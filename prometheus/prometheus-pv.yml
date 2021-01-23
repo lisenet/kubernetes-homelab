@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-prometheus
+  namespace: monitoring
+spec:
+  capacity:
+    storage: 32Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    path: /mnt/storage-k8s/nfs/prometheus
+    server: 10.11.1.20
