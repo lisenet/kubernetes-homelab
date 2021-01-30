@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: grafana
   namespace: grafana
+  labels:
+    app: grafana
 spec:
   replicas: 1
   selector:
