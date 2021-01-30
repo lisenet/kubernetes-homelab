@@ -117,7 +117,7 @@ data:
 
       - job_name: 'kvm1'
         static_configs:
-          - targets: ['10.11.1.21:9100']
+          - targets: ['10.11.1.20:9100']
             labels:
               alias: kvm1
 
