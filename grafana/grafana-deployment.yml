@@ -39,6 +39,8 @@ spec:
           - mountPath: /etc/grafana/certs/
             name: grafana-certs
             readOnly: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
       volumes:
         - name: grafana-storage
           persistentVolumeClaim:
