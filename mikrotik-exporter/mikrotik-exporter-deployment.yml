@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mikrotik-exporter
+  namespace: monitoring
+  labels:
+    app: mikrotik-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mikrotik-exporter
+  template:
+    metadata:
+      labels:
+        app: mikrotik-exporter
+    spec:
+      containers:
+        - name: mikrotik-exporter
+          image: nshttpd/mikrotik-exporter:1.0.11
+          imagePullPolicy: IfNotPresent          
+          env:
+            - name: "DEVICE"
+              valueFrom:
+                configMapKeyRef:
+                  name: mikrotik-exporter-conf
+                  key: device
+            - name: "ADDRESS"
+              valueFrom:
+                configMapKeyRef:
+                  name: mikrotik-exporter-conf
+                  key: address
+            - name: "USER"
+              valueFrom:
+                configMapKeyRef:
+                  name: mikrotik-exporter-conf
+                  key: user
+            - name: "PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mikrotik-exporter-secret
+                  key: password
+            - name: "LOG_LEVEL"
+              value: DEBUG
+          ports:
+            - containerPort: 9436
+          volumeMounts:
+            - name: mikrotik-exporter-volume
+              mountPath: /etc/mikrotik-exporter
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: mikrotik-exporter-volume
+          emptyDir: {}

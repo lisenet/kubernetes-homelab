@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mikrotik-exporter-conf
+  namespace: monitoring
+data:
+  device: mikrotik
+  address: 10.11.1.1
+  user: prometheus
