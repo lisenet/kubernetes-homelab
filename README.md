@@ -13,3 +13,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 [`Install and Configure Grafana on Kubernetes`](https://www.lisenet.com/2021/install-and-configure-grafana-on-kubernetes/)
 
 [`Monitor Etcd Cluster with Grafana and Prometheus`](https://www.lisenet.com/2021/monitor-etcd-cluster-with-grafana-and-prometheus/)
+
+## Homelab Network Diagram
+
+![Homelab Network Diagram](./docs/kubernetes-homelab-diagram.png)
