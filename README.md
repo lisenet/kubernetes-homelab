@@ -14,6 +14,21 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 [`Monitor Etcd Cluster with Grafana and Prometheus`](https://www.lisenet.com/2021/monitor-etcd-cluster-with-grafana-and-prometheus/)
 
+
+## Create a Homelab ROOT CA
+```
+vim /etc/pki/tls/certs/make-dummy-cert
+openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
+```
+
+## Create a Kubernetes Wildcard Cert Signed by the ROOT CA
+```
+DOMAIN=wildcard.apps.hl.test
+openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
+openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
+openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -CAcreateserial -out "${DOMAIN}".crt -days 1825 -sha256
+```
+
 ## Homelab Network Diagram
 
 ![Homelab Network Diagram](./docs/kubernetes-homelab-diagram.png)
