@@ -14,8 +14,15 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 [`Monitor Etcd Cluster with Grafana and Prometheus`](https://www.lisenet.com/2021/monitor-etcd-cluster-with-grafana-and-prometheus/)
 
+[`Monitor Bind DNS Server with Grafana and Prometheus (bind_exporter)`](https://www.lisenet.com/2021/monitor-bind-dns-server-with-grafana-and-prometheus-bind_exporter/)
+
+[`Monitor HAProxy with Grafana and Prometheus (haproxy_exporter)`](https://www.lisenet.com/2021/monitor-haproxy-with-grafana-and-prometheus-haproxy_exporter/)
+
+[`Monitor Linux Servers with Grafana and Prometheus (node_exporter)`](https://www.lisenet.com/2021/monitor-linux-servers-with-grafana-and-prometheus-node_exporter/)
 
 ## Create a Homelab ROOT CA
+Create your own Certificate Authority (CA) for homelab environment.
+
 ```
 vim /etc/pki/tls/certs/make-dummy-cert
 openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
