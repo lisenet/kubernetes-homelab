@@ -21,6 +21,7 @@ spec:
           image: prom/prometheus:v2.24.1
           imagePullPolicy: IfNotPresent
           args:
+            - "--storage.tsdb.retention.time=28d"
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
           ports:
