@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager
+  namespace: monitoring
+  labels:
+    app: alertmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      labels:
+        app: alertmanager
+    spec:
+      serviceAccountName: alertmanager
+      serviceAccount: alertmanager
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        fsGroup: 65534
+      containers:
+        - name: alertmanager
+          image: prom/alertmanager:v0.21.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - '--config.file=/etc/config/alertmanager.yml'
+            - '--storage.path=/data'
+            - '--cluster.advertise-address=$(POD_IP):6783'
+            - '--web.external-url=http://localhost:9093'
+          ports:
+            - containerPort: 9093
+              protocol: TCP
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          resources: {}
+          volumeMounts:
+            - name: alertmanager-config-volume
+              mountPath: /etc/config
+            - name: alertmanager-storage-volume
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9093
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+      # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/  
+      #initContainers:
+      #  - name: fix-nfs-permissions
+      #    image: busybox
+      #    command: ["sh", "-c", "chown -R 65534:65534 /data"]
+      #    securityContext:
+      #      runAsUser: 0
+      #      runAsNonRoot: false
+      #    volumeMounts:
+      #      - name: alertmanager-storage-volume
+      #        mountPath: /data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: alertmanager-config-volume
+          configMap:
+            name: alertmanager
+            defaultMode: 420
+
+        - name: alertmanager-storage-volume
+          persistentVolumeClaim:
+            claimName: nfs-pvc-alertmanager
