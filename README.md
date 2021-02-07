@@ -28,6 +28,8 @@ Deploy `alertmanager`:
 ```
 $ kubectl apply -f ./alertmanager
 ```
+Alertmanager uses the Incoming Webhooks feature of Slack, therefore you need to set it up if you want to receive Slack alerts.
+
 
 Deploy `mikrotik-exporter`:
 ```
