@@ -44,6 +44,17 @@ spec:
               readOnly: true
             - name: prometheus-storage-volume
               mountPath: /prometheus/
+      # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+      initContainers:
+        - name: fix-nfs-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 65534:65534 /prometheus"]
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+          volumeMounts:
+            - name: prometheus-storage-volume
+              mountPath: /prometheus
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
       volumes:
