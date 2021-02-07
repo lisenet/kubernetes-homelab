@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: grafana-datasources
   namespace: monitoring
+  labels:
+    app: grafana
 data:
   prometheus.yaml: |-
     {

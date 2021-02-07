@@ -2694,6 +2694,7 @@ data:
     }
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
   name: grafana-dashboards-k8s-cluster-summary
   namespace: monitoring
+  labels:
+    app: grafana

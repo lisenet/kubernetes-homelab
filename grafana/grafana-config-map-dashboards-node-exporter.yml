@@ -8423,6 +8423,7 @@ data:
     }
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
   name: grafana-dashboards-node-exporter-full
   namespace: monitoring
+  labels:
+    app: grafana
