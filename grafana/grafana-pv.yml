@@ -4,6 +4,8 @@ kind: PersistentVolume
 metadata:
   name: nfs-pv-grafana
   namespace: monitoring
+  labels:
+    app: grafana
 spec:
   capacity:
     storage: 1Gi
