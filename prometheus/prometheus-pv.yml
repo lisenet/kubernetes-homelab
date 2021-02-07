@@ -4,6 +4,8 @@ kind: PersistentVolume
 metadata:
   name: nfs-pv-prometheus
   namespace: monitoring
+  labels:
+    app: prometheus-server
 spec:
   capacity:
     storage: 32Gi

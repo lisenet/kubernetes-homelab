@@ -4,6 +4,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: nfs-pvc-prometheus
   namespace: monitoring
+  labels:
+    app: prometheus-server
 spec:
   storageClassName: nfs
   accessModes:
