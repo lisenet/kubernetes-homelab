@@ -39,8 +39,9 @@ data:
           summary: More than 3 OOM killed pods on node {{ $labels.instance }} within 24h
   prometheus.yml: |-
     global:
+      evaluation_interval: 60s
       scrape_interval: 15s
-      evaluation_interval: 15s
+      scrape_timeout: 10s
     rule_files:
       - /etc/prometheus/prometheus.rules
 
