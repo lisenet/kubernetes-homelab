@@ -14,13 +14,15 @@ data:
       group_wait: 30s      # how long to wait to buffer alerts of the same group before sending a notification initially
       group_interval: 1h   # how long to wait before sending an alert that has been added to a group for which there has already been a notification
       repeat_interval: 30s # how long to wait before re-sending a given alert that has already been sent in a notification
-      receiver: 'low_priority_receiver' # default/fallback request handler
+      receiver: 'slack_homelab' # default/fallback request handler
+      # Send severity=warning alerts to slack
       routes:
-      - receiver: low_priority_receiver
+      - receiver: slack_homelab
         match:
           severity: warning      
+    # See https://lisenet.slack.com/apps/A0F7XDUAZ-incoming-webhooks
     receivers:
-    - name: 'low_priority_receiver'
-      webhook_configs:
-        - send_resolved: true
-          url: 'http://prometheus-msteams.monitoring.svc:2000/low_priority_channel' # request handler 1
+    - name: 'slack_homelab'
+      slack_configs:
+      - api_url: SLACK_WEBHOOK_URL
+        channel: '#homelab'
