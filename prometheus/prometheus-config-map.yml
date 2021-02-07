@@ -7,6 +7,36 @@ metadata:
     name: prometheus-server-conf
   namespace: monitoring
 data:
+  prometheus.rules: |-
+    groups:
+    - name: node.alerts
+      rules:
+      - alert: KubernetesHostHighCPUUsage
+        expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+        for: 15m
+        labels:
+          severity: warning
+          context: node
+        annotations:
+          summary: High load on node
+          description: "Node {{ $labels.instance }} has more than 90% CPU load"
+      - alert: KubernetesNodeDiskUsagePercentage
+        expr: (100 - 100 * sum(node_filesystem_avail_bytes{device!~"tmpfs|by-uuid",fstype=~"xfs|ext"} / node_filesystem_size_bytes{device!~"tmpfs|by-uuid",fstype=~"xfs|ext"}) BY (instance,device)) > 85
+        for: 5m
+        labels:
+          severity: warning
+          context: node
+        annotations:
+          description: Node disk usage above 85%
+          summary: Disk usage on target {{ $labels.instance }} at 85%
+      - alert: KubernetesNodeContainerOOMKilled
+        expr: sum by (instance) (changes(node_vmstat_oom_kill[24h])) > 3
+        labels:
+          severity: warning
+          context: node
+        annotations:
+          description: More than 3 OOM killed pods on a node within 24h
+          summary: More than 3 OOM killed pods on node {{ $labels.instance }} within 24h
   prometheus.yml: |-
     global:
       scrape_interval: 15s
