@@ -37,15 +37,14 @@ spec:
             memory: "1Gi"
             cpu: "500m"
         volumeMounts:
-          - mountPath: /var/lib/grafana
-            name: grafana-storage
-          - mountPath: /etc/grafana/provisioning/datasources
-            name: grafana-datasources
-            readOnly: false
-          - mountPath: /etc/grafana/
-            name: grafana-ini
-          - mountPath: /etc/grafana/certs/
-            name: grafana-certs
+          - name: grafana-storage
+            mountPath: /var/lib/grafana
+          - name: grafana-datasources
+            mountPath: /etc/grafana/provisioning/datasources
+          - name: grafana-ini
+            mountPath: /etc/grafana/
+          - name: grafana-certs
+            mountPath: /etc/grafana/certs/
             readOnly: true
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
