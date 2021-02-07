@@ -13,7 +13,12 @@ data:
       cert_key  = /etc/grafana/certs/tls.key
     [analytics]
       reporting_enabled = false
-      check_for_updates = false
+      check_for_updates = true
     [log]
       mode = console
       level = info
+    [paths]
+      data         = /var/lib/grafana/data
+      logs         = /var/log/grafana
+      plugins      = /var/lib/grafana/plugins
+      provisioning = /etc/grafana/provisioning
