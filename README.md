@@ -2,6 +2,38 @@
 
 A repository to keep resources and configuration files used with my Kubernetes homelab.
 
+## TL;DR
+
+Create a monitoring namespace:
+```
+$ kubectl create ns monitoring
+```
+
+Deploy `kube-state-metrics`:
+```
+$ kubectl apply -f ./kube-state-metrics
+```
+
+Deploy `prometheus`:
+```
+$ kubectl apply -f ./prometheus
+```
+
+Deploy `grafana`:
+```
+$ kubectl apply -f ./grafana
+```
+
+Deploy `alertmanager`:
+```
+$ kubectl apply -f ./alertmanager
+```
+
+Deploy `mikrotik-exporter`:
+```
+$ kubectl apply -f ./mikrotik-exporter
+```
+
 ## Resources
 
 [`Install and Configure a Multi-Master HA Kubernetes Cluster with kubeadm, HAProxy and Keepalived on CentOS 7`](https://www.lisenet.com/2021/install-and-configure-a-multi-master-ha-kubernetes-cluster-with-kubeadm-haproxy-and-keepalived-on-centos-7/)
