@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-datasources
-  namespace: grafana
+  namespace: monitoring
 data:
   prometheus.yaml: |-
     {
