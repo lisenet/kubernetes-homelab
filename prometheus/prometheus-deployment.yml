@@ -41,6 +41,7 @@ spec:
           volumeMounts:
             - name: prometheus-config-volume
               mountPath: /etc/prometheus/
+              readOnly: true
             - name: prometheus-storage-volume
               mountPath: /prometheus/
       restartPolicy: Always
