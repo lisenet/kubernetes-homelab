@@ -46,6 +46,17 @@ spec:
           - name: grafana-certs
             mountPath: /etc/grafana/certs/
             readOnly: true
+      # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+      initContainers:
+        - name: fix-nfs-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 472:472 /var/lib/grafana"]
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
+          volumeMounts:
+            - name: grafana-storage
+              mountPath: /var/lib/grafana/
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
       volumes:
