@@ -45,6 +45,13 @@ data:
     rule_files:
       - /etc/prometheus/prometheus.rules
 
+    # Alertmanager configuration
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - 'alertmanager.monitoring.svc:9093'
+
     scrape_configs:
       - job_name: 'kubernetes-apiservers'
 
