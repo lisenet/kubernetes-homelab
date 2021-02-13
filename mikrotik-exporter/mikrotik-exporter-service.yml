@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: mikrotik-exporter
   namespace: monitoring
+  labels:
+    app: mikrotik-exporter
 spec:
   selector: 
     app: mikrotik-exporter

@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: mikrotik-exporter-conf
   namespace: monitoring
+  labels:
+    app: mikrotik-exporter
 data:
   device: mikrotik
   address: 10.11.1.1
