@@ -48,6 +48,8 @@ $ kubectl apply -f ./mikrotik-exporter
 
 [`Install and Configure Grafana on Kubernetes`](https://www.lisenet.com/2021/install-and-configure-grafana-on-kubernetes/)
 
+[`Install and Configure Alertmanager with Slack Integration on Kubernetes`](https://www.lisenet.com/2021/install-and-configure-alertmanager-with-slack-integration-on-kubernetes/)
+
 [`Monitor Etcd Cluster with Grafana and Prometheus`](https://www.lisenet.com/2021/monitor-etcd-cluster-with-grafana-and-prometheus/)
 
 [`Monitor Bind DNS Server with Grafana and Prometheus (bind_exporter)`](https://www.lisenet.com/2021/monitor-bind-dns-server-with-grafana-and-prometheus-bind_exporter/)
