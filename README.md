@@ -57,7 +57,7 @@ $ kubectl apply -f ./mikrotik-exporter
 [`Monitor Linux Servers with Grafana and Prometheus (node_exporter)`](https://www.lisenet.com/2021/monitor-linux-servers-with-grafana-and-prometheus-node_exporter/)
 
 ## Create a Homelab ROOT CA
-Create your own Certificate Authority (CA) for homelab environment.
+Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
 
 ```
 vim /etc/pki/tls/certs/make-dummy-cert
