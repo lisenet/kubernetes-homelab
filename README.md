@@ -42,6 +42,8 @@ $ kubectl apply -f ./mikrotik-exporter
 
 [`Install Kubernetes Dashboard`](https://www.lisenet.com/2021/install-kubernetes-dashboard/)
 
+[`Install Kube State Metrics on Kubernetes`](https://www.lisenet.com/2021/install-kube-state-metrics-on-kubernetes/)
+
 [`Install and Configure Prometheus Monitoring on Kubernetes`](https://www.lisenet.com/2021/install-and-configure-prometheus-monitoring-on-kubernetes/)
 
 [`Install and Configure Grafana on Kubernetes`](https://www.lisenet.com/2021/install-and-configure-grafana-on-kubernetes/)
