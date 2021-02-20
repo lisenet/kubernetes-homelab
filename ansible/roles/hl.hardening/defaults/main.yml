@@ -1,0 +1,31 @@
+---
+## Default variables for the role. These variables have the lowest
+## priority of any variables available, and can be easily overridden 
+## by any other variable, including inventory variables.
+
+password_minlen_login_defs: "12"
+password_mindays_login_defs: "1"
+accounts_tmout: "3600"
+accounts_fail_delay: "1"
+accounts_max_concurrent_login_sessions: "10"
+history_file_size: "5000"
+
+packages_to_remove_redhat:
+  - alsa-*
+  - ivtv-*
+  - iwl*firmware
+  - aic94xx-firmware
+  
+modules_to_disable:
+  - appletalk
+  - dccp
+  - sctp
+  - rds
+  - tipc
+  - bluetooth
+  - usb-storage
+  - cramfs
+  - freevxfs
+  - jffs2
+  - hfsplus
+  - squashfs

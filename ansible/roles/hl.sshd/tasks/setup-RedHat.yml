@@ -1,0 +1,20 @@
+---
+- name: RedHat | Configure OpenSSH Server
+  become: yes
+  vars:
+    - sshd_subsystem: "/usr/libexec/openssh/sftp-server"
+  block:
+  - name: RedHat | Install OpenSSH
+    package:
+      name: openssh-server
+      state: present
+
+  - name: RedHat | Configure sshd_config
+    notify:
+      - sshd
+    template:
+      src: "sshd_config.j2"
+      dest: "/etc/ssh/sshd_config"
+      owner: root
+      group: root
+      mode: 0600

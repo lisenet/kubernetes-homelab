@@ -1,0 +1,256 @@
+---
+# Inspired by: https://www.lisenet.com/2017/centos-7-server-hardening-guide/
+- name: RedHat | Check System Requirements
+  fail:
+    msg: "The server is not a CentOS 7 server."
+  when: ansible_distribution_major_version != "7"
+
+#
+# SELinux
+#
+- name: RedHat | Enable SELinux
+  selinux:
+    policy: targeted
+    state: enforcing
+
+#
+# YUM
+#
+- name: RedHat | Ensure YUM Removes Previous Package Versions
+  lineinfile:
+    dest: "/etc/yum.conf"
+    regexp: ^#?clean_requirements_on_remove
+    line: clean_requirements_on_remove=1
+    insertafter: '\[main\]'
+      
+- name: RedHat | Ensure GPG check Enabled for Local Packages (Yum)
+  ini_file:
+    dest: "{{ item }}"
+    section: main
+    option: localpkg_gpgcheck
+    value: "1"
+    create: True
+  with_items: "/etc/yum.conf"
+  when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"
+
+- name: RedHat | Lock Kernel Version from Automatic Upgrades
+  lineinfile:
+    dest: "/etc/yum.conf"
+    regexp: "^exclude=kernel"
+    line: "exclude=kernel*"
+
+#
+# Remove packages that you do not require on a server
+#
+- name: RedHat | Remove Packages
+  package: 
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ packages_to_remove_redhat }}"
+
+#
+# Disable uncommon network protocols and bluetooth
+#
+- name: RedHat | Ensure unnecessary kernel modules are disabled
+  lineinfile:
+    create: yes
+    dest: "/etc/modprobe.d/ansible-hardening.conf"
+    regexp: '{{ item }}'
+    line: "install {{ item }} /bin/true"
+  loop: "{{ modules_to_disable }}"
+
+#
+# Access Control
+#
+- name: RedHat | Prevent Log In to Accounts With Empty Password - system-auth
+  replace:
+    dest: "/etc/pam.d/system-auth"
+    follow: yes
+    regexp: 'nullok'
+      
+- name: RedHat | Prevent Log In to Accounts With Empty Password - password-auth
+  replace:
+    dest: "/etc/pam.d/password-auth"
+    follow: yes
+    regexp: 'nullok'
+
+- name: RedHat | Set Password Minimum Length in login.defs
+  lineinfile:
+    dest: "/etc/login.defs"
+    regexp: "^PASS_MIN_LEN *[0-9]*"
+    state: present
+    line: "PASS_MIN_LEN     {{password_minlen_login_defs }}"
+
+- name: RedHat | Set Password Minimum Age
+  lineinfile:
+    create: yes
+    dest: "/etc/login.defs"
+    regexp: "^#?PASS_MIN_DAYS"
+    line: "PASS_MIN_DAYS     {{ password_mindays_login_defs }}"    
+
+- name: Redhat | Set Interactive Session Timeout
+  lineinfile:
+    create: yes
+    dest: "/etc/profile"
+    regexp: "^#?TMOUT"
+    line: "readonly TMOUT={{ accounts_tmout }}"
+  
+- name: Redhat | Set accounts logon fail delay
+  lineinfile:
+    dest: "/etc/login.defs"
+    regexp: "^FAIL_DELAY"
+    line: "FAIL_DELAY {{ accounts_fail_delay }}"
+
+- name: Redhat | Log failed login attempts
+  lineinfile:
+    dest: "/etc/login.defs"
+    regexp: "^FAILLOG_ENAB"
+    line: "FAILLOG_ENAB yes"
+
+- name: RedHat | Limit the Number of Concurrent Login Sessions Allowed Per User
+  lineinfile:
+    state: present
+    dest: "/etc/security/limits.conf"
+    insertbefore: "^# End of file"
+    regexp: "^#?\\*.*maxlogins"
+    line: "*           hard    maxlogins     {{ accounts_max_concurrent_login_sessions }}"
+
+#
+# Install Sysstat to collect performance activity
+#
+- name: RedHat | Install package sysstat
+  package: 
+    name: sysstat
+    state: present
+
+- name: RedHat | Enable service sysstat 
+  service:
+    name: sysstat
+    state: started
+    enabled: yes
+
+# Because of Systemd, we need to use permissions of 0640, so that
+# the group ssh_keys can read the generated ssh private keys for
+# access to the system.
+- name: RedHat | Ensure permission 0640 on /etc/ssh/*_key
+  file:
+    path: "/etc/ssh/{{ item }}"
+    mode: "0640"
+  loop:
+    - "ssh_host_ecdsa_key"
+    - "ssh_host_ed25519_key"
+    - "ssh_host_rsa_key"
+
+#
+# Install process accounting software
+#
+- name: RedHat | Install package psacct
+  package: 
+    name: psacct
+    state: present
+
+- name: RedHat | Enable service psacct
+  service:
+    name: psacct
+    state: started
+    enabled: yes
+
+#
+# Disable core dumps
+#
+- name: RedHat | Disable Core Dumps
+  lineinfile:
+    state: present
+    dest: "/etc/security/limits.conf"
+    insertbefore: "^# End of file"
+    regexp: "^#?\\*.*core"
+    line: "*           hard    core     0"
+
+#
+# Restrict Programs from Dangerous Execution Patterns
+#
+- name: RedHat | Restrict Programs from Dangerous Execution Patterns
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - name: fs.suid_dumpable
+      value: "0"
+    - name: kernel.sysrq
+      value: "0"
+    - name: kernel.dmesg_restrict
+      value: "1"
+    - name: kernel.randomize_va_space
+      value: "2"
+    - name: kernel.kptr_restrict
+      value: "2"
+    - name: kernel.kexec_load_disabled
+      value: "1"
+    - name: kernel.yama.ptrace_scope
+      value: 1      
+
+#
+# IPv4 and IPv6 kernel networking values
+#
+- name: RedHat | Ensure sysctl values are set
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - name: net.ipv4.icmp_ignore_bogus_error_responses
+      value: 1
+    - name: net.ipv4.conf.all.log_martians
+      value: 1      
+    - name: net.ipv4.conf.default.log_martians
+      value: 1
+    - name: net.ipv4.conf.all.secure_redirects
+      value: 0
+    - name: net.ipv4.conf.default.secure_redirects
+      value: 0
+    - name: net.ipv4.conf.all.accept_redirects
+      value: 0
+    - name: net.ipv4.conf.all.send_redirects
+      value: 0
+    - name: net.ipv4.conf.default.send_redirects
+      value: 0
+    - name: net.ipv4.icmp_echo_ignore_broadcasts
+      value: 1
+    - name: net.ipv4.conf.default.accept_redirects
+      value: 0
+    - name: net.ipv6.conf.all.accept_redirects
+      value: 0
+    - name: net.ipv6.conf.default.accept_redirects
+      value: 0
+
+#
+# Configure History File Size
+#
+- name: Redhat | Configure History File Size
+  lineinfile:
+    dest: "/etc/profile"
+    regexp: "^HISTSIZE"
+    line: "HISTSIZE={{ history_file_size }}"
+
+#
+# Enable Firewalld and allow SSH
+#
+- name: RedHat | Install and enable firewalld
+  yum:
+    name: "firewalld"
+    state: "installed"
+
+- name: RedHat | Enable service firewalld
+  service:
+    name: firewalld
+    enabled: "yes"
+    state: "restarted"
+  
+- name: RedHat | Enable SSHD in firewalld (default port)
+  firewalld:
+    service: ssh
+    permanent: yes
+    state: enabled

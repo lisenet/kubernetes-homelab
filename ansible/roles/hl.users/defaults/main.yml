@@ -1,0 +1,5 @@
+sudo_group: "wheel"
+
+users:
+  - name: ansible
+    password: "defined in secure.yml as user_password"

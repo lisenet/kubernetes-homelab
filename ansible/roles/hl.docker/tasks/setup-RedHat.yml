@@ -1,0 +1,37 @@
+---
+
+- name: RedHat | Configure sysctl values
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ sysctl_config }}"
+
+- name: RedHat | Install Prerequisites Packages
+  package: name={{ item }} state=present
+  loop: "{{ prerequisites_packages_redhat }}"
+
+- name: RedHat | Add repository sources
+  yum_repository:
+    file: "docker-ce-stable"
+    name: "docker-ce-stable"
+    description: "Docker CE Stable - $basearch"
+    baseurl: "{{ docker_repository_redhat }}"
+    gpgcheck: yes
+    gpgkey: "{{ docker_gpg_key_redhat }}"
+    enabled: yes
+
+- name: RedHat | Install packages
+  package: 
+    name: "{{ item }}"
+    state: present
+    allow_downgrade: yes
+  loop: "{{ docker_packages_redhat }}"
+  notify:
+  - start docker
+
+- name: RedHat | Start and Enable Services "{{ docker_service }}"
+  service:
+    name: "{{ docker_service }}"
+    state: started
+    enabled: yes    

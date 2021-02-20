@@ -1,0 +1,34 @@
+---
+## Default variables for the role. These variables have the lowest
+## priority of any variables available, and can be easily overridden 
+## by any other variable, including inventory variables.
+
+k8s_version: "1.19.7"
+k8s_pod_network: "192.168.0.0/16"
+k8s_ha_dns: "kubelb.hl.test"
+k8s_api_port: "6443"
+k8s_service_dns: "apps.hl.test"
+
+k8s_sysctl_config:
+  - name: net.bridge.bridge-nf-call-iptables
+    value: 1
+  - name: net.bridge.bridge-nf-call-ip6tables
+    value: 1
+
+k8s_admin_config: "/etc/kubernetes/admin.conf"
+
+## This has to match with {{ ansible_user }}
+k8s_user: "ansible"
+k8s_user_home: "/home/{{ k8s_user }}"
+
+calico_net_url: "https://docs.projectcalico.org/archive/v3.17/manifests/calico.yaml"
+calico_net_config: "calico.yaml"
+
+k8s_token_file_master: "join-master-command"
+k8s_token_file_node: "join-node-command"
+k8s_kubelet_config: "/etc/kubernetes/kubelet.conf"
+
+dashboard_url: "https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.5/aio/deploy/recommended.yaml"
+dashboard_config: "kubernetes-dashboard.yml"
+k8s_dashboard_adminuser_config: "dashboard-adminuser.yaml"
+k8s_dashboard_url: "https://{{ k8s_ha_dns }}:{{ k8s_api_port }}/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/overview?namespace=default"

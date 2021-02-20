@@ -1,0 +1,8 @@
+---
+- name: Configure K8s
+  hosts: k8s
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.k8s
+...

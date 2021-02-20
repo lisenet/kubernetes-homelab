@@ -1,0 +1,7 @@
+---
+- name: Configure OpenSSH Server
+  hosts: k8s
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.sshd

@@ -1,0 +1,20 @@
+---
+## Default variables for the role. These variables have the lowest
+## priority of any variables available, and can be easily overridden 
+## by any other variable, including inventory variables.
+
+docker_service: docker
+sysctl_config:
+  - name: net.ipv4.ip_forward
+    value: 1
+
+prerequisites_packages_redhat:
+  - yum-utils
+
+docker_packages_redhat:
+  - docker-ce-19.03.14-3.el7.x86_64
+  - docker-ce-cli-19.03.14-3.el7.x86_64
+  - containerd.io-1.4.3-3.1.el7.x86_64
+
+docker_gpg_key_redhat: "https://download.docker.com/linux/centos/gpg"
+docker_repository_redhat: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"

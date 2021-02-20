@@ -1,0 +1,16 @@
+# Start with creating user accounts
+- import_playbook: create-users.yml
+
+# Proceed with SSHD config and system hardening
+- import_playbook: configure-sshd.yml
+- import_playbook: configure-hardening.yml
+- import_playbook: configure-timezone.yml
+
+# Kubernetes server specific config follows
+- import_playbook: configure-hostsfile.yml
+- import_playbook: configure-docker.yml
+- import_playbook: configure-k8s.yml
+- import_playbook: deploy-k8s-cluster.yml
+
+# Node exporter configuration
+- import_playbook: configure-node-exporter.yml

@@ -1,0 +1,184 @@
+---
+- name: RedHat | Check System Memory Requirements
+  fail:
+    msg: "The server does not have enough memory, 1536MB required"
+  when: ansible_memtotal_mb < 1536
+
+- name: RedHat | Check System CPU Requirements
+  fail:
+    msg: "The server does not have enough CPU, 2 vcpus required"
+  when: ansible_processor_vcpus < 1.5
+
+- name: RedHat | Configure sysctl to let iptables see bridged traffic
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ k8s_sysctl_config }}"
+
+- name: RedHat | Configure the first control plane
+  block:
+    - name: RedHat | Initialise the Kubernetes cluster {{ k8s_version }} using kubeadm
+      become: true
+      command: kubeadm init --kubernetes-version "{{ k8s_version }}" --pod-network-cidr "{{ k8s_pod_network }}" --service-dns-domain "{{ k8s_service_dns }}" --control-plane-endpoint "{{ k8s_ha_dns }}:{{ k8s_api_port }}" --upload-certs
+      args:
+        creates: "{{ k8s_admin_config }}"
+
+    - name: RedHat | Setup kubeconfig for {{ k8s_user }} user
+      file:
+        path: "{{ k8s_user_home }}/.kube"
+        state: directory
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0750"
+    
+    - name: RedHat | Copy {{ k8s_admin_config }}
+      become: true
+      copy:
+        src: "{{ k8s_admin_config }}"
+        dest: "{{ k8s_user_home }}/.kube/config"
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0640"
+        remote_src: yes
+      
+    - name: RedHat | Download {{ calico_net_url }}
+      get_url:
+        url: "{{ calico_net_url }}"
+        dest: "{{ k8s_user_home }}/{{ calico_net_config }}"
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0640"     
+
+    - name: RedHat | Set CALICO_IPV4POOL_CIDR to {{ k8s_pod_network }}
+      replace:
+        path: "{{ k8s_user_home }}/{{ calico_net_config }}"
+        regexp: "192.168.0.0/16"
+        replace: "{{ k8s_pod_network }}"   
+    
+    - name: RedHat | Install calico pod network {{ calico_net_config }}
+      become: false
+      command: kubectl apply -f "{{ k8s_user_home }}/{{ calico_net_config }}"
+
+    - name: RedHat | Download {{ dashboard_url }}
+      get_url:
+        url: "{{ dashboard_url }}"
+        dest: "{{ k8s_user_home }}/{{ dashboard_config }}"
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0640"
+
+    - name: RedHat | Install K8s dashboard {{ dashboard_config }}
+      become: false
+      command: kubectl apply -f "{{ k8s_user_home }}/{{ dashboard_config }}"
+
+#
+# Kubernetes Dashboard permissions
+#
+    - name: RedHat | kubectl create serviceaccount dashboard
+      become: false
+      command: kubectl -n default create serviceaccount dashboard
+      ignore_errors: yes
+    
+    - name: RedHat | kubectl create clusterrolebinding dashboard-admin
+      become: false
+      command: kubectl -n default create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=default:dashboard
+      ignore_errors: yes
+
+    - name: RedHat | Create cluster role binding cluster-system-anonymous
+      become: false
+      command: kubectl create clusterrolebinding cluster-system-anonymous --clusterrole=cluster-admin --user=system:anonymous
+      ignore_errors: yes
+
+    - name: RedHat | Test K8s dashboard and wait for HTTP 200
+      uri:
+        url: "{{ k8s_dashboard_url }}"
+        status_code: 200
+        validate_certs: no
+      ignore_errors: yes
+      register: result_k8s_dashboard_page
+      retries: 20
+      delay: 6
+      until: result_k8s_dashboard_page is succeeded
+
+    - name: RedHat | Print K8s dashboard URL
+      debug:
+        var: k8s_dashboard_url
+
+    - name: RedHat | Create a new certificate key
+      become: true
+      command: kubeadm init phase upload-certs --upload-certs
+      register: join_certificate_key
+
+    - name: RedHat | Generate master join command
+      become: true
+      command: kubeadm token create --print-join-command --certificate-key "{{ join_certificate_key.stdout_lines[2] }}"
+      register: join_master_command
+
+    - name: RedHat | Copy master join command to local file
+      become: false
+      local_action: copy content="{{ join_master_command.stdout_lines[0] }}" dest="../{{ k8s_token_file_master }}"
+
+    - name: RedHat | Generate node join command
+      command: kubeadm token create --print-join-command
+      register: join_node_command
+
+    - name: RedHat | Copy node join command to local file
+      become: false
+      local_action: copy content="{{ join_node_command.stdout_lines[0] }}" dest="../{{ k8s_token_file_node }}"
+
+  when: "'k8s_first_control_plane' in group_names"
+
+- name: RedHat | Configure other control planes
+  block:
+    - name: RedHat | Copy {{ k8s_token_file_master }} to server location
+      copy: 
+        src: "../{{ k8s_token_file_master }}"
+        dest: "{{ k8s_user_home }}/{{ k8s_token_file_master }}.sh"
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0750"
+
+    - name: RedHat | Join the control plane to cluster unless file {{ k8s_kubelet_config }} exists
+      become: true
+      command: sh "{{ k8s_user_home }}/{{ k8s_token_file_master }}.sh"
+      args:
+        creates: "{{ k8s_kubelet_config }}"
+
+    - name: RedHat | Setup kubeconfig for {{ k8s_user }} user
+      file:
+        path: "{{ k8s_user_home }}/.kube"
+        state: directory
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0750"
+    
+    - name: RedHat | Copy {{ k8s_admin_config }}
+      become: true
+      copy:
+        src: "{{ k8s_admin_config }}"
+        dest: "{{ k8s_user_home }}/.kube/config"
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0640"
+        remote_src: yes
+
+  when: "'k8s_other_control_plane' in group_names"    
+
+- name: RedHat | Configure worker nodes
+  block:
+    - name: RedHat | Copy {{ k8s_token_file_node }} to server location
+      copy:
+        src: "../{{ k8s_token_file_node }}"
+        dest: "{{ k8s_user_home }}/{{ k8s_token_file_node }}.sh"
+        owner: "{{ k8s_user }}"
+        group: "{{ k8s_user }}"
+        mode: "0750"
+
+    - name: RedHat | Join the worker node to cluster unless file {{ k8s_kubelet_config }} exists
+      become: true
+      command: sh "{{ k8s_user_home }}/{{ k8s_token_file_node }}.sh"
+      args:
+        creates: "{{ k8s_kubelet_config }}"
+
+  when: "'k8s_node' in group_names"
