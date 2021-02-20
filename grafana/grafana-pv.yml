@@ -8,7 +8,7 @@ metadata:
     app: grafana
 spec:
   capacity:
-    storage: 1Gi
+    storage: 500Mi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
