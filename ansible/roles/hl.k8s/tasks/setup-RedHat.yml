@@ -1,0 +1,101 @@
+---
+- name: RedHat | Configure sysctl values
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ sysctl_config }}"
+
+#
+# Disable swap
+#
+- name: RedHat | Disable SWAP because k8s does work with swap enabled (1/2)
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: RedHat | Remove SWAP from fstab because k8s does not work with swap enabled (2/2)
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+#
+# Add repository and install packages
+#
+- name: RedHat | Add repository sources
+  yum_repository:
+    file: "kubernetes"
+    name: "kubernetes"
+    description: "kubernetes"
+    baseurl: "{{ k8s_repository_redhat }}"
+    gpgcheck: yes
+    gpgkey: "{{ k8s_gpg_key_redhat }}"
+    enabled: yes
+    #exclude: kubelet,kubeadm,kubectl
+    skip_if_unavailable: yes
+
+- name: RedHat | Install Dependencies
+  package:
+    name: "{{ item }}"
+    state: present
+    allow_downgrade: yes
+  loop: "{{ k8s_dependencies_redhat }}"
+
+- name: RedHat | Install Packages
+  package:
+    name: "{{ item }}"
+    state: present
+    allow_downgrade: yes
+  loop: "{{ k8s_packages_redhat }}"
+
+- name: RedHat | Configure kubelet Eviction Thresholds
+  lineinfile:
+    path: "{{ kubelet_file }}"
+    state: present
+    regexp: "^KUBELET_EXTRA_ARGS="
+    line: "KUBELET_EXTRA_ARGS=--eviction-hard=memory.available<256Mi,nodefs.available<1Gi,imagefs.available<1Gi"
+
+- name: RedHat | Enable service kubelet 
+  service: 
+    name: kubelet
+    state: started
+    enabled: yes  
+
+#
+# Configure firewall
+#
+- name: RedHat | Open K8s firewall ports for master
+  firewalld:
+    immediate: yes
+    permanent: yes
+    state: enabled
+    port: "{{ item }}/tcp"
+  loop: "{{ k8s_firewall_ports_master }}"
+  when: "'k8s_master' in group_names"
+
+- name: RedHat | Open K8s firewall ports for node
+  firewalld:
+    immediate: yes
+    permanent: yes
+    state: enabled
+    port: "{{ item }}/tcp"
+  loop: "{{ k8s_firewall_ports_node }}"
+  when: "'k8s_node' in group_names"
+
+- name: RedHat | Open K8s firewall ports for CNI
+  firewalld:
+    immediate: yes
+    permanent: yes
+    state: enabled
+    port: "{{ item }}/tcp"
+  loop: "{{ k8s_firewall_ports_cni }}"
+
+- name: RedHat | Enable masquerade
+  firewalld:
+    immediate: yes
+    permanent: yes
+    state: enabled
+    masquerade: yes

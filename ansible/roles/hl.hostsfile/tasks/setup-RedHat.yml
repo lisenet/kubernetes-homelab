@@ -1,0 +1,10 @@
+---
+- name: RedHat | Create file {{ hosts_file }}
+  become: true
+  template:
+    src: "{{ hosts_template }}"
+    dest: "{{ hosts_file }}"
+    owner: root
+    group: root
+    mode: "0644"
+  ignore_errors: yes

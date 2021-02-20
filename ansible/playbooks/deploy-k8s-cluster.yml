@@ -1,0 +1,8 @@
+---
+- name: Deploy K8s Cluster
+  hosts: k8s
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.k8s-cluster
+...

@@ -1,0 +1,34 @@
+- name: RedHat | Include secure vars
+  include_vars:
+    file: ../defaults/secure.yml
+
+- name: RedHat | Create users
+  user:
+    state: present  
+    name: "{{ item.name }}"
+    groups: "{{ sudo_group }}"
+    shell: "/bin/bash"
+    password: "{{ user_password | password_hash('sha512') }}"
+    update_password: always
+  loop: "{{ users }}"
+
+- name: RedHat | Create authorised keys
+  authorized_key:
+    state: present  
+    user: "{{ item.name }}"
+    key: "{{ lookup('file', 'files/id_rsa_' + item.name + '.pub') }}"
+  loop: "{{ users }}"
+
+- name: RedHat | Create authorised keys for root
+  authorized_key:
+    state: present  
+    user: "root"
+    key: "{{ lookup('file', 'files/id_rsa_' + 'root' + '.pub') }}"
+
+- name: RedHat | Configure sudo rules
+  lineinfile:
+    state: present  
+    path: "/etc/sudoers"
+    regexp: "^%{{ sudo_group }}"
+    line: "%{{ sudo_group }} ALL=(ALL) NOPASSWD: ALL"
+    validate: '/usr/sbin/visudo -cf %s'

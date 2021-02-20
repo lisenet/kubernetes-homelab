@@ -1,0 +1,8 @@
+---
+- name: Configure Node Exporter
+  hosts: k8s
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.node-exporter
+...

@@ -1,0 +1,8 @@
+---
+- name: Configure Server Hardening
+  hosts: k8s
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.hardening
+...

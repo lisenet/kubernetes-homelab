@@ -1,0 +1,12 @@
+---
+- name: Configure Timezone
+  hosts: k8s
+  become: yes
+  gather_facts: no
+  vars:
+    timezone_value: "Europe/London"
+  tasks:
+  - name: Set timezone to {{ timezone_value }}
+    timezone:
+      name: "{{ timezone_value }}"
+...

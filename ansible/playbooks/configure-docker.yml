@@ -1,0 +1,8 @@
+---
+- name: Configure Docker
+  hosts: docker
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.docker
+...

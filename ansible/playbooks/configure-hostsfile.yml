@@ -1,0 +1,8 @@
+---
+- name: Configure hosts file
+  hosts: k8s_master,k8s_node
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.hostsfile
+...

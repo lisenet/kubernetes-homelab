@@ -1,0 +1,54 @@
+---
+#
+# Configure Node Exporter systemd service
+#
+- name: RedHat | Ensure group {{ prometheus_user }} exists
+  group:
+    state: present
+    system: yes
+    name: "{{ prometheus_user }}"
+
+- name: RedHat | Create user {{ prometheus_user }}
+  user:
+    state: present
+    system: yes
+    name: "{{ prometheus_user }}"
+    groups: "{{ prometheus_user }}"
+    shell: "/sbin/nologin"
+
+- name: RedHat | Unarchive a file that needs to be downloaded
+  unarchive:
+    src: "{{ node_exporter_url }}"
+    dest: "/usr/local/bin"
+    remote_src: yes
+    owner: root
+    group: root
+    creates: "/usr/local/bin/{{ node_exporter_binary }}"
+    extra_opts:
+      - "--strip-components"
+      - "1"
+
+- name: RedHat | Copy {{ node_exporter_systemd_service }}
+  template: 
+    src: "templates/{{ node_exporter_systemd_service }}.j2"
+    dest: "/etc/systemd/system/{{ node_exporter_systemd_service }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: RedHat | systemctl daemon-reload
+  command: systemctl daemon-reload 
+
+- name: RedHat | Start and enable service {{ node_exporter_systemd_service }}
+  service:
+    name: "{{ node_exporter_systemd_service }}"
+    state: started
+    enabled: yes     
+
+- name: RedHat | Open node exporter firewall port tcp {{ node_exporter_port }}
+  firewalld:
+    immediate: yes
+    permanent: yes
+    state: enabled
+    port: "{{ node_exporter_port }}/tcp"
+  ignore_errors: yes

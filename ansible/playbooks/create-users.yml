@@ -1,0 +1,8 @@
+---
+- name: Create users and groups
+  hosts: k8s
+  remote_user: root
+  gather_facts: yes
+  roles:
+    - hl.users
+...

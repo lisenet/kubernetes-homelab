@@ -1,0 +1,12 @@
+# MANAGED BY ANSIBLE
+
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6 ip6-localhost ip6-loopback
+
+10.11.1.30  kubelb.hl.test
+{% for host in groups['k8s_master'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}  {{ hostvars[host].ansible_facts.fqdn }} {{ hostvars[host].ansible_facts.hostname }} 
+{% endfor %}
+{% for host in groups['k8s_node'] %}
+{{ hostvars[host].ansible_default_ipv4.address }}  {{ hostvars[host].ansible_facts.fqdn }} {{ hostvars[host].ansible_facts.hostname }}
+{% endfor %}

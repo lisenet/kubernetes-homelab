@@ -1,0 +1,40 @@
+# MANAGED BY ANSIBLE
+#
+[Unit]
+Description=Prometheus
+Documentation=https://github.com/prometheus/node_exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ prometheus_user }}
+Group={{ prometheus_user }}
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/{{ node_exporter_binary }} \
+    --collector.cpu \
+    --collector.diskstats \
+    --collector.filesystem \
+    --collector.loadavg \
+    --collector.meminfo \
+    --collector.filefd \
+    --collector.netdev \
+    --collector.stat \
+    --collector.netstat \
+    --collector.systemd \
+    --collector.uname \
+    --collector.vmstat \
+    --collector.time \
+    --collector.mdadm \
+    --collector.tcpstat \
+    --collector.hwmon \
+    --collector.arp \
+    --web.max-requests=40 \
+    --web.listen-address=0.0.0.0:{{ node_exporter_port }} \
+    --web.telemetry-path=/metrics
+
+SyslogIdentifier=prometheus
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
