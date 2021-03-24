@@ -1,0 +1,1792 @@
+# Imported from https://grafana.com/grafana/dashboards/367
+---
+apiVersion: v1
+data:
+  haproxy-summary.json: |
+    {
+      "__inputs": [
+        {
+          "name": "Prometheus",
+          "label": "Prometheus",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "prometheus",
+          "pluginName": "Prometheus"
+        }
+      ],
+      "__requires": [
+        {
+          "type": "grafana",
+          "id": "grafana",
+          "name": "Grafana",
+          "version": "4.1.2"
+        },
+        {
+          "type": "panel",
+          "id": "graph",
+          "name": "Graph",
+          "version": ""
+        },
+        {
+          "type": "datasource",
+          "id": "prometheus",
+          "name": "Prometheus",
+          "version": "1.0.0"
+        }
+      ],
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "gnetId": 367,
+      "graphTooltip": 1,
+      "hideControls": false,
+      "id": null,
+      "links": [],
+      "refresh": "1m",
+      "rows": [
+        {
+          "collapse": false,
+          "height": "250px",
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 15,
+              "legend": {
+                "alignAsTable": true,
+                "avg": true,
+                "current": true,
+                "max": true,
+                "min": true,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": true
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 12,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_http_responses_total{backend=~\"$backend\", server=~\"$server\", code=~\"$code\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}/{{ code }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "HTTP Responses",
+              "tooltip": {
+                "msResolution": true,
+                "shared": true,
+                "sort": 2,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 16,
+              "legend": {
+                "alignAsTable": false,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 4,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "avg(haproxy_server_check_duration_milliseconds{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}) without (alias)",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Check Duration (ms)",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "cumulative"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "ms",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "none",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 17,
+              "legend": {
+                "alignAsTable": false,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 4,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_check_failures_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Check Failures",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 18,
+              "legend": {
+                "alignAsTable": false,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 4,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_downtime_seconds_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Downtime (s)",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 19,
+              "legend": {
+                "alignAsTable": false,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 4,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_redispatch_warnings_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Redispatch Warnings",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 20,
+              "legend": {
+                "alignAsTable": false,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 4,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_response_errors_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Response Errors",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 21,
+              "legend": {
+                "alignAsTable": false,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 4,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_retry_warnings_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Retry Warnings",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            }
+          ],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
+          "showTitle": true,
+          "title": "Backend Responses",
+          "titleSize": "h6"
+        },
+        {
+          "collapse": false,
+          "height": "250px",
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 1,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_bytes_in_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Bytes IN",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "bytes",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 5,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_bytes_out_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_",
+                  "refId": "B",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Bytes OUT",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "bytes",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            }
+          ],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
+          "showTitle": true,
+          "title": "Throughput",
+          "titleSize": "h6"
+        },
+        {
+          "collapse": false,
+          "height": "250px",
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 0,
+              "grid": {},
+              "id": 4,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [
+                {
+                  "alias": "^ERRORS.*$",
+                  "fill": 2
+                }
+              ],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_connections_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backe",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "New Connections Rate",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "none",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 0,
+              "grid": {},
+              "id": 6,
+              "legend": {
+                "alignAsTable": true,
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [
+                {
+                  "alias": "^ERRORS.*$",
+                  "fill": 2
+                }
+              ],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "irate(haproxy_server_connection_errors_total{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}[180s])",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backe",
+                  "refId": "B",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Connection Errors Rate",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "none",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            }
+          ],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
+          "showTitle": true,
+          "title": "Connections",
+          "titleSize": "h6"
+        },
+        {
+          "collapse": false,
+          "height": "250px",
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 7,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_current_queue{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Current Queue Size",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "cumulative"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 8,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_max_queue{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Max Queue Size",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "cumulative"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            }
+          ],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
+          "showTitle": true,
+          "title": "Queues",
+          "titleSize": "h6"
+        },
+        {
+          "collapse": false,
+          "height": "250px",
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 10,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_current_sessions{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Active Sessions",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 11,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_current_session_rate{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "New Session Rate",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 0,
+              "grid": {},
+              "id": 12,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_max_sessions{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Max Active Sessions",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 0,
+              "grid": {},
+              "id": 13,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_max_session_rate{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "interval": "$interval",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "metric": "haproxy_backend_current_queue",
+                  "refId": "A",
+                  "step": 60
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Max Session Rate",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            }
+          ],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
+          "showTitle": true,
+          "title": "Sessions",
+          "titleSize": "h6"
+        },
+        {
+          "collapse": false,
+          "height": "250px",
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "decimals": 0,
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 22,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": true,
+                "show": true,
+                "total": false,
+                "values": true
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_up{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "refId": "A",
+                  "step": 30
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Servers UP",
+              "tooltip": {
+                "msResolution": true,
+                "shared": false,
+                "sort": 0,
+                "value_type": "cumulative"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": 0,
+                  "show": true
+                }
+              ]
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "datasource": "Prometheus",
+              "editable": true,
+              "error": false,
+              "fill": 1,
+              "grid": {},
+              "id": 23,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 2,
+              "links": [],
+              "nullPointMode": "connected",
+              "percentage": false,
+              "pointradius": 5,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "span": 6,
+              "stack": true,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "expr": "haproxy_server_weight{backend=~\"$backend\", server=~\"$server\", alias=\"$alias\"}",
+                  "intervalFactor": 2,
+                  "legendFormat": "{{ backend }}/{{ server }}",
+                  "refId": "A",
+                  "step": 30
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Servers Weights",
+              "tooltip": {
+                "msResolution": true,
+                "shared": true,
+                "sort": 0,
+                "value_type": "cumulative"
+              },
+              "type": "graph",
+              "xaxis": {
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ]
+            }
+          ],
+          "repeat": null,
+          "repeatIteration": null,
+          "repeatRowId": null,
+          "showTitle": false,
+          "title": "New row",
+          "titleSize": "h6"
+        }
+      ],
+      "schemaVersion": 14,
+      "style": "dark",
+      "tags": [
+        "haproxy",
+        "servers"
+      ],
+      "templating": {
+        "list": [
+          {
+            "auto": true,
+            "auto_count": 30,
+            "auto_min": "10s",
+            "current": {
+              "text": "1m",
+              "value": "1m"
+            },
+            "datasource": null,
+            "hide": 0,
+            "includeAll": false,
+            "label": "Interval",
+            "multi": false,
+            "name": "interval",
+            "options": [
+              {
+                "selected": false,
+                "text": "auto",
+                "value": "$__auto_interval"
+              },
+              {
+                "selected": true,
+                "text": "1m",
+                "value": "1m"
+              },
+              {
+                "selected": false,
+                "text": "5m",
+                "value": "5m"
+              },
+              {
+                "selected": false,
+                "text": "1h",
+                "value": "1h"
+              },
+              {
+                "selected": false,
+                "text": "6h",
+                "value": "6h"
+              },
+              {
+                "selected": false,
+                "text": "1d",
+                "value": "1d"
+              }
+            ],
+            "query": "1m,5m,1h,6h,1d",
+            "refresh": 2,
+            "type": "interval"
+          },
+          {
+            "allValue": null,
+            "current": {},
+            "datasource": "Prometheus",
+            "hide": 0,
+            "includeAll": false,
+            "label": "Load Balancer",
+            "multi": false,
+            "name": "alias",
+            "options": [],
+            "query": "label_values(haproxy_up, alias)",
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "tagValuesQuery": null,
+            "tags": [],
+            "tagsQuery": null,
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {},
+            "datasource": "Prometheus",
+            "hide": 0,
+            "includeAll": true,
+            "label": "Backend",
+            "multi": true,
+            "name": "backend",
+            "options": [],
+            "query": "label_values(haproxy_server_bytes_in_total{alias=\"$alias\"}, backend)",
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "tagValuesQuery": null,
+            "tags": [],
+            "tagsQuery": null,
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {},
+            "datasource": "Prometheus",
+            "hide": 0,
+            "includeAll": true,
+            "label": "Server",
+            "multi": true,
+            "name": "server",
+            "options": [],
+            "query": "label_values(haproxy_server_bytes_in_total{alias=\"$alias\", backend=~\"$backend\"}, server)",
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "tagValuesQuery": null,
+            "tags": [],
+            "tagsQuery": null,
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {},
+            "datasource": "Prometheus",
+            "hide": 0,
+            "includeAll": true,
+            "label": "HTTP Code",
+            "multi": true,
+            "name": "code",
+            "options": [],
+            "query": "label_values(haproxy_server_http_responses_total{alias=\"$alias\", backend=~\"$backend\", server=~\"$server\"}, code)",
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "tagValuesQuery": null,
+            "tags": [],
+            "tagsQuery": null,
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-3h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ],
+        "time_options": [
+          "5m",
+          "15m",
+          "1h",
+          "6h",
+          "12h",
+          "24h",
+          "2d",
+          "7d",
+          "30d"
+        ]
+      },
+      "timezone": "browser",
+      "title": "HAproxy Servers | HAproxy",
+      "version": 6,
+      "description": "HAproxy backend servers"
+    }
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards-haproxy-summary
+  namespace: monitoring
+  labels:
+    app: grafana

@@ -24,3 +24,33 @@ data:
       orgId: 1
       type: file
       disableDeletion: false
+    - name: etcd-summary
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/etcd-summary
+      orgId: 1
+      type: file
+    - name: bind-summary
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/bind-summary
+      orgId: 1
+      type: file
+    - name: haproxy-summary
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/haproxy-summary
+      orgId: 1
+      type: file
+    - name: mikrotik-summary
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/mikrotik-summary
+      orgId: 1
+      type: file
+    - name: x509-cert-summary
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/x509-cert-summary
+      orgId: 1
+      type: file

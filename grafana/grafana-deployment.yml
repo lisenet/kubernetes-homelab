@@ -62,6 +62,21 @@ spec:
           - name: dashboards-node-exporter-full
             mountPath: /var/lib/grafana/dashboards/node-exporter-full
 
+          - name: dashboards-etcd-summary
+            mountPath: /var/lib/grafana/dashboards/etcd-summary
+
+          - name: dashboards-bind-summary
+            mountPath: /var/lib/grafana/dashboards/bind-summary
+
+          - name: dashboards-haproxy-summary
+            mountPath: /var/lib/grafana/dashboards/haproxy-summary
+
+          - name: dashboards-mikrotik-summary
+            mountPath: /var/lib/grafana/dashboards/mikrotik-summary
+
+          - name: dashboards-x509-cert-summary
+            mountPath: /var/lib/grafana/dashboards/x509-cert-summary
+
       # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
       #initContainers:
       #  - name: fix-nfs-permissions
@@ -109,3 +124,39 @@ spec:
         - name: dashboards-node-exporter-full
           configMap:
             name: grafana-dashboards-node-exporter-full
+
+        - name: grafana-datasources
+          configMap:
+            name: grafana-datasources
+
+        - name: grafana-dashboard-providers
+          configMap:
+            name: grafana-dashboard-providers
+
+        - name: dashboards-k8s-cluster-summary
+          configMap:
+            name: grafana-dashboards-k8s-cluster-summary
+
+        - name: dashboards-node-exporter-full
+          configMap:
+            name: grafana-dashboards-node-exporter-full
+
+        - name: dashboards-etcd-summary
+          configMap:
+            name: grafana-dashboards-etcd-summary
+
+        - name: dashboards-bind-summary
+          configMap:
+            name: grafana-dashboards-bind-summary
+
+        - name: dashboards-haproxy-summary
+          configMap:
+            name: grafana-dashboards-haproxy-summary
+
+        - name: dashboards-mikrotik-summary
+          configMap:
+            name: grafana-dashboards-mikrotik-summary
+
+        - name: dashboards-x509-cert-summary
+          configMap:
+            name: grafana-dashboards-x509-cert-summary
