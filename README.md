@@ -60,6 +60,16 @@ Deploy `mikrotik-exporter`:
 $ kubectl apply -f ./mikrotik-exporter
 ```
 
+### X509 Certificate Exporter
+
+Deploy the Helm chart:
+```
+$ helm upgrade --install x509-certificate-exporter \
+  ./charts/x509-certificate-exporter/ \
+  --namespace monitoring \
+  --debug
+```
+
 ## Create a Homelab ROOT CA
 Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
 
