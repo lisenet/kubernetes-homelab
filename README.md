@@ -98,6 +98,8 @@ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -
 
 [`Monitor Linux Servers with Grafana and Prometheus (node_exporter)`](https://www.lisenet.com/2021/monitor-linux-servers-with-grafana-and-prometheus-node_exporter/)
 
+[`Monitor Mikrotik Router with Grafana and Prometheus (mikrotik-exporter)`](https://www.lisenet.com/2021/monitor-mikrotik-router-with-grafana-and-prometheus-mikrotik-exporter/)
+
 
 # Homelab Network Diagram
 
