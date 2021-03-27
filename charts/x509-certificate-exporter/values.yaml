@@ -2,7 +2,8 @@
 # Default values for x509-certificate-exporter.
 
 # -- Extra labels to add on chart resources
-extraLabels: {}
+extraLabels:
+  app: x509-certificate-exporter
 
 # -- String to partially override x509-certificate-exporter.fullname template with a string (will prepend the release name)
 nameOverride: ""
