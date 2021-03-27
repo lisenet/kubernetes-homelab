@@ -16,6 +16,18 @@ spec:
       labels:
         app: prometheus-server
     spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - prometheus-server
+            topologyKey: "kubernetes.io/hostname"
       securityContext:
         fsGroup: 65534
         runAsGroup: 65534

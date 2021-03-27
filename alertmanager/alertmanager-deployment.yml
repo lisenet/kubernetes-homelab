@@ -16,6 +16,18 @@ spec:
       labels:
         app: alertmanager
     spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - alertmanager
+            topologyKey: "kubernetes.io/hostname"
       serviceAccountName: alertmanager
       serviceAccount: alertmanager
       securityContext:

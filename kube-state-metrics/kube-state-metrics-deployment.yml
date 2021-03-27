@@ -16,6 +16,18 @@ spec:
       labels:
         app: kube-state-metrics
     spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - kube-state-metrics
+            topologyKey: "kubernetes.io/hostname"
       serviceAccountName: kube-state-metrics
       serviceAccount: kube-state-metrics
       securityContext:

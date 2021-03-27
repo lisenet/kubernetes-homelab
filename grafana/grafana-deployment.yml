@@ -17,6 +17,18 @@ spec:
       labels:
         app: grafana
     spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - grafana
+            topologyKey: "kubernetes.io/hostname"
       securityContext:
         fsGroup: 472
         runAsGroup: 472

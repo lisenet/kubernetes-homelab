@@ -16,6 +16,18 @@ spec:
       labels:
         app: mikrotik-exporter
     spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - mikrotik-exporter
+            topologyKey: "kubernetes.io/hostname"
       containers:
         - name: mikrotik-exporter
           image: nshttpd/mikrotik-exporter:1.0.11
