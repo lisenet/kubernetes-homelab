@@ -81,16 +81,16 @@ $ kubectl apply -f ./metallb
 Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
 
 ```
-vim /etc/pki/tls/certs/make-dummy-cert
-openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
+$ vim /etc/pki/tls/certs/make-dummy-cert
+$ openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
 ```
 
 ## Create a Kubernetes Wildcard Cert Signed by the ROOT CA
 ```
-DOMAIN=wildcard.apps.hl.test
-openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
-openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
-openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -CAcreateserial -out "${DOMAIN}".crt -days 1825 -sha256
+$ DOMAIN=wildcard.apps.hl.test
+$ openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
+$ openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
+$ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -CAcreateserial -out "${DOMAIN}".crt -days 1825 -sha256
 ```
 
 # Blog Posts
