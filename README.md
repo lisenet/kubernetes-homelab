@@ -70,6 +70,13 @@ $ helm upgrade --install x509-certificate-exporter \
   --debug
 ```
 
+### MetalLB
+
+Update the config map [`metallb/metallb-config-map.yml`](./metallb/metallb-config-map.yml) and specify the IP address range. Deploy MetalLB network load-balancer:
+```
+$ kubectl apply -f ./metallb
+```
+
 ## Create a Homelab ROOT CA
 Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
 
