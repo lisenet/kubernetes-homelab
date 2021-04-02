@@ -55,7 +55,7 @@ $ kubectl apply -f ./alertmanager
 
 ### Mikrotik-exporter
 
-Deploy `mikrotik-exporter`:
+Update the secret file [`mikrotik-exporter/mikrotik-exporter-secret.yml`](./mikrotik-exporter/mikrotik-exporter-secret.yml) and specify your password for the Mikrotik API user. Deploy `mikrotik-exporter`:
 ```
 $ kubectl apply -f ./mikrotik-exporter
 ```
