@@ -16,6 +16,8 @@ $ ansible-vault create ./roles/hl.users/defaults/secure.yml
 
 The variable for user password is `user_password`.
 
+Cluster defaults are defined in [`roles/hl.k8s-cluster/defaults/main.yml`](./roles/hl.k8s-cluster/defaults/main.yml).
+
 Run the main playbook:
 ```
 $ ansible-playbook ./playbooks/main-k8s-hosts.yml
