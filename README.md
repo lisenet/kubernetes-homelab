@@ -46,12 +46,12 @@ $ kubectl apply -f ./grafana
 
 ### Alertmanager
 
-Deploy `alertmanager`:
+Alertmanager uses the Incoming Webhooks feature of Slack, therefore you need to set it up if you want to receive Slack alerts.
+
+Update the config map [`alertmanager/alertmanager-config-map.yml`](./alertmanager/alertmanager-config-map.yml) and specify your incoming webhook URL. Deploy `alertmanager`:
 ```
 $ kubectl apply -f ./alertmanager
 ```
-
-Alertmanager uses the Incoming Webhooks feature of Slack, therefore you need to set it up if you want to receive Slack alerts.
 
 ### Mikrotik-exporter
 
