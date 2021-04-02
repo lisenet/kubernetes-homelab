@@ -1,0 +1,29 @@
+---
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+spec:
+  profile: default
+  components:
+    ingressGateways:
+      - enabled: true
+        name: istio-ingressgateway
+        k8s:
+         hpaSpec:
+           minReplicas: 2 # default 1
+         service:
+            ports:
+              # Whatever is listed as the first port in a Service of
+              # type LoadBalancer is picked to be the port used for
+              # health checks. 10001 is the port of httpd-healthcheck.
+              - name: httpd-healthcheck
+                port: 10001
+                targetPort: 10001
+              - name: https
+                port: 443
+                targetPort: 8443
+              # Istio readiness port of gateways
+              - name: status-port
+                port: 15021
+                targetPort: 15021

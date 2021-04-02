@@ -1,0 +1,18 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: httpd-healthcheck-gateway
+  namespace: httpd-healthcheck
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 10001
+        name: tcp-httpd-healthcheck
+        protocol: TCP
+      hosts:
+        # Don't use a specific server name, or then we can't use NodePort services, due to
+        # https://github.com/istio/istio/issues/12545
+        - "*"

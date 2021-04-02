@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: httpd-healthcheck
+  labels:
+    app: httpd-healthcheck
+    istio-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-healthcheck
+  namespace: httpd-healthcheck
+  labels:
+    app: httpd-healthcheck 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: httpd-healthcheck
+  template:
+    metadata:
+      name: httpd-healthcheck
+      labels:
+        app: httpd-healthcheck
+    spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - httpd-healthcheck
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: httpd-healthcheck
+        image: lisenet/httpd-healthcheck:0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 10001
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests: 
+            memory: "64M"
+            cpu: "1m"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60

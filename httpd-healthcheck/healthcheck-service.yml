@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpd-healthcheck-service
+  namespace: httpd-healthcheck
+  labels:
+    app: httpd-healthcheck
+spec:
+  selector: 
+    app: httpd-healthcheck
+  ports:
+    - port: 10001
+      name: tcp-httpd-healthcheck-10001
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: httpd-healthcheck-virtual-service
+  namespace: httpd-healthcheck
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - httpd-healthcheck-gateway
+  tcp:
+    - match:
+        - port: 10001
+      route:
+        - destination:
+            host: httpd-healthcheck-service
+            port:
+              number: 10001
