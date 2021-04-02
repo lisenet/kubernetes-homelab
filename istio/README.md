@@ -36,6 +36,18 @@ Install httpd-healthcheck:
 kubectl apply -f ../httpd-healthcheck/
 ```
 
+Expected output:
+
+```
+$ kubectl -n istio-system get svc
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                                         AGE
+istio-ingressgateway   LoadBalancer   10.99.133.23     10.11.1.52    10001:32104/TCP,443:30175/TCP,15021:30860/TCP   73m
+istiod                 ClusterIP      10.103.218.247   <none>        15010/TCP,15012/TCP,443/TCP,15014/TCP           73m
+kiali                  ClusterIP      10.109.213.166   <none>        20001/TCP,9090/TCP                              36m
+```
+
+Note that I use MetalLB as a network load balancer implementation for my bare metal homelab cluster.
+
 ## References
 
 https://istio.io/latest/docs/setup/install/istioctl/
