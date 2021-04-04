@@ -1,0 +1,19 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: grafana-virtual-service
+  namespace: monitoring
+spec:
+  # the destination hosts to which traffic is being sent
+  hosts:
+    - "grafana.apps.hl.test"
+  # the name of gateway and sidecar that should apply the route
+  gateways:
+    - monitoring-gateway
+  http:
+    - route:
+      - destination:
+          host: grafana
+          port:
+            number: 3000

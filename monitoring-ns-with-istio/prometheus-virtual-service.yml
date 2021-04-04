@@ -1,0 +1,19 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: prometheus-server-virtual-service
+  namespace: monitoring
+spec:
+  # the destination hosts to which traffic is being sent
+  hosts:
+    - "prometheus.apps.hl.test"
+  # the name of gateway and sidecar that should apply the route
+  gateways:
+    - monitoring-gateway
+  http:
+    - route:
+      - destination:
+          host: prometheus-service
+          port:
+            number: 9090

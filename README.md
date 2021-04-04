@@ -20,7 +20,7 @@ See [`ansible/README.md`](./ansible/README.md).
 
 Create a monitoring namespace:
 ```
-$ kubectl create ns monitoring
+$ kubectl apply -f ./monitoring-ns-istio-injection-enabled.yml
 ```
 
 ### kube-state-metrics

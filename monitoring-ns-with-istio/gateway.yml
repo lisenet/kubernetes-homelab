@@ -1,0 +1,30 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: monitoring-gateway
+  namespace: monitoring
+spec:
+  selector:
+    istio: ingressgateway # use istio default ingress gateway
+  servers:
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE # enables HTTPS on this port
+        credentialName: istio-ingressgateway-tls-cert # fetches certs from Kubernetes secret
+      hosts:
+        # don't use a specific server name, or then we can't use NodePort services, due to
+        # https://github.com/istio/istio/issues/12545
+        - "*"
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "PeerAuthentication"
+metadata:
+  name: "monitoring-peer-authentication" # mandatory for a namespace policy
+  namespace: monitorings
+spec:
+  mtls:
+    mode: STRICT # in this mode, the service can only accept encrypted traffic

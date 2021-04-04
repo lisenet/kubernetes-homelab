@@ -1,0 +1,19 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: alertmanager-virtual-service
+  namespace: monitoring
+spec:
+  # the destination hosts to which traffic is being sent
+  hosts:
+    - "alertmanager.apps.hl.test"
+  # the name of gateway and sidecar that should apply the route
+  gateways:
+    - monitoring-gateway
+  http:
+    - route:
+      - destination:
+          host: alertmanager
+          port:
+            number: 9093
