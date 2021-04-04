@@ -77,6 +77,36 @@ Update the config map [`metallb/metallb-config-map.yml`](./metallb/metallb-confi
 $ kubectl apply -f ./metallb
 ```
 
+## Install Istio
+
+The Istio namespace must be created manually.
+
+```
+$ kubectl create ns istio-system
+```
+
+The `kubectl apply` command may show transient errors due to resources not being available in the cluster in the correct order. If that happens, simply run the command again.
+```
+kubectl apply -f ./istio/istio-kubernetes.yml
+```
+
+Install httpd-healthcheck:
+```
+$ kubectl apply -f ./httpd-healthcheck
+```
+
+### Install Istio Addons - Prometheus
+
+```
+$ kubectl apply -f istio-addons/prometheus
+```
+
+### Install Istio Addons - Kiali
+
+```
+$ kubectl apply -f istio-addons/kiali
+```
+
 ## Create a Homelab ROOT CA
 Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
 
