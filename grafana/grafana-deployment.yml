@@ -137,22 +137,6 @@ spec:
           configMap:
             name: grafana-dashboards-node-exporter-full
 
-        - name: grafana-datasources
-          configMap:
-            name: grafana-datasources
-
-        - name: grafana-dashboard-providers
-          configMap:
-            name: grafana-dashboard-providers
-
-        - name: dashboards-k8s-cluster-summary
-          configMap:
-            name: grafana-dashboards-k8s-cluster-summary
-
-        - name: dashboards-node-exporter-full
-          configMap:
-            name: grafana-dashboards-node-exporter-full
-
         - name: dashboards-etcd-summary
           configMap:
             name: grafana-dashboards-etcd-summary
