@@ -24,7 +24,7 @@ apiVersion: "security.istio.io/v1beta1"
 kind: "PeerAuthentication"
 metadata:
   name: "monitoring-peer-authentication" # mandatory for a namespace policy
-  namespace: monitorings
+  namespace: monitoring
 spec:
   mtls:
     mode: STRICT # in this mode, the service can only accept encrypted traffic
