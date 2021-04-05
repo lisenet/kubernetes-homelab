@@ -47,3 +47,7 @@ k8s_firewall_ports_node:
 # 179 - Calico networking (BGP)
 k8s_firewall_ports_cni:
   - 179
+
+# 7946 - MetalLB
+k8s_firewall_ports_metallb:
+  - 7946

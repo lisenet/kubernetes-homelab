@@ -93,6 +93,22 @@
     port: "{{ item }}/tcp"
   loop: "{{ k8s_firewall_ports_cni }}"
 
+- name: RedHat | Open K8s firewall ports for MetalLB - TCP
+  firewalld:
+    immediate: yes
+    permanent: yes
+    state: enabled
+    port: "{{ item }}/tcp"
+  loop: "{{ k8s_firewall_ports_metallb }}"
+
+- name: RedHat | Open K8s firewall ports for MetalLB - UDP
+  firewalld:
+    immediate: yes
+    permanent: yes
+    state: enabled
+    port: "{{ item }}/udp"
+  loop: "{{ k8s_firewall_ports_metallb }}"
+
 - name: RedHat | Enable masquerade
   firewalld:
     immediate: yes
