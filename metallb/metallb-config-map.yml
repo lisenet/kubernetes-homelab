@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: metallb-conf
+  name: config
   namespace: metallb-system
   labels:
     app: metallb
