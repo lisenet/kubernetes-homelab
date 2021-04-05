@@ -3,7 +3,7 @@
 ## priority of any variables available, and can be easily overridden 
 ## by any other variable, including inventory variables.
 
-k8s_version: "1.19.7"
+k8s_version: "1.20.5"
 k8s_pod_network: "192.168.0.0/16"
 k8s_ha_dns: "kubelb.hl.test"
 k8s_api_port: "6443"
