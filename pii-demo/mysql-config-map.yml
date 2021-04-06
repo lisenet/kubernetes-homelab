@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-server-config
+  namespace: pii-demo
+  labels:
+    app: mysql-server
+data:
+  my.cnf: |
+    [mysqld]
+    bind_address = 0.0.0.0
+    skip_name_resolve
+    skip_log_bin

@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd-server
+  namespace: pii-demo
+  labels:
+    app: httpd-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpd-server
+  template:
+    metadata:
+      name: httpd-server
+      labels:
+        app: httpd-server
+    spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - httpd-server
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: httpd-server
+          image: lisenet/httpd-pii-demo:0.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            tcpSocket:
+              port: 80
+          ports:
+            - containerPort: 80
+              name: httpd
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+            requests: 
+              memory: "64Mi"
+              cpu: "10m"
+      terminationGracePeriodSeconds: 60

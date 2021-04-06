@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-server
+  namespace: pii-demo
+  labels:
+    app: mysql-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-server
+  template:
+    metadata:
+      name: mysql-server
+      labels:
+        app: mysql-server
+    spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - mysql-server
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: mysql-server
+          image: mysql:5.7
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: mysql_root_password
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: mysql_user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: mysql_password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-credentials
+                  key: mysql_database
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+          ports:
+            - containerPort: 3306
+              name: mysql
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "200m"
+            requests: 
+              memory: "64Mi"
+              cpu: "10m"
+          volumeMounts:
+            - name: mysql-datadir
+              mountPath: /var/lib/mysql
+            - name: mysql-server-config
+              mountPath: /etc/mysql/conf.d/my.cnf
+              subPath: my.cnf
+              readOnly: true
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: mysql-datadir
+          emptyDir: {}
+        - name: mysql-server-config
+          configMap:
+            name: mysql-server-config
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config
