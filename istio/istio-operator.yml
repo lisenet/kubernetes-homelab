@@ -20,6 +20,9 @@ spec:
               - name: httpd-healthcheck
                 port: 10001
                 targetPort: 10001
+              - name: http
+                port: 80
+                targetPort: 8080
               - name: https
                 port: 443
                 targetPort: 8443
