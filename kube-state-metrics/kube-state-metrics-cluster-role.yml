@@ -199,6 +199,13 @@ rules:
       - storage.k8s.io
     resources:
       - volumeattachments
+  - verbs:
+      - list
+      - watch
+    apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

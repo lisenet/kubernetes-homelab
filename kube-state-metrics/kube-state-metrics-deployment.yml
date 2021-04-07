@@ -36,12 +36,18 @@ spec:
         fsGroup: 65534    
       containers:
         - name: kube-state-metrics
-          image: 'quay.io/coreos/kube-state-metrics:v1.9.7'
+          image: k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.0.0-rc.1
           imagePullPolicy: IfNotPresent          
           ports:
             - containerPort: 8080
               protocol: TCP
-          resources: {}
+          resources:
+            limits:
+              memory: "400Mi"
+              cpu: "100m"
+            requests:
+              memory: "200Mi"
+              cpu: "10m"
           livenessProbe:
             httpGet:
               path: /healthz
