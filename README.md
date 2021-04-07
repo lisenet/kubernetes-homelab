@@ -2,6 +2,23 @@
 
 A repository to keep resources and configuration files used with my Kubernetes homelab.
 
+# Content of the Repository
+
+* [`alertmanager`](./alertmanager/) - configuration files to deploy Alertmanager.
+* [`ansible`](./ansible/README.md) - Ansible playbooks to deploy Kubernetes homelab.
+* [`charts`](./charts/) - Helm charts.
+* [`docs`](./docs/) - images and documentation files.
+* [`grafana`](./grafana/) - configuration files to deploy Grafana.
+* [`httpd-healthcheck`](./httpd-healthcheck/) - configuration files deploy a simple httpd healthcheck for Istio ingressgateway.
+* [`istio`](./istio/) - configuration files to deploy Istio.
+* [`istio-addons`](./istio-addons/) - configuration files to deploy Istio add-ons (e.g. Kiali).
+* [`kube-state-metrics`](./kube-state-metrics/) - configuration files to deploy kube-state-metrics.
+* [`metallb`](./metallb/) - configuration files to deploy MetalLB.
+* [`mikrotik-exporter`](./mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
+* [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
+* [`prometheus`](./prometheus/) - configuration files to deploy Prometheus monitoring.
+* `regcred` - docker registry credentials.
+
 # Pre-requisites
 
 A working NFS server is required to create persistent volumes.
