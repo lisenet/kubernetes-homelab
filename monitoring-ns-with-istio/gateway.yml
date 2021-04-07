@@ -27,4 +27,4 @@ metadata:
   namespace: monitoring
 spec:
   mtls:
-    mode: STRICT # in this mode, the service can only accept encrypted traffic
+    mode: PERMISSIVE # in this mode, the service can accept encrypted and plaintext traffic
