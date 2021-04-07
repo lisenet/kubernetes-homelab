@@ -5,8 +5,8 @@
 Kubernetes development continues to grow at a rapid pace, and keeping up to date can be a challenge. Therefore it’s important to know which software versions can work together without breaking things.
 
 * CentOS 7
-* Kubernetes 1.19.7
-* Calico CNI 3.17
+* Kubernetes 1.20.5
+* Calico CNI 3.18
 * docker-ce 19.03
 * kubernetes-cni 0.8.7
 * Istio 1.9
