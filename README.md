@@ -2,6 +2,12 @@
 
 A repository to keep resources and configuration files used with my Kubernetes homelab.
 
+[![version](https://img.shields.io/github/manifest-json/v/lisenet/kubernetes-homelab?style=plastic)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
+[![license](https://img.shields.io/github/license/lisenet/kubernetes-homelab?style=plastic)](https://github.com/lisenet/kubernetes-homelab/blob/master/LICENSE)
+[![last commit](https://img.shields.io/github/last-commit/lisenet/kubernetes-homelab?style=plastic)](https://github.com/lisenet/kubernetes-homelab/commits/master)
+[![commit activity](https://img.shields.io/github/commit-activity/y/lisenet/kubernetes-homelab?style=plastic)](hhttps://github.com/lisenet/kubernetes-homelab/commits/master)
+
+
 # Content of the Repository
 
 * [`alertmanager`](./alertmanager/) - configuration files to deploy Alertmanager.
