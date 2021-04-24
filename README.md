@@ -24,14 +24,11 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
 * [`prometheus`](./prometheus/) - configuration files to deploy Prometheus monitoring.
 * `regcred` - docker registry credentials.
+* [`truenas-nfs`](./truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
 
 # Pre-requisites
 
-A working NFS server is required to create persistent volumes.
-
-* `/mnt/storage-k8s/nfs/prometheus` - the owner:group of the Prometheus NFS folder is set to 65534:65534, because of Prometheus deployment `runAsUser: 65534`.
-* `/mnt/storage-k8s/nfs/grafana` - the owner:group of the grafana NFS folder is set to 472:472, because of Grafana deployment `runAsUser: 472`.
-* `/mnt/storage-k8s/nfs/alertmanager` - the owner:group of the Alertmanager NFS folder is set to 65534:65534, because of Alertmanager deployment `runAsUser: 65534`.
+A TrueNAS NFS server is required to create persistent volumes claims using `democratic-csi`.
 
 # Deployment
 
