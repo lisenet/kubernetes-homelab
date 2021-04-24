@@ -1,0 +1,62 @@
+csiDriver:
+  # should be globally unique for a given cluster
+  name: "org.democratic-csi.nfs"
+
+storageClasses:
+- name: freenas-nfs-csi
+  defaultClass: false
+  reclaimPolicy: Delete
+  volumeBindingMode: Immediate
+  allowVolumeExpansion: true
+  parameters:
+    fsType: nfs
+      
+  mountOptions:
+  - noatime
+  - nfsvers=4
+  secrets:
+    provisioner-secret:
+    controller-publish-secret:
+    node-stage-secret:
+    node-publish-secret:
+    controller-expand-secret:
+
+driver:
+  config:
+    driver: freenas-nfs
+    instance_id:
+    httpConnection:
+      protocol: http
+      host: 10.11.1.5
+      port: 80
+      # You should never commit API keys to source control, especially public repositories.
+      apiKey: <your API key>
+      username: root
+      allowInsecure: true
+      apiVersion: 2
+    sshConnection:
+      host: 10.11.1.5
+      port: 22
+      username: root
+      # You should never commit private keys to source control, especially public repositories.
+      privateKey: |
+        -----BEGIN RSA PRIVATE KEY-----
+        <your SSH private key>
+        -----END RSA PRIVATE KEY-----
+    zfs:
+      datasetParentName: homelab-hdd/k8s/nfs/vols
+      detachedSnapshotsDatasetParentName: homelab-hdd/k8s/nfs/snaps
+      datasetEnableQuotas: true
+      datasetEnableReservation: false
+      datasetPermissionsMode: "0777"
+      datasetPermissionsUser: root
+      datasetPermissionsGroup: wheel
+    nfs:
+      shareHost: 10.11.1.5
+      shareAlldirs: false
+      shareAllowedHosts: []
+      shareAllowedNetworks: []
+      shareMaprootUser: root
+      shareMaprootGroup: wheel
+      shareMapallUser: ""
+      shareMapallGroup: ""
