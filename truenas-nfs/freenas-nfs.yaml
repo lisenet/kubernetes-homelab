@@ -5,7 +5,7 @@ csiDriver:
 storageClasses:
 - name: freenas-nfs-csi
   defaultClass: false
-  reclaimPolicy: Delete
+  reclaimPolicy: Retain
   volumeBindingMode: Immediate
   allowVolumeExpansion: true
   parameters:

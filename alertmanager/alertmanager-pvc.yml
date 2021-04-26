@@ -6,10 +6,12 @@ metadata:
   namespace: monitoring
   labels:
     app: alertmanager
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "freenas-nfs-csi"
 spec:
-  storageClassName: nfs
+  storageClassName: freenas-nfs-csi
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 128Mi
