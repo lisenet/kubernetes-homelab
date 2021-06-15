@@ -15,12 +15,12 @@ kubelet_file: "/etc/sysconfig/kubelet"
 
 k8s_dependencies_redhat:
   - kubernetes-cni-0.8.7-0.x86_64
-  - kubelet-1.20.5-0.x86_64
+  - kubelet-1.21.1-0.x86_64
 
 # nfs-utils to configure NFS based PV (Persistent Volume)
 k8s_packages_redhat:
-  - kubectl-1.20.5-0.x86_64
-  - kubeadm-1.20.5-0.x86_64
+  - kubectl-1.21.1-0.x86_64
+  - kubeadm-1.21.1-0.x86_64
   - nfs-utils
   - firewalld  
 
