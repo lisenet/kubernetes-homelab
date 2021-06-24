@@ -24,6 +24,9 @@ k8s_packages_redhat:
   - nfs-utils
   - firewalld  
 
+k8s_packages_redhat8:
+  - iproute-tc
+
 k8s_repository_redhat: "https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64"
 k8s_gpg_key_redhat: "https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
 
