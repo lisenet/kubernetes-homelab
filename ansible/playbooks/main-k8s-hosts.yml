@@ -10,7 +10,8 @@
 - import_playbook: configure-hostsfile.yml
 - import_playbook: configure-docker.yml
 - import_playbook: configure-k8s.yml
-- import_playbook: deploy-k8s-cluster.yml
+#- import_playbook: deploy-k8s-cluster.yml
 
 # Node exporter configuration
 - import_playbook: configure-node-exporter.yml
+
