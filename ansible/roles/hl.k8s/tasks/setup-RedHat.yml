@@ -51,6 +51,14 @@
     allow_downgrade: yes
   loop: "{{ k8s_packages_redhat }}"
 
+- name: RedHat | Install iproute-tc
+  package:
+    name: "{{ item }}"
+    state: present
+    allow_downgrade: yes
+  loop: "{{ k8s_packages_redhat8 }}"
+  when: ansible_distribution_major_version == "8"
+
 - name: RedHat | Configure kubelet Eviction Thresholds
   lineinfile:
     path: "{{ kubelet_file }}"
