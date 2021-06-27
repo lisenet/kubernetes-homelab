@@ -4,7 +4,7 @@
 
 Kubernetes development continues to grow at a rapid pace, and keeping up to date can be a challenge. Therefore it’s important to know which software versions can work together without breaking things.
 
-* CentOS 7
+* Rocky Linux 8
 * Kubernetes 1.21.1
 * Calico CNI 3.19
 * docker-ce 20.10.7
