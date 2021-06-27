@@ -51,7 +51,20 @@
     allow_downgrade: yes
   loop: "{{ k8s_packages_redhat }}"
 
-- name: RedHat | Install iproute-tc
+- name: RedHat | Install firewalld on RHEL 7
+  package:
+    name: "{{ package_firewalld }}"
+    state: present
+    allow_downgrade: yes
+  when: ansible_distribution_major_version == "7"
+
+- name: RedHat | Remove firewalld from RHEL 8
+  package:
+    name: "{{ firewalld_package }}"
+    state: absent
+  when: ansible_distribution_major_version == "8"
+
+- name: RedHat | Install RHEL 8 packages
   package:
     name: "{{ item }}"
     state: present
@@ -75,51 +88,55 @@
 #
 # Configure firewall
 #
-- name: RedHat | Open K8s firewall ports for master
-  firewalld:
-    immediate: yes
-    permanent: yes
-    state: enabled
-    port: "{{ item }}/tcp"
-  loop: "{{ k8s_firewall_ports_master }}"
-  when: "'k8s_master' in group_names"
+- name: Configure firewalld on RHEL 7
+  block:
+  - name: RedHat | Open K8s firewall ports for master
+    firewalld:
+      immediate: yes
+      permanent: yes
+      state: enabled
+      port: "{{ item }}/tcp"
+    loop: "{{ k8s_firewall_ports_master }}"
+    when: "'k8s_master' in group_names"
 
-- name: RedHat | Open K8s firewall ports for node
-  firewalld:
-    immediate: yes
-    permanent: yes
-    state: enabled
-    port: "{{ item }}/tcp"
-  loop: "{{ k8s_firewall_ports_node }}"
-  when: "'k8s_node' in group_names"
+  - name: RedHat | Open K8s firewall ports for node
+    firewalld:
+      immediate: yes
+      permanent: yes
+      state: enabled
+      port: "{{ item }}/tcp"
+    loop: "{{ k8s_firewall_ports_node }}"
+    when: "'k8s_node' in group_names"
 
-- name: RedHat | Open K8s firewall ports for CNI
-  firewalld:
-    immediate: yes
-    permanent: yes
-    state: enabled
-    port: "{{ item }}/tcp"
-  loop: "{{ k8s_firewall_ports_cni }}"
+  - name: RedHat | Open K8s firewall ports for CNI
+    firewalld:
+      immediate: yes
+      permanent: yes
+      state: enabled
+      port: "{{ item }}/tcp"
+    loop: "{{ k8s_firewall_ports_cni }}"
 
-- name: RedHat | Open K8s firewall ports for MetalLB - TCP
-  firewalld:
-    immediate: yes
-    permanent: yes
-    state: enabled
-    port: "{{ item }}/tcp"
-  loop: "{{ k8s_firewall_ports_metallb }}"
+  - name: RedHat | Open K8s firewall ports for MetalLB - TCP
+    firewalld:
+      immediate: yes
+      permanent: yes
+      state: enabled
+      port: "{{ item }}/tcp"
+    loop: "{{ k8s_firewall_ports_metallb }}"
 
-- name: RedHat | Open K8s firewall ports for MetalLB - UDP
-  firewalld:
-    immediate: yes
-    permanent: yes
-    state: enabled
-    port: "{{ item }}/udp"
-  loop: "{{ k8s_firewall_ports_metallb }}"
+  - name: RedHat | Open K8s firewall ports for MetalLB - UDP
+    firewalld:
+      immediate: yes
+      permanent: yes
+      state: enabled
+      port: "{{ item }}/udp"
+    loop: "{{ k8s_firewall_ports_metallb }}"
 
-- name: RedHat | Enable masquerade
-  firewalld:
-    immediate: yes
-    permanent: yes
-    state: enabled
-    masquerade: yes
+  - name: RedHat | Enable masquerade
+    firewalld:
+      immediate: yes
+      permanent: yes
+      state: enabled
+      masquerade: yes
+
+  when: ansible_distribution_major_version == "7"
