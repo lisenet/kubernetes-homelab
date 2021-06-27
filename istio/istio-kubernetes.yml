@@ -4567,7 +4567,7 @@ data:
         "istiod": {
           "enableAnalysis": false
         },
-        "jwtPolicy": "first-party-jwt",
+        "jwtPolicy": "third-party-jwt",
         "logAsJson": false,
         "logging": {
           "level": "default:info"
@@ -5556,7 +5556,7 @@ spec:
               memory: 128Mi
           env:
           - name: JWT_POLICY
-            value: first-party-jwt
+            value: third-party-jwt
           - name: PILOT_CERT_PROVIDER
             value: istiod
           - name: CA_ADDR
@@ -5615,6 +5615,9 @@ spec:
             mountPath: /etc/istio/config
           - mountPath: /var/run/secrets/istio
             name: istiod-ca-cert
+          - name: istio-token
+            mountPath: /var/run/secrets/tokens
+            readOnly: true
           - mountPath: /var/lib/istio/data
             name: istio-data
           - name: podinfo
@@ -5652,6 +5655,13 @@ spec:
         emptyDir: {}
       - name: istio-data
         emptyDir: {}
+      - name: istio-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: istio-token
+              expirationSeconds: 43200
+              audience: istio-ca
       - name: config-volume
         configMap:
           name: istio
@@ -5764,7 +5774,7 @@ spec:
           - name: REVISION
             value: "default"
           - name: JWT_POLICY
-            value: first-party-jwt
+            value: third-party-jwt
           - name: PILOT_CERT_PROVIDER
             value: istiod
           - name: POD_NAME
@@ -5812,6 +5822,9 @@ spec:
           volumeMounts:
           - name: config-volume
             mountPath: /etc/istio/config
+          - name: istio-token
+            mountPath: /var/run/secrets/tokens
+            readOnly: true
           - name: local-certs
             mountPath: /var/run/secrets/istio-dns
           - name: cacerts
@@ -5829,6 +5842,13 @@ spec:
       - emptyDir:
           medium: Memory
         name: local-certs
+      - name: istio-token
+        projected:
+          sources:
+            - serviceAccountToken:
+                audience: istio-ca
+                expirationSeconds: 43200
+                path: istio-token
       # Optional: user-generated root
       - name: cacerts
         secret:
