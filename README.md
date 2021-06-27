@@ -23,6 +23,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`mikrotik-exporter`](./mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
 * [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
 * [`prometheus`](./prometheus/) - configuration files to deploy Prometheus monitoring.
+* [`pxe`](./pxe/) - configuration files for PXE boot and Kickstart.
 * `regcred` - docker registry credentials.
 * [`truenas-nfs`](./truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
 
