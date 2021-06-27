@@ -1,7 +1,7 @@
 ---
 # Inspired by: https://www.lisenet.com/2017/centos-7-server-hardening-guide/
 - name: RedHat | Check System Requirements
-  fail:
+  debug:
     msg: "The server is not a CentOS 7 server."
   when: ansible_distribution_major_version != "7"
 
@@ -236,21 +236,24 @@
     line: "HISTSIZE={{ history_file_size }}"
 
 #
-# Enable Firewalld and allow SSH
+# Enable Firewalld and allow SSH if RHEL 7
 #
-- name: RedHat | Install and enable firewalld
-  yum:
-    name: "firewalld"
-    state: "installed"
+- name: Firewalld
+  block:
+  - name: RedHat | Install and enable firewalld
+    yum:
+      name: "firewalld"
+      state: "installed"
 
-- name: RedHat | Enable service firewalld
-  service:
-    name: firewalld
-    enabled: "yes"
-    state: "restarted"
+  - name: RedHat | Enable service firewalld
+    service:
+      name: firewalld
+      enabled: "yes"
+      state: "restarted"
   
-- name: RedHat | Enable SSHD in firewalld (default port)
-  firewalld:
-    service: ssh
-    permanent: yes
-    state: enabled
+  - name: RedHat | Enable SSHD in firewalld (default port)
+    firewalld:
+      service: ssh
+      permanent: yes
+      state: enabled
+  when: ansible_distribution_major_version == "7"
