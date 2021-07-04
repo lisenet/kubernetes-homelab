@@ -6,7 +6,7 @@ Kiali is an observability console for Istio with service mesh configuration and 
 
 Istio provides a basic sample installation to quickly get Kiali up and running:
 ```
-kubectl apply -f ./istio-1.9-samples-addons-kiali.yml
+kubectl apply -f ./istio-addon-kiali.yml
 ```
 
 Use port forwarding to Access Kiali dashboard:
