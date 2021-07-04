@@ -6,7 +6,7 @@ Prometheus is an open source monitoring system and time series database.
 
 Istio provides a basic sample installation to quickly get Prometheus up and running:
 ```
-kubectl apply -f ./istio-1.9-samples-addons-prometheus.yml
+kubectl apply -f ./istio-addon-prometheus.yml
 ```
 
 Use port forwarding to access Prometheus dashboard:

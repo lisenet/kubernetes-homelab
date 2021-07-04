@@ -18,6 +18,12 @@ istioctl manifest generate -f ./istio-operator.yml --set values.global.jwtPolicy
 
 The output is a Kubernetes YAML file that can be used with `kubectl apply`. Note that you can skip the `--set values` parameter if your cluster supports third party tokens. While AWS cloud provider, and possibly others, supports this feature (I use it myself), many local development tools and custom installations may not prior to Kubernetes 1.20.
 
+Use the following if your cluster supports third party tokens:
+
+```
+istioctl manifest generate -f ./istio-operator.yml --set values.global.jwtPolicy=third-party-jwt > ./istio-kubernetes.yml
+```
+
 ## Install Istio
 
 The Istio namespace must be created manually.
