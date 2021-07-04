@@ -39,6 +39,10 @@ A TrueNAS NFS server is required to create persistent volumes claims using `demo
 
 See [`ansible/README.md`](./ansible/README.md).
 
+## Manage Kubernetes Homelab with Terraform
+
+See [`terraform/README.md`](./terraform/README.md).
+
 ## Kubernetes Resources
 
 Create a monitoring namespace:
