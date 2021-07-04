@@ -1,0 +1,7 @@
+terraform.tfvars
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*plan_*
+**/out/*
+.DS_Store

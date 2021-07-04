@@ -26,6 +26,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`prometheus`](./prometheus/) - configuration files to deploy Prometheus monitoring.
 * [`pxe`](./pxe/) - configuration files for PXE boot and Kickstart.
 * `regcred` - docker registry credentials.
+* [`terraform`](./terraform/) - configuration files to manage Kubernetes with Terraform.
 * [`truenas-nfs`](./truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
 
 # Pre-requisites
@@ -37,6 +38,10 @@ A TrueNAS NFS server is required to create persistent volumes claims using `demo
 ## Ansible-defined Kubernetes Homelab
 
 See [`ansible/README.md`](./ansible/README.md).
+
+## Manage Kubernetes Homelab with Terraform
+
+See [`terraform/README.md`](./terraform/README.md).
 
 ## Kubernetes Resources
 
