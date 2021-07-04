@@ -1,8 +1,8 @@
 # Terraform
 
-Manage Kubernetes with Terraform.
-
 These resources should be built with Terraform: https://terraform.io
+
+Manage Kubernetes with Terraform. This effectivelly replaces all `kubectl` and `helm` commands with a single `terraform apply`.
 
 ## Kubernetes Provider
 
