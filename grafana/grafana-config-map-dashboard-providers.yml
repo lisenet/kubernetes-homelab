@@ -17,6 +17,13 @@ data:
       orgId: 1
       type: file
       disableDeletion: false
+    - name: k8s-cluster-monitoring
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/k8s-cluster-monitoring
+      orgId: 1
+      type: file
+      disableDeletion: false
     - name: node-exporter-full
       folder: homelab
       options:

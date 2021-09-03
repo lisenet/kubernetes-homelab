@@ -71,6 +71,9 @@ spec:
           - name: dashboards-k8s-cluster-summary
             mountPath: /var/lib/grafana/dashboards/k8s-cluster-summary
 
+          - name: dashboards-k8s-cluster-monitoring
+            mountPath: /var/lib/grafana/dashboards/k8s-cluster-monitoring
+
           - name: dashboards-node-exporter-full
             mountPath: /var/lib/grafana/dashboards/node-exporter-full
 
@@ -132,6 +135,10 @@ spec:
         - name: dashboards-k8s-cluster-summary
           configMap:
             name: grafana-dashboards-k8s-cluster-summary
+
+        - name: dashboards-k8s-cluster-monitoring
+          configMap:
+            name: grafana-dashboards-k8s-cluster-monitoring
 
         - name: dashboards-node-exporter-full
           configMap:
