@@ -14,6 +14,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`ansible`](./ansible/README.md) - Ansible playbooks to deploy Kubernetes homelab.
 * [`calico`](./calico/) - configuration files to deploy Calico CNI.
 * [`charts`](./charts/) - Helm charts.
+* [`dashboard`](./dashboard/) - configuration files to deploy Kubernetes dashboard.
 * [`docs`](./docs/) - images and documentation files.
 * [`grafana`](./grafana/) - configuration files to deploy Grafana.
 * [`httpd-healthcheck`](./httpd-healthcheck/) - configuration files deploy a simple httpd healthcheck for Istio ingressgateway.
