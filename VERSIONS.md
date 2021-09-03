@@ -6,12 +6,12 @@ Kubernetes development continues to grow at a rapid pace, and keeping up to date
 
 * Rocky Linux 8 (not officially supported, use CentOS 7 instead)
 * Kubernetes 1.21.1
-* Calico CNI 3.19
+* Calico CNI 3.20
 * docker-ce 20.10.7
 * kubernetes-cni 0.8.7
 * Istio 1.10
 
-According to Calico project documentation, Calico 3.19 has been tested against the following Kubernetes versions: 1.19, 1.20, 1.21.
+Calico 3.20 has been tested against the following Kubernetes versions: 1.19, 1.20, 1.21.
 
 Istio 1.10 has been tested with these Kubernetes releases: 1.18, 1.19, 1.20, 1.21.
 
