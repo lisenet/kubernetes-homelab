@@ -1,0 +1,25 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: pii-demo-gateway
+  namespace: pii-demo
+spec:
+  selector:
+    istio: ingressgateway # use istio default ingress gateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "PeerAuthentication"
+metadata:
+  name: default # mandatory for a namespace policy
+  namespace: pii-demo
+spec:
+  mtls:
+    mode: STRICT # in this mode, the service can only accept encrypted traffic

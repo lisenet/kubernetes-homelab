@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-server
+  namespace: pii-demo
+  labels:
+    app: mysql-server
+spec:
+  selector:
+    app: mysql-server
+  ports:
+    - name: tcp-3306 # do not use "mysql" as a name, see https://github.com/istio/istio/issues/13484
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: mysql-server
+  namespace: pii-demo
+spec:
+  # the destination hosts to which traffic is being sent to
+  hosts:
+    - mysql-server
+  # the name of gateway and sidecar that should apply the route
+  gateways:
+    - mesh # applies internally as well as externally
+  tcp:
+    - match:
+        - sourceLabels:
+            version: blue # a blue mysql pod should only talk to another blue mysql pod
+      route:
+        - destination:
+            host: mysql-server
+            port:
+              number: 3306
+            subset: blue
+    - match:
+        - sourceLabels:
+            version: green # a green mysql pod should only talk to another green mysql pod
+      route:
+        - destination:
+            host: mysql-server
+            port:
+              number: 3306
+            subset: green
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mysql-server
+  namespace: pii-demo
+spec:
+  host: mysql-server
+  subsets:
+  - name: blue
+    labels:
+      version: blue
+  - name: green
+    labels:
+      version: green

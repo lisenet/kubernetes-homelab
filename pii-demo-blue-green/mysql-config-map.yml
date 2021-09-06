@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-server-config-blue
+  namespace: pii-demo
+  labels:
+    app: mysql-server
+    version: blue
+data:
+  my.cnf: |
+    [mysqld]
+    bind_address = 0.0.0.0
+    skip_name_resolve
+    skip_log_bin
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-server-config-green
+  namespace: pii-demo
+  labels:
+    app: mysql-server
+    version: green
+data:
+  my.cnf: |
+    [mysqld]
+    bind_address = 0.0.0.0
+    skip_name_resolve
+    skip_log_bin

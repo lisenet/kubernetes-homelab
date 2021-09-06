@@ -1,0 +1,90 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpd-server
+  namespace: pii-demo
+  labels:
+    app: httpd-server
+spec:
+  selector:
+    app: httpd-server
+  type: NodePort
+  ports:
+    - name: http-80 # istio requires named service ports
+      port: 80
+      protocol: TCP
+      targetPort: 80
+      nodePort: 30080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: httpd-server
+  namespace: pii-demo
+spec:
+  # the destination hosts to which traffic is being sent to
+  hosts:
+    - pii-demo.apps.hl.test # cannot use "*" here since this is being combined with the mesh services
+    - pii-demo-blue.apps.hl.test
+    - pii-demo-green.apps.hl.test
+    - httpd-server
+  # the name of gateway and sidecar that should apply the route
+  gateways:
+    - mesh  # applies internally as well as externally
+    - pii-demo-gateway
+  http:
+    - match:
+        - headers:
+            host:
+              exact: 'pii-demo-blue.apps.hl.test'
+          gateways:
+            - pii-demo-gateway # restricts this rule to apply only to ingress gateway
+        - sourceLabels:
+            version: blue # a blue httpd pod should only talk to another blue httpd pod
+      route:
+        - destination:
+            host: httpd-server
+            port:
+              number: 80
+            subset: blue
+    - match:
+        - headers:
+            host:
+              exact: 'pii-demo-green.apps.hl.test'
+          gateways:
+            - pii-demo-gateway
+        - sourceLabels:
+            version: green # a green httpd pod should only talk to another green httpd pod
+      route:
+        - destination:
+            host: httpd-server
+            port:
+              number: 80
+            subset: green
+    - match:
+        - headers:
+            host:
+              exact: 'pii-demo.apps.hl.test'
+          gateways:
+            - pii-demo-gateway
+      route:
+        - destination:
+            host: httpd-server # no subset, round robin service routing applies
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: httpd-server
+  namespace: pii-demo
+spec:
+  host: httpd-server
+  subsets:
+  - name: blue
+    labels:
+      version: blue
+  - name: green
+    labels:
+      version: green
