@@ -61,6 +61,13 @@ $ kubectl apply -f ./kube-state-metrics
 
 ### Prometheus
 
+Create a secret called **prometheus-cluster-name** that contains the cluster name the Prometheus instance is running in:
+
+```
+$ kubectl -n monitoring create secret generic \
+  prometheus-cluster-name --from-literal=CLUSTER_NAME=kubernetes-homelab
+```
+
 Deploy `prometheus`:
 ```
 $ kubectl apply -f ./prometheus
