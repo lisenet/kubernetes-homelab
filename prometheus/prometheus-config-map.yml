@@ -15,31 +15,83 @@ data:
         expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
         for: 15m
         labels:
-          severity: warning
-          context: node
+          severity: "warning"
+          context: "node"
           cluster:
         annotations:
-          summary: High load on node
+          summary: "High load on node"
           description: "Node {{ $labels.instance }} has more than 90% CPU load"
       - alert: KubernetesNodeDiskUsagePercentage
         expr: (100 - 100 * sum(node_filesystem_avail_bytes{device!~"tmpfs|by-uuid",fstype=~"xfs|ext"} / node_filesystem_size_bytes{device!~"tmpfs|by-uuid",fstype=~"xfs|ext"}) BY (instance,device)) > 85
-        for: 5m
+        for: 15m
         labels:
-          severity: warning
-          context: node
+          severity: "warning"
+          context: "node"
           cluster:
         annotations:
-          description: Node disk usage above 85%
-          summary: Disk usage on target {{ $labels.instance }} at 85%
+          description: "Node disk usage above 85%"
+          summary: "Disk usage on target {{ $labels.instance }} device {{ $labels.device }} at 85%"
       - alert: KubernetesNodeContainerOOMKilled
         expr: sum by (instance) (changes(node_vmstat_oom_kill[24h])) > 3
         labels:
-          severity: warning
-          context: node
+          severity: "warning"
+          context: "node"
           cluster:
         annotations:
-          description: More than 3 OOM killed pods on a node within 24h
-          summary: More than 3 OOM killed pods on node {{ $labels.instance }} within 24h
+          description: "More than 3 OOM killed pods on a node within 24h"
+          summary: "More than 3 OOM killed pods on node {{ $labels.instance }} within 24h"
+      - alert: KubernetesNodeHighLoad15
+        expr: node_load15 > 20
+        for: 15m
+        labels:
+          severity: "warning"
+          context: "node"
+          cluster:
+        annotations:
+          description: "Load average over 20 in the last 15 minutes"
+          summary: "The node {{ $labels.instance }} load average is over 20 in the last 15 minutes"
+      - alert: KubernetesNodeDiskPressure
+        expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+        for: 10m
+        labels:
+          severity: "warning"
+          context: "node"
+          cluster:
+        annotations:
+          description: "Insufficient disk space"
+          summary: "Node {{ $labels.node }} under pressure due to insufficient available disk space"
+      - alert: KubernetesNodeMemoryPressure
+        expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+        for: 10m
+        labels:
+          severity: "warning"
+          context: "node"
+          cluster:
+        annotations:
+          description: "Insufficient memory"
+          summary: "Node {{ $labels.node }} under pressure due to insufficient available memory"
+    - name: pod.alerts
+      rules:
+      - alert: KubernetesPodWaiting
+        expr: (sum(kube_pod_container_status_waiting_reason) by (container,namespace,reason)) > 0
+        for: 15m
+        labels:
+          severity: "warning"
+          context: "pod"
+          cluster:
+        annotations:
+          description: "Pod waiting to start"
+          summary: "Pod {{ $labels.container }} in {{ $labels.namespace }} namespace waiting to start for more than 30 min"
+      - alert: KubernetesPodHighAvailability
+        expr: (sum by(container,namespace) (kube_pod_container_status_running{namespace="kube-system",container="coredns"} or kube_pod_container_status_running{namespace="kube-system",container="etcd"} or kube_pod_container_status_running{namespace="kube-system",container="kube-apiserver"}) < 2)
+        for: 15m
+        labels:
+          severity: "warning"
+          context: "pod"
+          cluster:
+        annotations:
+          description: "Pod high availability requirements not met"
+          summary: "Pod {{ $labels.container }} in {{ $labels.namespace }} namespace does not meet HA requirements, less than 2 pods running"
   prometheus.yml: |-
     global:
       evaluation_interval: 60s
