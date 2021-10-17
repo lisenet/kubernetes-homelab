@@ -17,6 +17,7 @@ data:
         labels:
           severity: warning
           context: node
+          cluster:
         annotations:
           summary: High load on node
           description: "Node {{ $labels.instance }} has more than 90% CPU load"
@@ -26,6 +27,7 @@ data:
         labels:
           severity: warning
           context: node
+          cluster:
         annotations:
           description: Node disk usage above 85%
           summary: Disk usage on target {{ $labels.instance }} at 85%
@@ -34,6 +36,7 @@ data:
         labels:
           severity: warning
           context: node
+          cluster:
         annotations:
           description: More than 3 OOM killed pods on a node within 24h
           summary: More than 3 OOM killed pods on node {{ $labels.instance }} within 24h
@@ -42,11 +45,19 @@ data:
       evaluation_interval: 60s
       scrape_interval: 15s
       scrape_timeout: 10s
+      external_labels:
+        cluster: ${CLUSTER_NAME}
     rule_files:
       - /etc/prometheus/prometheus.rules
 
     # Alertmanager configuration
     alerting:
+      alert_relabel_configs:
+      - source_labels: [cluster]
+        action: replace
+        regex: (.*)
+        replacement: "$1"
+        target_label: cluster
       alertmanagers:
       - static_configs:
         - targets:
