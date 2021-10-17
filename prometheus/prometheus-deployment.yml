@@ -79,3 +79,5 @@ spec:
         - name: prometheus-storage-volume
           persistentVolumeClaim:
             claimName: nfs-pvc-prometheus
+  strategy:
+    type: Recreate
