@@ -41,6 +41,10 @@ spec:
             - "--storage.tsdb.retention.time=28d"
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
+            - "--enable-feature=expand-external-labels"
+          envFrom:
+            - secretRef:
+                name: prometheus-cluster-name
           ports:
             - containerPort: 9090
               protocol: TCP
