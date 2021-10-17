@@ -26,3 +26,11 @@ data:
       slack_configs:
       - api_url: SLACK_WEBHOOK_URL
         channel: '#homelab'
+        send_resolved: true
+        title: "[{{ .Status | toUpper }}] {{ range .Alerts }}{{ .Annotations.summary }}\n{{ end }}"
+        text: |-
+          {{ range .Alerts }}*Description:* {{ .Annotations.description }}
+          *Context:* {{ .Labels.context }}
+          *Cluster:* {{ .Labels.cluster }}
+          *Severity:* {{ .Labels.severity }}
+          {{ end }}
