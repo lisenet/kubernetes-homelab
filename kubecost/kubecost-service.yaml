@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubecost-service
+  namespace: kubecost
+  labels:
+    app: cost-analyzer
+spec:
+  selector:
+    app: cost-analyzer
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9090
