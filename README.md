@@ -21,6 +21,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`istio`](./istio/) - configuration files to deploy Istio.
 * [`istio-addons`](./istio-addons/) - configuration files to deploy Istio add-ons (e.g. Kiali).
 * [`kube-state-metrics`](./kube-state-metrics/) - configuration files to deploy kube-state-metrics.
+* [`kubecost`](./kubecost/) - configuration files to deploy Kubecost.
 * [`metallb`](./metallb/) - configuration files to deploy MetalLB.
 * [`mikrotik-exporter`](./mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
 * [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
