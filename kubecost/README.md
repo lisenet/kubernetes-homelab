@@ -53,3 +53,13 @@ Create a `LoadBalancer` type service (this uses MetalLB) that will expose Kubeco
 ```
 kubectl apply -f ./kubecost-service.yaml
 ```
+
+Kubecost should be deployed:
+```
+$ kubectl get svc -n kubecost
+NAME                          TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+kubecost-cost-analyzer        ClusterIP      10.102.128.194   <none>        9001/TCP,9003/TCP,9090/TCP   42m
+kubecost-grafana              ClusterIP      10.111.116.220   <none>        80/TCP                       42m
+kubecost-kube-state-metrics   ClusterIP      10.106.178.102   <none>        8080/TCP                     42m
+kubecost-service              LoadBalancer   10.102.54.33     10.11.1.52    80:31527/TCP                 9d
+```
