@@ -30,7 +30,7 @@ We have to do several things:
 * Configure our Prometheus to scrape the cost-model `/metrics` endpoint,
 * Add Prometheus recording rules to enable certain Kubecost features.
 
-Note that we can supply any value as a token, it does not seem to be validated, deployment works regardless.
+Note that we do not have to supply any value as a token, it does not seem to be validated, deployment works regardless.
 
 ```
 helm upgrade --install kubecost kubecost/cost-analyzer \
@@ -38,12 +38,12 @@ helm upgrade --install kubecost kubecost/cost-analyzer \
   --set global.prometheus.enabled=false \
   --set global.prometheus.fqdn="http://prometheus-service.monitoring.svc:9090" \
   --set global.grafana.enabled=true \
-  --set kubecostToken="a" \
   --set kubecostModel.imagePullPolicy="IfNotPresent" \
   --set kubecostFrontend.imagePullPolicy="IfNotPresent" \
   --set networkCosts.enabled=true \
+  --set networkCosts.imagePullPolicy="IfNotPresent" \
   --set persistentVolume.enabled=true \
-  --set persistentVolume.size=10Gi \
+  --set persistentVolume.size="10Gi" \
   --set persistentVolume.storageClass="freenas-nfs-csi" \
   --set prometheus.nodeExporter.enabled=false \
   --set prometheus.server.persistentVolume.enabled=false
