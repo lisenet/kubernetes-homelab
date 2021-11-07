@@ -1,0 +1,39 @@
+---
+image:
+  pullPolicy: IfNotPresent
+
+hostPathsExporter:
+  daemonSets:
+    cp:
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+        operator: Exists
+      watchDirectories:
+      - /etc/kubernetes/pki/
+      - /etc/kubernetes/pki/etcd/
+      watchFiles:
+      - /var/lib/kubelet/pki/kubelet-client-current.pem
+      - /var/lib/kubelet/pki/kubelet.crt
+      watchKubeconfFiles:
+      - /etc/kubernetes/kubelet.conf
+      - /etc/kubernetes/admin.conf
+
+    nodes:
+      watchDirectories:
+      - /etc/kubernetes/pki/
+      watchFiles:
+      - /var/lib/kubelet/pki/kubelet-client-current.pem
+      - /var/lib/kubelet/pki/kubelet.crt
+      watchKubeconfFiles:
+      - /etc/kubernetes/kubelet.conf
+
+prometheusServiceMonitor:
+  # -- Should a ServiceMonitor ressource be installed to scrape this exporter. For prometheus-operator (kube-prometheus) users.
+  create: false
+
+prometheusRules:
+  # -- Should a PrometheusRule ressource be installed to alert on certificate expiration. For prometheus-operator (kube-prometheus) users.
+  create: false
