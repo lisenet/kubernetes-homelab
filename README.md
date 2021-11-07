@@ -32,6 +32,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * `regcred` - docker registry credentials.
 * [`terraform`](./terraform/) - configuration files to manage Kubernetes with Terraform.
 * [`truenas-nfs`](./truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
+* [`x509-certificate-exporter`](./x509-certificate-exporter/) - configuration files to deploy x509-certificate-exporter.
 
 # Pre-requisites
 
@@ -102,10 +103,10 @@ $ kubectl apply -f ./mikrotik-exporter
 
 Deploy the Helm chart:
 ```
-$ helm upgrade --install x509-certificate-exporter \
-  ./charts/x509-certificate-exporter/ \
+$ helm install x509-certificate-exporter \
+  enix/x509-certificate-exporter \
   --namespace monitoring \
-  --debug
+  --values ./x509-certificate-exporter/values.yml
 ```
 
 ### MetalLB
