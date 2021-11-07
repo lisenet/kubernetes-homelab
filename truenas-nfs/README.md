@@ -9,7 +9,7 @@ See https://github.com/democratic-csi/democratic-csi
 ```
 helm repo add democratic-csi https://democratic-csi.github.io/charts/
 helm repo update
-helm search repo democratic-csi/
+helm search repo democratic-csi
 ```
 
 ## Install the democratic-csi Helm Chart
@@ -17,10 +17,10 @@ helm search repo democratic-csi/
 This uses our `freenas-nfs.yaml` values file:
 
 ```
-helm upgrade \
-  --install \
-  --create-namespace \
-  --values freenas-nfs.yaml \
+helm upgrade --install zfs-nfs \
+  democratic-csi/democratic-csi \
   --namespace democratic-csi \
-  zfs-nfs democratic-csi/democratic-csi
+  --create-namespace \
+  --version "0.8.3" \
+  --values ./freenas-nfs.yaml
 ```
