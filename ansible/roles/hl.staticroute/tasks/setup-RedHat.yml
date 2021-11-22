@@ -1,0 +1,10 @@
+---
+- name: RedHat | Create a static route
+  become: true
+  template:
+    src: "{{ network_template }}"
+    dest: "/etc/sysconfig/network-scripts/route-{{ ansible_default_ipv4.interface }}"
+    owner: root
+    group: root
+    mode: "0644"
+  ignore_errors: yes
