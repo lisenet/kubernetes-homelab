@@ -1,0 +1,8 @@
+---
+## Default variables for the role. These variables have the lowest
+## priority of any variables available, and can be easily overridden 
+## by any other variable, including inventory variables.
+
+network_template: "templates/route-ethx.j2"
+vpn_subnet: "10.8.0.0/24"
+vpn_client_gateway: "10.11.1.20"
