@@ -3,7 +3,7 @@
 ## priority of any variables available, and can be easily overridden 
 ## by any other variable, including inventory variables.
 
-k8s_version: "1.21.1"
+k8s_version: "1.22.4"
 k8s_pod_network: "192.168.0.0/16"
 k8s_ha_dns: "kubelb.hl.test"
 k8s_api_port: "6443"
@@ -21,7 +21,7 @@ k8s_admin_config: "/etc/kubernetes/admin.conf"
 k8s_user: "ansible"
 k8s_user_home: "/home/{{ k8s_user }}"
 
-calico_net_url: "https://docs.projectcalico.org/archive/v3.20/manifests/calico.yaml"
+calico_net_url: "https://docs.projectcalico.org/archive/v3.21/manifests/calico.yaml"
 calico_net_config: "calico.yaml"
 
 k8s_token_file_master: "join-master-command"
