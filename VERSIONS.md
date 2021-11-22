@@ -9,11 +9,11 @@ Kubernetes development continues to grow at a rapid pace, and keeping up to date
 * Calico CNI 3.21
 * docker-ce 20.10.11
 * kubernetes-cni 0.8.7
-* Istio 1.10
+* Istio 1.11
 
 Calico 3.21 has been tested against the following Kubernetes versions: 1.20, 1.21, 1.22.
 
-Istio 1.10 has been tested with these Kubernetes releases: 1.18, 1.19, 1.20, 1.21.
+Istio 1.11 has been tested with these Kubernetes releases: 1.19, 1.20, 1.21, 1.22.
 
 Kubernetes 1.21 updated the latest validated version of Docker to 20.10.
 
