@@ -30,3 +30,9 @@ spec:
               - name: status-port
                 port: 15021
                 targetPort: 15021
+    pilot:
+      k8s:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 150Mi
