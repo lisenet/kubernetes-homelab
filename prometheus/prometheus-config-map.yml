@@ -32,14 +32,14 @@ data:
           description: "Node disk usage above 85%"
           summary: "Disk usage on target {{ $labels.instance }} device {{ $labels.device }} at 85%"
       - alert: KubernetesNodeContainerOOMKilled
-        expr: sum by (instance) (changes(node_vmstat_oom_kill[24h])) > 3
+        expr: sum by (instance) (changes(node_vmstat_oom_kill[2h])) > 3
         labels:
           severity: "warning"
           context: "node"
           cluster:
         annotations:
-          description: "More than 3 OOM killed pods on a node within 24h"
-          summary: "More than 3 OOM killed pods on node {{ $labels.instance }} within 24h"
+          description: "More than 3 OOM killed pods on a node within 2h"
+          summary: "More than 3 OOM killed pods on node {{ $labels.instance }} within 2h"
       - alert: KubernetesNodeHighLoad15
         expr: node_load15 > 20
         for: 15m
