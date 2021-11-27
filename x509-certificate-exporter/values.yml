@@ -3,6 +3,14 @@ image:
   pullPolicy: IfNotPresent
 
 hostPathsExporter:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 40Mi
+    requests:
+      cpu: 10m
+      memory: 20Mi
+
   daemonSets:
     cp:
       nodeSelector:
