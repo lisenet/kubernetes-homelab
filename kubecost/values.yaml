@@ -40,3 +40,10 @@ prometheus:
 networkCosts:
   enabled: true
   imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "20Mi"
+    limits:
+      cpu: "100m"
+      memory: "256Mi"
