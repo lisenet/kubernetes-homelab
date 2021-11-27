@@ -52,6 +52,15 @@ helm upgrade --install kubecost \
   --set prometheus.server.persistentVolume.enabled=false
 ```
 
+Alternativelly, use a pre-configured `values.yaml` file:
+
+```
+helm upgrade --install kubecost \
+  kubecost/cost-analyzer \
+  --namespace kubecost \
+  --values ./values.yaml
+```
+
 Create a `LoadBalancer` type service (this uses MetalLB) that will expose Kubecost to the network:
 ```
 kubectl apply -f ./kubecost-service.yaml
