@@ -2,6 +2,10 @@
 image:
   pullPolicy: IfNotPresent
 
+podAnnotations:
+  prometheus.io/port: "9793"
+  prometheus.io/scrape: "true"
+
 hostPathsExporter:
   resources:
     limits:
@@ -10,6 +14,9 @@ hostPathsExporter:
     requests:
       cpu: 10m
       memory: 20Mi
+  podAnnotations:
+    prometheus.io/port: "9793"
+    prometheus.io/scrape: "true"
 
   daemonSets:
     cp:
@@ -37,6 +44,12 @@ hostPathsExporter:
       - /var/lib/kubelet/pki/kubelet.crt
       watchKubeconfFiles:
       - /etc/kubernetes/kubelet.conf
+
+service:
+  create: true
+  annotations:
+    prometheus.io/port: "9793"
+    prometheus.io/scrape: "true"
 
 prometheusServiceMonitor:
   # -- Should a ServiceMonitor ressource be installed to scrape this exporter. For prometheus-operator (kube-prometheus) users.
