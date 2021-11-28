@@ -401,6 +401,12 @@ data:
             labels:
               alias: k8s-node3
 
+      - job_name: 'raspberrypi'
+        static_configs:
+          - targets: ['10.11.1.7:9100']
+            labels:
+              alias: raspberrypi
+
       - job_name: 'mikrotik-exporter'
         scrape_interval: 30s
         static_configs:
