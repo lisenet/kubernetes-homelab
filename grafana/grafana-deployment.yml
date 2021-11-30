@@ -48,6 +48,9 @@ spec:
           requests: 
             memory: "1Gi"
             cpu: "500m"
+        envFrom:
+          - secretRef:
+              name: grafana-iam-cloudwatch
         volumeMounts:
           - name: grafana-config
             mountPath: /etc/grafana/grafana.ini

@@ -17,3 +17,15 @@ data:
       type: prometheus
       url: http://prometheus-service.monitoring.svc:9090
       version: 1
+    - access: proxy
+      editable: true
+      jsonData:
+        authType: keys
+        defaultRegion: eu-west-2
+      secureJsonData:
+        accessKey: ${GRAFANA_IAM_ACCESS_KEY}
+        secretKey: ${GRAFANA_IAM_SECRET_KEY}
+      name: CloudWatch
+      orgId: 1
+      type: cloudwatch
+      version: 1
