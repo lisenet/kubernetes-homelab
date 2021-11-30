@@ -12,6 +12,7 @@ data:
     datasources:
     - access: proxy
       editable: true
+      isDefault: true
       name: Prometheus
       orgId: 1
       type: prometheus
