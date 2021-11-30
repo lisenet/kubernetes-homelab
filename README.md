@@ -36,7 +36,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 # Pre-requisites
 
-A TrueNAS NFS server is required to create persistent volumes claims using `democratic-csi`.
+A [TrueNAS](https://www.lisenet.com/2021/moving-to-truenas-and-democratic-csi-for-kubernetes-persistent-storage/) NFS server is required to create persistent volumes claims using `democratic-csi`.
 
 # Deployment
 
