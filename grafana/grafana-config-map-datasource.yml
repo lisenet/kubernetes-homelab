@@ -22,7 +22,7 @@ data:
       editable: true
       jsonData:
         authType: keys
-        defaultRegion: eu-west-2
+        defaultRegion: eu-west-1
       secureJsonData:
         accessKey: ${GRAFANA_IAM_ACCESS_KEY}
         secretKey: ${GRAFANA_IAM_SECRET_KEY}
