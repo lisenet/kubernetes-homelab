@@ -45,10 +45,10 @@ spec:
         - containerPort: 10001
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: 128Mi
+            cpu: 100m
           requests: 
-            memory: "64M"
-            cpu: "1m"
+            memory: 40M
+            cpu: 10m
       restartPolicy: Always
       terminationGracePeriodSeconds: 60

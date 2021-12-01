@@ -1,0 +1,49 @@
+global:
+  prometheus:
+    enabled: false
+    fqdn: "http://prometheus-service.monitoring.svc:9090"
+  grafana:
+    enabled: true
+
+kubecostFrontend:
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "55Mi"
+    limits:
+      cpu: "100m"
+      memory: "256Mi"
+
+kubecostModel:
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "20m"
+      memory: "128Mi"
+    limits:
+      cpu: "800m"
+      memory: "256Mi"
+
+persistentVolume:
+  enabled: true
+  size: 10Gi
+  storageClass: "freenas-nfs-csi"
+
+prometheus:
+  server:
+    persistentVolume:
+      enabled: false
+  nodeExporter:
+    enabled: false
+
+networkCosts:
+  enabled: true
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "20Mi"
+    limits:
+      cpu: "100m"
+      memory: "256Mi"

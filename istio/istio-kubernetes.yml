@@ -7495,7 +7495,7 @@ data:
               "memory": "1024Mi"
             },
             "requests": {
-              "cpu": "100m",
+              "cpu": "10m",
               "memory": "128Mi"
             }
           },
@@ -8772,7 +8772,7 @@ spec:
               cpu: 2000m
               memory: 1024Mi
             requests:
-              cpu: 100m
+              cpu: 10m
               memory: 128Mi
           env:
           - name: JWT_POLICY
@@ -9014,8 +9014,8 @@ spec:
             value: "Kubernetes"
           resources:
             requests:
-              cpu: 500m
-              memory: 2048Mi
+              cpu: 100m
+              memory: 150Mi
           securityContext:
             runAsUser: 1337
             runAsGroup: 1337

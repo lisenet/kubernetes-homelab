@@ -57,6 +57,13 @@ spec:
               value: DEBUG
           ports:
             - containerPort: 9436
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 512m
+            requests:
+              memory: 64Mi
+              cpu: 15m
           volumeMounts:
             - name: mikrotik-exporter-volume
               mountPath: /etc/mikrotik-exporter

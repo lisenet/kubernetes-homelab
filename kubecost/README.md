@@ -33,12 +33,15 @@ We have to do several things:
 Note that we do not have to supply any value as a token, it does not seem to be validated, deployment works regardless.
 
 ```
-helm upgrade --install kubecost kubecost/cost-analyzer \
+helm upgrade --install kubecost \
+  kubecost/cost-analyzer \
   --namespace kubecost \
   --set global.prometheus.enabled=false \
   --set global.prometheus.fqdn="http://prometheus-service.monitoring.svc:9090" \
   --set global.grafana.enabled=true \
   --set kubecostModel.imagePullPolicy="IfNotPresent" \
+  --set kubecostModel.resources.requests.cpu="20m" \
+  --set kubecostModel.resources.requests.memory="128Mi" \
   --set kubecostFrontend.imagePullPolicy="IfNotPresent" \
   --set networkCosts.enabled=true \
   --set networkCosts.imagePullPolicy="IfNotPresent" \
@@ -47,6 +50,15 @@ helm upgrade --install kubecost kubecost/cost-analyzer \
   --set persistentVolume.storageClass="freenas-nfs-csi" \
   --set prometheus.nodeExporter.enabled=false \
   --set prometheus.server.persistentVolume.enabled=false
+```
+
+Alternativelly, use a pre-configured `values.yaml` file:
+
+```
+helm upgrade --install kubecost \
+  kubecost/cost-analyzer \
+  --namespace kubecost \
+  --values ./values.yaml
 ```
 
 Create a `LoadBalancer` type service (this uses MetalLB) that will expose Kubecost to the network:
