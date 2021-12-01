@@ -19,7 +19,8 @@ kubectl create namespace monitoring
 Deploy x509-certificate-exporter:
 
 ```
-helm install x509-certificate-exporter \
+helm upgrade --install \
+  x509-certificate-exporter \
   enix/x509-certificate-exporter \
   --namespace monitoring \
   --values ./values.yml
