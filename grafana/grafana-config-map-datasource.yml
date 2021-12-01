@@ -8,17 +8,25 @@ metadata:
     app: grafana
 data:
   prometheus.yaml: |-
-    {
-        "apiVersion": 1,
-        "datasources": [
-            {
-               "access":"proxy",
-                "editable": true,
-                "name": "Prometheus",
-                "orgId": 1,
-                "type": "prometheus",
-                "url": "http://prometheus-service.monitoring.svc:9090",
-                "version": 1
-            }
-        ]
-    }
+    apiVersion: 1
+    datasources:
+    - access: proxy
+      editable: true
+      isDefault: true
+      name: Prometheus
+      orgId: 1
+      type: prometheus
+      url: http://prometheus-service.monitoring.svc:9090
+      version: 1
+    - access: proxy
+      editable: true
+      jsonData:
+        authType: keys
+        defaultRegion: eu-west-1
+      secureJsonData:
+        accessKey: ${GRAFANA_IAM_ACCESS_KEY}
+        secretKey: ${GRAFANA_IAM_SECRET_KEY}
+      name: CloudWatch
+      orgId: 1
+      type: cloudwatch
+      version: 1
