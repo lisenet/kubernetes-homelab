@@ -61,3 +61,9 @@ data:
         path: /var/lib/grafana/dashboards/x509-cert-summary
       orgId: 1
       type: file
+    - name: cloudwatch-aws-billing
+      folder: aws
+      options:
+        path: /var/lib/grafana/dashboards/cloudwatch-aws-billing
+      orgId: 1
+      type: file

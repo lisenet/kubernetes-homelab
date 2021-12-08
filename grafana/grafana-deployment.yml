@@ -95,6 +95,9 @@ spec:
           - name: dashboards-x509-cert-summary
             mountPath: /var/lib/grafana/dashboards/x509-cert-summary
 
+          - name: dashboards-aws-billing
+            mountPath: /var/lib/grafana/dashboards/cloudwatch-aws-billing
+
       # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
       #initContainers:
       #  - name: fix-nfs-permissions
@@ -166,3 +169,7 @@ spec:
         - name: dashboards-x509-cert-summary
           configMap:
             name: grafana-dashboards-x509-cert-summary
+
+        - name: dashboards-aws-billing
+          configMap:
+            name: grafana-dashboards-aws-billing
