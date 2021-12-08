@@ -38,19 +38,52 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 ![Homelab Network Diagram](./docs/kubernetes-homelab-diagram.png)
 
-# Pre-requisites
+# Homelab Infrastructure
 
-A [TrueNAS](https://www.lisenet.com/2021/moving-to-truenas-and-democratic-csi-for-kubernetes-persistent-storage/) NFS server is required to create persistent volumes claims using `democratic-csi`.
+Kubernetes environment runs on three KVM hypervisors. The goal is to maintain service in the event of a loss of a (single) host. This [blog post](https://www.lisenet.com/2021/install-and-configure-a-multi-master-ha-kubernetes-cluster-with-kubeadm-haproxy-and-keepalived-on-centos-7/) explains how to build a multi-master Kubernetes homelab cluster by hand using KVM, PXE boot and kubeadm.
+
+## Hardware
+
+Commodity hardware is used to keep costs to a minimum.
+
+| Hostname | CPU Cores | RAM (MB) | Storage |
+| --- | --- | --- | --- |
+| kvm1.hl.test | 8 | 28672 | 120GB SSD |
+| kvm2.hl.test | 8 | 16384 | 120GB SSD |
+| kvm3.hl.test | 8 | 16384 | 120GB SSD |
+| truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool |
+
+## Guest Provisioning
+
+Provisioninig of KVM guests is done by using a [PXE boot server](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) with Kickstart templates.
+
+## Shared Storage
+
+A [TrueNAS](https://www.lisenet.com/2021/moving-to-truenas-and-democratic-csi-for-kubernetes-persistent-storage/) NFS server is used to create persistent volumes claims using `democratic-csi`.
+
+## Other Services
+
+Homelab provides other services to Kubernetes that aren't covered here:
+* [Bind DNS servers with failover and dynamic updates](https://www.lisenet.com/2018/configure-bind-dns-servers-with-failover-and-dynamic-updates-on-centos-7/)
+* [DHCP failover with dynamic DNS](https://www.lisenet.com/2018/configure-dhcp-failover-with-dynamic-dns-on-centos-7/)
+* [Peered NTP servers](https://www.lisenet.com/2018/configure-peered-ntp-servers-on-centos-7/)
+* [Redundant SMTP relays](https://www.lisenet.com/2018/configure-postfix-to-relay-mail-to-an-external-smtp-server-on-centos-7/)
 
 # Deployment
+
+The deployment section assumes that the homelab environment has been provisioned.
 
 ## Ansible-defined Kubernetes Homelab
 
 See [`ansible/README.md`](./ansible/README.md).
 
+Use this to deploy Kubernetes cluster with Ansible.
+
 ## Manage Kubernetes Homelab with Terraform
 
 See [`terraform/README.md`](./terraform/README.md).
+
+Use this to deploy various Kubernetes resources with Terraform.
 
 ## Kubernetes Resources
 
