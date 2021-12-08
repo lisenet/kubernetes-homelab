@@ -67,3 +67,9 @@ data:
         path: /var/lib/grafana/dashboards/cloudwatch-aws-billing
       orgId: 1
       type: file
+    - name: pihole-exporter
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/pihole-exporter
+      orgId: 1
+      type: file

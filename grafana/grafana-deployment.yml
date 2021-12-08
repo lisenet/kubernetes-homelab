@@ -55,48 +55,37 @@ spec:
           - name: grafana-config
             mountPath: /etc/grafana/grafana.ini
             subPath: grafana.ini
-
           - name: grafana-storage
             mountPath: /var/lib/grafana
-
           - name: grafana-certs
             mountPath: /etc/grafana/certs/
             readOnly: true
-
           - name: grafana-datasources
             mountPath: /etc/grafana/provisioning/datasources/prometheus.yaml
             subPath: prometheus.yaml
-
           - name: grafana-dashboard-providers
             mountPath: /etc/grafana/provisioning/dashboards/dashboardproviders.yaml
             subPath: dashboardproviders.yaml
-
           - name: dashboards-k8s-cluster-summary
             mountPath: /var/lib/grafana/dashboards/k8s-cluster-summary
-
           - name: dashboards-k8s-cluster-monitoring
             mountPath: /var/lib/grafana/dashboards/k8s-cluster-monitoring
-
           - name: dashboards-node-exporter-full
             mountPath: /var/lib/grafana/dashboards/node-exporter-full
-
           - name: dashboards-etcd-summary
             mountPath: /var/lib/grafana/dashboards/etcd-summary
-
           - name: dashboards-bind-summary
             mountPath: /var/lib/grafana/dashboards/bind-summary
-
           - name: dashboards-haproxy-summary
             mountPath: /var/lib/grafana/dashboards/haproxy-summary
-
           - name: dashboards-mikrotik-summary
             mountPath: /var/lib/grafana/dashboards/mikrotik-summary
-
           - name: dashboards-x509-cert-summary
             mountPath: /var/lib/grafana/dashboards/x509-cert-summary
-
           - name: dashboards-aws-billing
             mountPath: /var/lib/grafana/dashboards/cloudwatch-aws-billing
+          - name: dashboards-pihole-exporter
+            mountPath: /var/lib/grafana/dashboards/pihole-exporter
 
       # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
       #initContainers:
@@ -133,43 +122,36 @@ spec:
         - name: grafana-datasources
           configMap:
             name: grafana-datasources
-
         - name: grafana-dashboard-providers
           configMap:
             name: grafana-dashboard-providers
-
         - name: dashboards-k8s-cluster-summary
           configMap:
             name: grafana-dashboards-k8s-cluster-summary
-
         - name: dashboards-k8s-cluster-monitoring
           configMap:
             name: grafana-dashboards-k8s-cluster-monitoring
-
         - name: dashboards-node-exporter-full
           configMap:
             name: grafana-dashboards-node-exporter-full
-
         - name: dashboards-etcd-summary
           configMap:
             name: grafana-dashboards-etcd-summary
-
         - name: dashboards-bind-summary
           configMap:
             name: grafana-dashboards-bind-summary
-
         - name: dashboards-haproxy-summary
           configMap:
             name: grafana-dashboards-haproxy-summary
-
         - name: dashboards-mikrotik-summary
           configMap:
             name: grafana-dashboards-mikrotik-summary
-
         - name: dashboards-x509-cert-summary
           configMap:
             name: grafana-dashboards-x509-cert-summary
-
         - name: dashboards-aws-billing
           configMap:
             name: grafana-dashboards-aws-billing
+        - name: dashboards-pihole-exporter
+          configMap:
+            name: grafana-dashboards-pihole-exporter
