@@ -42,7 +42,7 @@
 - name: RedHat | Start and enable service {{ node_exporter_systemd_service }}
   service:
     name: "{{ node_exporter_systemd_service }}"
-    state: started
+    state: restarted
     enabled: yes     
 
 - name: RedHat | Open node exporter firewall port tcp {{ node_exporter_port }}

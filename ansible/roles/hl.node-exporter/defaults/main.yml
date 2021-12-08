@@ -7,6 +7,6 @@ prometheus_user: "prometheus"
 
 node_exporter_port: "9100"
 
-node_exporter_url: "https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz"
+node_exporter_url: "https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz"
 node_exporter_binary: "node_exporter"
 node_exporter_systemd_service: "node_exporter.service"
