@@ -413,6 +413,12 @@ data:
             labels:
               alias: pihole
 
+      - job_name: 'vps'
+        static_configs:
+          - targets: ['vps.hl.test:9100']
+            labels:
+              alias: vps
+
       - job_name: 'mikrotik-exporter'
         scrape_interval: 30s
         static_configs:
