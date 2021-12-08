@@ -1,4 +1,4 @@
-- name: RedHat | Include secure vars
+- name: Debian | Include secure vars
   include_vars:
     file: ../defaults/secure.yml
 
@@ -6,7 +6,7 @@
   include_vars:
     file: "../vars/{{ ansible_os_family }}.yml"
 
-- name: RedHat | Create users
+- name: Debian | Create users
   user:
     state: present  
     name: "{{ item.name }}"
@@ -16,20 +16,20 @@
     update_password: always
   loop: "{{ users }}"
 
-- name: RedHat | Create authorised keys
+- name: Debian | Create authorised keys
   authorized_key:
     state: present  
     user: "{{ item.name }}"
     key: "{{ lookup('file', 'files/id_rsa_' + item.name + '.pub') }}"
   loop: "{{ users }}"
 
-- name: RedHat | Create authorised keys for root
+- name: Debian | Create authorised keys for root
   authorized_key:
     state: present  
     user: "root"
     key: "{{ lookup('file', 'files/id_rsa_' + 'root' + '.pub') }}"
 
-- name: RedHat | Configure sudo rules
+- name: Debian | Configure sudo rules
   lineinfile:
     state: present  
     path: "/etc/sudoers"

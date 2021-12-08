@@ -1,0 +1,12 @@
+---
+## Default variables for the role. These variables have the lowest
+## priority of any variables available, and can be easily overridden 
+## by any other variable, including inventory variables.
+
+prometheus_user: "prometheus"
+
+pihole_exporter_port: "9617"
+
+pihole_exporter_url: "https://github.com/eko/pihole-exporter/releases/download/v0.0.11/pihole_exporter-linux-arm"
+pihole_exporter_binary: "pihole_exporter"
+pihole_exporter_systemd_service: "pihole_exporter.service"

@@ -1,0 +1,21 @@
+# MANAGED BY ANSIBLE
+#
+[Unit]
+Description=Prometheus Pi-Hole Exporter
+Documentation=https://github.com/eko/pihole-exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ prometheus_user }}
+Group={{ prometheus_user }}
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStart=/usr/local/bin/{{ pihole_exporter_binary }} \
+  --port {{ pihole_exporter_port }}
+
+SyslogIdentifier=prometheus
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

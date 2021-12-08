@@ -1,0 +1,8 @@
+---
+- name: Configure Pihole Exporter
+  hosts: raspberrypi
+  become: yes
+  gather_facts: yes
+  roles:
+    - hl.pihole-exporter
+...
