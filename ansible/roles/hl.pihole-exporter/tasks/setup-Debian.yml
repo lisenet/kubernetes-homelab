@@ -1,0 +1,42 @@
+---
+#
+# Configure Pi-Hole Exporter systemd service
+#
+- name: Debian | Ensure group {{ prometheus_user }} exists
+  group:
+    state: present
+    system: yes
+    name: "{{ prometheus_user }}"
+
+- name: Debian | Create user {{ prometheus_user }}
+  user:
+    state: present
+    system: yes
+    name: "{{ prometheus_user }}"
+    groups: "{{ prometheus_user }}"
+    shell: "/sbin/nologin"
+
+- name: Debian | Download a binary file
+  get_url:
+    url: "{{ pihole_exporter_url }}"
+    dest: "/usr/local/bin/{{ pihole_exporter_binary }}"
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Debian | Copy {{ pihole_exporter_systemd_service }}
+  template: 
+    src: "templates/{{ pihole_exporter_systemd_service }}.j2"
+    dest: "/etc/systemd/system/{{ pihole_exporter_systemd_service }}"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Debian | systemctl daemon-reload
+  command: systemctl daemon-reload 
+
+- name: Debian | Start and enable service {{ pihole_exporter_systemd_service }}
+  service:
+    name: "{{ pihole_exporter_systemd_service }}"
+    state: started
+    enabled: yes     
