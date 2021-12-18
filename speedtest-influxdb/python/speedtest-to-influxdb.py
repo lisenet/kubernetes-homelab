@@ -32,27 +32,14 @@ print (results)
 # Format the data
 influx_data = [
     {
-        "measurement": "download",
+        "measurement": "speedtest",
         "time": results["timestamp"],
         "fields": {
             "download": results["download"],
-            "bytes": results["bytes_received"]
-        }
-    },
-    {
-        "measurement": "upload",
-        "time": results["timestamp"],
-        "fields": {
             "upload": results["upload"],
-            "bytes": results["bytes_sent"]
-        }
-    },
-    {
-        "measurement": "ping",
-        "time": results["timestamp"],
-        "fields": {
-            "ping": results["ping"],
-            "latency": results["server"]["latency"]
+            "bytes_received": results["bytes_received"],
+            "bytes_sent": results["bytes_sent"],
+            "ping": results["ping"]
         }
     }
 ]
