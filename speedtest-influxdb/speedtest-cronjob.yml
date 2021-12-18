@@ -1,0 +1,32 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: speedtest-to-influxdb
+  namespace: speedtest
+  labels:
+    app: speedtest-to-influxdb
+spec:
+  schedule: "45 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: speedtest-to-influxdb
+            image: lisenet/speedtest-to-influxdb:1.0.0
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: INFLUXDB_DATABASE
+              value: "speedtest"
+            - name: INFLUXDB_HOST
+              value: "influxdb"
+            - name: INFLUXDB_PORT
+              value: "8086"
+            envFrom:
+            - secretRef:
+                name: influxdb-credentials
+          restartPolicy: OnFailure
+...

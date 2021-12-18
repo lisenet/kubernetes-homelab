@@ -1,0 +1,65 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: influxdb
+  namespace: speedtest
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  serviceName: influxdb
+  template:
+    metadata:
+      name: speedtest-influxdb
+      labels:
+        app: influxdb
+    spec:
+      containers:
+        - name: influxdb
+          image: influxdb:2.1.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8086
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 8086
+              name: influxdb
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8086
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: "1024Mi"
+              cpu: "200m"
+            requests: 
+              memory: "64Mi"
+              cpu: "10m"
+          volumeMounts:
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb2
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: influxdb-data
+          persistentVolumeClaim:
+            claimName: nfs-pvc-speedtest-influxdb
+...
