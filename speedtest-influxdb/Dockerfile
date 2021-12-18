@@ -1,6 +1,6 @@
 FROM python:3-alpine
 
-RUN pip install speedtest-cli influxdb
+RUN pip3 install speedtest-cli influxdb
 
 COPY python/speedtest-to-influxdb.py /usr/local/bin/speedtest-to-influxdb.py
 
