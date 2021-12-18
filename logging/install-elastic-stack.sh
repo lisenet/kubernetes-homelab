@@ -3,7 +3,7 @@ set -eu
 
 # See https://github.com/lisenet/kubernetes-homelab
 
-STACK_VERSION="7.15.0"
+STACK_VERSION="7.16.1"
 NAMESPACE="logging"
 
 if ! kubectl get ns logging > /dev/null; then
@@ -30,13 +30,17 @@ else
   printf "%s\\n" "Helm repository for 'elastic  already exists"
 fi
 
+helm repo update
+
 if [ -e ./values-elasticsearch.yml ]; then
   printf "\\n%s\\n" "Deploying Elasticsearch"
   helm upgrade --install elasticsearch \
     elastic/elasticsearch \
     --namespace "${NAMESPACE}" \
     --version "${STACK_VERSION}" \
-    --values ./values-elasticsearch.yml
+    --values ./values-elasticsearch.yml \
+    --set service.type="LoadBalancer" \
+    --set service.LoadBalancerIP="10.11.1.59"
 else
   printf "%s\\n" "Helm values file for Elasticsearch not found"
   exit 1
@@ -48,7 +52,9 @@ if [ -e ./values-kibana.yml ]; then
     elastic/kibana \
     --namespace "${NAMESPACE}" \
     --version "${STACK_VERSION}" \
-    --values ./values-kibana.yml
+    --values ./values-kibana.yml \
+    --set service.type="LoadBalancer" \
+    --set service.LoadBalancerIP="10.11.1.58"
 else
   printf "%s\\n" "Helm values file for Kibana not found"
   exit 1
