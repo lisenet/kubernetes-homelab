@@ -60,3 +60,13 @@ Update the file `speedtest-secret.yml` to use the password that you set up for t
 kubectl apply -f speedtest-secret.yml
 kubectl apply -f speedtest-cronjob.yml
 ```
+
+## InfluxDB Variables
+
+| Variable          | Information                     |
+|:------------------|:--------------------------------|
+| INFLUXDB_HOST     | InfluxDB server FQDN/IP address |
+| INFLUXDB_PORT     | InfluxDB server port            |
+| INFLUXDB_DATABASE | Database name                   |
+| INFLUXDB_USERNAME | Username                        |
+| INFLUXDB_PASSWORD | Password                        |
