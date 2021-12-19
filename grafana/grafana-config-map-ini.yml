@@ -14,6 +14,10 @@ data:
       http_port = 3000
       cert_file = /etc/grafana/certs/tls.crt
       cert_key  = /etc/grafana/certs/tls.key
+    [auth.anonymous]
+      enabled = true
+      org_role = Viewer
+      hide_version = false
     [analytics]
       reporting_enabled = false
       check_for_updates = false
