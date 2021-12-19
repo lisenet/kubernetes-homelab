@@ -67,6 +67,24 @@ data:
         path: /var/lib/grafana/dashboards/cloudwatch-aws-billing
       orgId: 1
       type: file
+    - name: cloudwatch-aws-ec2
+      folder: aws
+      options:
+        path: /var/lib/grafana/dashboards/cloudwatch-aws-ec2
+      orgId: 1
+      type: file
+    - name: cloudwatch-amazon-ebs
+      folder: aws
+      options:
+        path: /var/lib/grafana/dashboards/cloudwatch-amazon-ebs
+      orgId: 1
+      type: file
+    - name: cloudwatch-amazon-ec2
+      folder: aws
+      options:
+        path: /var/lib/grafana/dashboards/cloudwatch-amazon-ec2
+      orgId: 1
+      type: file
     - name: pihole-exporter
       folder: homelab
       options:

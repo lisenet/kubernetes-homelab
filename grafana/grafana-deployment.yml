@@ -84,6 +84,12 @@ spec:
             mountPath: /var/lib/grafana/dashboards/x509-cert-summary
           - name: dashboards-aws-billing
             mountPath: /var/lib/grafana/dashboards/cloudwatch-aws-billing
+          - name: dashboards-aws-ec2
+            mountPath: /var/lib/grafana/dashboards/cloudwatch-aws-ec2
+          - name: dashboards-amazon-ebs
+            mountPath: /var/lib/grafana/dashboards/cloudwatch-amazon-ebs
+          - name: dashboards-amazon-ec2
+            mountPath: /var/lib/grafana/dashboards/cloudwatch-amazon-ec2
           - name: dashboards-pihole-exporter
             mountPath: /var/lib/grafana/dashboards/pihole-exporter
 
@@ -152,6 +158,15 @@ spec:
         - name: dashboards-aws-billing
           configMap:
             name: grafana-dashboards-aws-billing
+        - name: dashboards-aws-ec2
+          configMap:
+            name: grafana-dashboards-aws-ec2
+        - name: dashboards-amazon-ebs
+          configMap:
+            name: grafana-dashboards-amazon-ebs
+        - name: dashboards-amazon-ec2
+          configMap:
+            name: grafana-dashboards-amazon-ec2
         - name: dashboards-pihole-exporter
           configMap:
             name: grafana-dashboards-pihole-exporter
