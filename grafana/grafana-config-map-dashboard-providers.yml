@@ -91,3 +91,9 @@ data:
         path: /var/lib/grafana/dashboards/pihole-exporter
       orgId: 1
       type: file
+    - name: speedtest
+      folder: speedtest
+      options:
+        path: /var/lib/grafana/dashboards/speedtest
+      orgId: 1
+      type: file
