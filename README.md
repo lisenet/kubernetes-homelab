@@ -75,6 +75,32 @@ Homelab provides other services to Kubernetes that aren't covered here:
 * [Peered NTP servers](https://www.lisenet.com/2018/configure-peered-ntp-servers-on-centos-7/)
 * [Redundant SMTP relays](https://www.lisenet.com/2018/configure-postfix-to-relay-mail-to-an-external-smtp-server-on-centos-7/)
 
+## Homelab Root CA
+
+SSL certificates are signed by the homelab CA.
+
+Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
+
+```
+$ vim /etc/pki/tls/certs/make-dummy-cert
+$ openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
+```
+
+### Create a Kubernetes Wildcard Cert Signed by the Root CA
+
+```
+$ DOMAIN=wildcard.apps.hl.test
+$ openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
+$ openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
+$ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -CAcreateserial -out "${DOMAIN}".crt -days 1825 -sha256
+```
+
+## Average Power Consumption
+
+~80W
+
+Monthly, the homelab costs (((80W * 24h) / 1000) * £0.16/kWh * 365days) / 12months = £9.34 (~13$).
+
 # Deployment
 
 The deployment section assumes that the homelab environment has been provisioned.
@@ -189,22 +215,6 @@ $ kubectl apply -f istio-addons/prometheus
 $ kubectl apply -f istio-addons/kiali
 ```
 
-## Create a Homelab ROOT CA
-Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
-
-```
-$ vim /etc/pki/tls/certs/make-dummy-cert
-$ openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
-```
-
-## Create a Kubernetes Wildcard Cert Signed by the ROOT CA
-```
-$ DOMAIN=wildcard.apps.hl.test
-$ openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
-$ openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
-$ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -CAcreateserial -out "${DOMAIN}".crt -days 1825 -sha256
-```
-
 # Upgrades
 
 * [Upgrading Kubernetes from 1.19 to 1.20](https://www.lisenet.com/2021/upgrading-homelab-kubernetes-cluster/)
@@ -231,9 +241,3 @@ $ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key
 * [Migrating HA Kubernetes Cluster from CentOS 7 to Rocky Linux 8](https://www.lisenet.com/2021/migrating-ha-kubernetes-cluster-from-centos-7-to-rocky-linux-8/)
 * [Blue/Green Deployment with Istio: Match Host Header and sourceLabels for Pod to Pod Communication](https://www.lisenet.com/2021/blue-green-deployment-with-istio-match-host-header-and-sourcelabels-for-pod-to-pod-communication/)
 * [Install Kubecost to Help Optimise Kubernetes Applications](https://www.lisenet.com/2021/install-kubecost-to-help-optimise-kubernetes-applications/)
-
-# Average Kubernetes Homelab Power Consumption
-
-~80W
-
-Monthly, my homelab costs (((80W * 24h) / 1000) * £0.16/kWh * 365days) / 12months = £9.34 (~13$).
