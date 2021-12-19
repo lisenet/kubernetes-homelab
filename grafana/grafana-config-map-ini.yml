@@ -16,7 +16,7 @@ data:
       cert_key  = /etc/grafana/certs/tls.key
     [analytics]
       reporting_enabled = false
-      check_for_updates = true
+      check_for_updates = false
     [log]
       mode = console
       level = info
