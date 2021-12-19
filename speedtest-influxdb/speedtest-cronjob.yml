@@ -28,5 +28,5 @@ spec:
             envFrom:
             - secretRef:
                 name: influxdb-credentials
-          restartPolicy: OnFailure
+          restartPolicy: Never
 ...
