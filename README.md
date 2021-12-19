@@ -42,6 +42,8 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 Kubernetes environment runs on three KVM hypervisors. The goal is to maintain service in the event of a loss of a (single) host. This [blog post](https://www.lisenet.com/2021/install-and-configure-a-multi-master-ha-kubernetes-cluster-with-kubeadm-haproxy-and-keepalived-on-centos-7/) explains how to build a multi-master Kubernetes homelab cluster by hand using KVM, PXE boot and kubeadm.
 
+![KVM Hosts](./docs/virt-manager-kvm-hosts-provisioned.png)
+
 ## Hardware
 
 Commodity hardware is used to keep costs to a minimum.
@@ -57,9 +59,13 @@ Commodity hardware is used to keep costs to a minimum.
 
 Provisioninig of KVM guests is done by using a [PXE boot server](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) with Kickstart templates.
 
+![Homelab PXE Boot](./docs/homelab-pxe-boot-menu.png)
+
 ## Shared Storage
 
 A [TrueNAS](https://www.lisenet.com/2021/moving-to-truenas-and-democratic-csi-for-kubernetes-persistent-storage/) NFS server is used to create persistent volumes claims using `democratic-csi`.
+
+![TrueNAS Dashboard](./docs/truenas-dashboard.png)
 
 ## Other Services
 
