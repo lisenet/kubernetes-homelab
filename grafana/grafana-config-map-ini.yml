@@ -25,3 +25,5 @@ data:
       logs         = /var/log/grafana
       plugins      = /var/lib/grafana/plugins
       provisioning = /etc/grafana/provisioning
+    [security]
+      disable_gravatar = true
