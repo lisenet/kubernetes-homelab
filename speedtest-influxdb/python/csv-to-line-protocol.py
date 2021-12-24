@@ -20,7 +20,7 @@
 
 import pandas as pd
 
-df = pd.read_csv("speedtest-from-mysql.csv")
+df = pd.read_csv("./data/speedtest-from-mysql.csv")
 lines = ["speedtest"
          + " "
          + "ping=" + str(df["Ping"][d]) + ","
@@ -28,6 +28,6 @@ lines = ["speedtest"
          + "upload=" + str(df["Upload"][d])
          + " " + str(df["Timestamp"][d]) for d in range(len(df))]
 
-thefile = open('speedtest-line-protocol.txt', 'w')
+thefile = open('./data/speedtest-line-protocol.txt', 'w')
 for item in lines:
     thefile.write("%s\n" % item)
