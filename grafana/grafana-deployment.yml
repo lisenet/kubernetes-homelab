@@ -51,6 +51,8 @@ spec:
         envFrom:
           - secretRef:
               name: grafana-iam-cloudwatch
+          - secretRef:
+              name: grafana-influxdb
         volumeMounts:
           - name: grafana-config
             mountPath: /etc/grafana/grafana.ini
@@ -92,6 +94,8 @@ spec:
             mountPath: /var/lib/grafana/dashboards/cloudwatch-amazon-ec2
           - name: dashboards-pihole-exporter
             mountPath: /var/lib/grafana/dashboards/pihole-exporter
+          - name: dashboards-speedtest
+            mountPath: /var/lib/grafana/dashboards/speedtest
 
       # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
       #initContainers:
@@ -170,3 +174,6 @@ spec:
         - name: dashboards-pihole-exporter
           configMap:
             name: grafana-dashboards-pihole-exporter
+        - name: dashboards-speedtest
+          configMap:
+            name: grafana-dashboards-speedtest

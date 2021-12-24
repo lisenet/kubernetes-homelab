@@ -30,3 +30,15 @@ data:
       orgId: 1
       type: cloudwatch
       version: 1
+    - access: proxy
+      database: speedtest
+      editable: true
+      name: InfluxDB
+      orgId: 1
+      secureJsonData:
+        password: ${INFLUXDB_PASSWORD}
+      type: influxdb
+      url: http://influxdb.speedtest.svc:8086
+      user: ${INFLUXDB_USERNAME}
+      version: 1
+
