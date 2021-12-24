@@ -3,7 +3,7 @@ set -eu
 
 # See https://github.com/lisenet/kubernetes-homelab
 
-STACK_VERSION="7.16.1"
+STACK_VERSION="7.16.2"
 NAMESPACE="logging"
 
 if ! kubectl get ns logging > /dev/null; then
