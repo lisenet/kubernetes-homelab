@@ -1,0 +1,68 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole-exporter
+  namespace: monitoring
+  labels:
+    app: pihole-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole-exporter
+  template:
+    metadata:
+      labels:
+        app: pihole-exporter
+    spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pihole-exporter
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: pihole-exporter
+          image: ekofr/pihole-exporter:v0.1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9617
+          env:
+            - name: "PIHOLE_HOSTNAME"
+              valueFrom:
+                configMapKeyRef:
+                  name: pihole-exporter-config
+                  key: pihole_hostname
+            - name: "PIHOLE_PORT"
+              valueFrom:
+                configMapKeyRef:
+                  name: pihole-exporter-config
+                  key: pihole_port
+          envFrom:
+          - secretRef:
+              name: pihole-exporter-secret
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 9617
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 9617
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: 20m
+            requests:
+              memory: 20Mi
+              cpu: 1m
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+...

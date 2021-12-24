@@ -25,6 +25,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`logging`](./logging/) - configuration files to deploy Elastic Stack (Elasticsearch, Kibana etc).
 * [`metallb`](./metallb/) - configuration files to deploy MetalLB.
 * [`mikrotik-exporter`](./mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
+* [`pihole-exporter`](./pihole-exporter/) - configuration files to deploy a Prometheus exporter for Pi-hole Raspberry Pi ad blocker.
 * [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
 * [`pii-demo-blue-green`](./pii-demo-blue-green/) - a demo PII application based that uses blue/green deployment.
 * [`prometheus`](./prometheus/) - configuration files to deploy Prometheus monitoring.
@@ -42,6 +43,8 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 Kubernetes environment runs on three KVM hypervisors. The goal is to maintain service in the event of a loss of a (single) host. This [blog post](https://www.lisenet.com/2021/install-and-configure-a-multi-master-ha-kubernetes-cluster-with-kubeadm-haproxy-and-keepalived-on-centos-7/) explains how to build a multi-master Kubernetes homelab cluster by hand using KVM, PXE boot and kubeadm.
 
+![KVM Hosts](./docs/virt-manager-kvm-hosts-provisioned.png)
+
 ## Hardware
 
 Commodity hardware is used to keep costs to a minimum.
@@ -57,9 +60,13 @@ Commodity hardware is used to keep costs to a minimum.
 
 Provisioninig of KVM guests is done by using a [PXE boot server](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) with Kickstart templates.
 
+![Homelab PXE Boot](./docs/homelab-pxe-boot-menu.png)
+
 ## Shared Storage
 
 A [TrueNAS](https://www.lisenet.com/2021/moving-to-truenas-and-democratic-csi-for-kubernetes-persistent-storage/) NFS server is used to create persistent volumes claims using `democratic-csi`.
+
+![TrueNAS Dashboard](./docs/truenas-dashboard.png)
 
 ## Other Services
 
@@ -68,6 +75,32 @@ Homelab provides other services to Kubernetes that aren't covered here:
 * [DHCP failover with dynamic DNS](https://www.lisenet.com/2018/configure-dhcp-failover-with-dynamic-dns-on-centos-7/)
 * [Peered NTP servers](https://www.lisenet.com/2018/configure-peered-ntp-servers-on-centos-7/)
 * [Redundant SMTP relays](https://www.lisenet.com/2018/configure-postfix-to-relay-mail-to-an-external-smtp-server-on-centos-7/)
+
+## Homelab Root CA
+
+SSL certificates are signed by the homelab CA.
+
+Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
+
+```
+$ vim /etc/pki/tls/certs/make-dummy-cert
+$ openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
+```
+
+### Create a Kubernetes Wildcard Cert Signed by the Root CA
+
+```
+$ DOMAIN=wildcard.apps.hl.test
+$ openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
+$ openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
+$ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -CAcreateserial -out "${DOMAIN}".crt -days 1825 -sha256
+```
+
+## Average Power Consumption
+
+~80W
+
+Monthly, the homelab costs (((80W * 24h) / 1000) * £0.16/kWh * 365days) / 12months = £9.34 (~13$).
 
 # Deployment
 
@@ -183,22 +216,6 @@ $ kubectl apply -f istio-addons/prometheus
 $ kubectl apply -f istio-addons/kiali
 ```
 
-## Create a Homelab ROOT CA
-Create your own Certificate Authority (CA) for homelab environment. Run the following a CentOS 7 server:
-
-```
-$ vim /etc/pki/tls/certs/make-dummy-cert
-$ openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out homelab-ca.crt
-```
-
-## Create a Kubernetes Wildcard Cert Signed by the ROOT CA
-```
-$ DOMAIN=wildcard.apps.hl.test
-$ openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
-$ openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
-$ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -CAcreateserial -out "${DOMAIN}".crt -days 1825 -sha256
-```
-
 # Upgrades
 
 * [Upgrading Kubernetes from 1.19 to 1.20](https://www.lisenet.com/2021/upgrading-homelab-kubernetes-cluster/)
@@ -225,9 +242,3 @@ $ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key
 * [Migrating HA Kubernetes Cluster from CentOS 7 to Rocky Linux 8](https://www.lisenet.com/2021/migrating-ha-kubernetes-cluster-from-centos-7-to-rocky-linux-8/)
 * [Blue/Green Deployment with Istio: Match Host Header and sourceLabels for Pod to Pod Communication](https://www.lisenet.com/2021/blue-green-deployment-with-istio-match-host-header-and-sourcelabels-for-pod-to-pod-communication/)
 * [Install Kubecost to Help Optimise Kubernetes Applications](https://www.lisenet.com/2021/install-kubecost-to-help-optimise-kubernetes-applications/)
-
-# Average Kubernetes Homelab Power Consumption
-
-~80W
-
-Monthly, my homelab costs (((80W * 24h) / 1000) * £0.16/kWh * 365days) / 12months = £9.34 (~13$).
