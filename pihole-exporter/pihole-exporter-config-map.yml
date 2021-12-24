@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-exporter-config
+  namespace: monitoring
+  labels:
+    app: pihole-exporter
+data:
+  pihole_hostname: "10.11.1.7"
+  pihole_port: "80"
+...
