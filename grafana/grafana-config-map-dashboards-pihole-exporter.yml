@@ -72,7 +72,7 @@ data:
           },
           "id": 60,
           "panels": [],
-          "title": "🍓PI-Hole",
+          "title": "🍓Pi-hole",
           "type": "row"
         },
         {
@@ -137,7 +137,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "pihole_status",
+              "expr": "pihole_status{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ legend }}",
@@ -227,7 +227,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "pihole_domains_being_blocked",
+              "expr": "pihole_domains_being_blocked{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "refId": "A"
@@ -309,7 +309,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "pihole_unique_domains",
+              "expr": "pihole_unique_domains{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "refId": "A"
@@ -362,7 +362,7 @@ data:
           "strokeWidth": 1,
           "targets": [
             {
-              "expr": "pihole_top_queries",
+              "expr": "pihole_top_queries{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ domain }}",
@@ -408,7 +408,7 @@ data:
           "strokeWidth": 1,
           "targets": [
             {
-              "expr": "pihole_reply",
+              "expr": "pihole_reply{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ type }}",
@@ -452,7 +452,7 @@ data:
           "strokeWidth": 1,
           "targets": [
             {
-              "expr": "pihole_top_ads",
+              "expr": "pihole_top_ads{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ domain }}",
@@ -504,7 +504,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "pihole_dns_queries_all_types",
+              "expr": "pihole_dns_queries_all_types{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ job }}",
@@ -598,7 +598,7 @@ data:
           "pluginVersion": "6.1.4",
           "targets": [
             {
-              "expr": "pihole_ads_percentage_today",
+              "expr": "pihole_ads_percentage_today{alias='pihole-exporter'}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
@@ -650,7 +650,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "pihole_ads_blocked_today",
+              "expr": "pihole_ads_blocked_today{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ job }}",
@@ -735,14 +735,14 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "pihole_queries_cached",
+              "expr": "pihole_queries_cached{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Queries cached",
               "refId": "A"
             },
             {
-              "expr": "pihole_queries_forwarded",
+              "expr": "pihole_queries_forwarded{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Queries forwarded",
@@ -827,7 +827,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "pihole_querytypes",
+              "expr": "pihole_querytypes{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ type }}",
@@ -920,7 +920,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "pihole_ads_percentage_today",
+              "expr": "pihole_ads_percentage_today{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ job }}",
@@ -1008,7 +1008,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "pihole_top_queries",
+              "expr": "pihole_top_queries{alias='pihole-exporter'}",
               "format": "time_series",
               "instant": false,
               "interval": "",
@@ -1066,7 +1066,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "pihole_top_ads",
+              "expr": "pihole_top_ads{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ domain }}",
@@ -1116,7 +1116,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "pihole_forward_destinations",
+              "expr": "pihole_forward_destinations{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{ destination }}",
@@ -1204,7 +1204,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "pihole_unique_clients",
+              "expr": "pihole_unique_clients{alias='pihole-exporter'}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "",
@@ -1258,7 +1258,10 @@ data:
       "refresh": false,
       "schemaVersion": 18,
       "style": "dark",
-      "tags": [],
+      "tags": [
+        "lisenet",
+        "prometheus"
+      ],
       "templating": {
         "list": []
       },
@@ -1293,11 +1296,11 @@ data:
           "30d"
         ]
       },
-      "timezone": "",
-      "title": "PI-Hole Exporter",
+      "timezone": "browser",
+      "title": "Pi-hole Exporter",
       "uid": "MIBVglomg",
-      "version": 139,
-      "description": "This is a PI-Hole dashboard when using the https://github.com/eko/pihole-exporter Prometheus exporter"
+      "version": 1,
+      "description": "This is a Pi-hole dashboard when using the https://github.com/eko/pihole-exporter Prometheus exporter"
     }
 kind: ConfigMap
 metadata:
