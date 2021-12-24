@@ -4,15 +4,18 @@ Run speedtest-cli Docker images using a cronjob and store speedtest results in I
 
 See https://github.com/sivel/speedtest-cli and https://github.com/influxdata/influxdb
 
-## Create a Kubernetes Namespace
+![Grafana Dashboard Speedtest](../docs/grafana/grafana-dashboard-speedtest.png)
+
+## Kubernetes Deployment
+
+Create a namespace:
 
 ```
 kubectl create ns speedtest
 ```
 
-## Setup InfluxDB
+### Setup InfluxDB
 
-Kubernetes deployment:
 ```
 kubectl apply -f influxdb-pvc.yml
 kubectl apply -f influxdb-service.yml
@@ -52,7 +55,7 @@ influx v1 dbrp create \
   --default
 ```
 
-## Deploy speedtest-cli
+### Deploy speedtest-cli
 
 Update the file `speedtest-secret.yml` to use the password that you set up for the v1 user, and deploy the application.
 
@@ -70,3 +73,7 @@ kubectl apply -f speedtest-cronjob.yml
 | INFLUXDB_DATABASE | Database name                   |
 | INFLUXDB_USERNAME | Username                        |
 | INFLUXDB_PASSWORD | Password                        |
+
+## Grafana Dashboard
+
+See [`grafana-dashboard-speedtest.json`](./grafana-dashboard-speedtest.json)
