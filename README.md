@@ -31,6 +31,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`prometheus`](./prometheus/) - configuration files to deploy Prometheus monitoring.
 * [`pxe`](./pxe/) - configuration files for PXE boot and Kickstart.
 * `regcred` - docker registry credentials.
+* [`speedtest-influxdb`](./speedtest-influxdb/) - configuration files to deploy a Speedtest service that stores results in InfluxDB.
 * [`terraform`](./terraform/) - configuration files to manage Kubernetes with Terraform.
 * [`truenas-nfs`](./truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
 * [`x509-certificate-exporter`](./x509-certificate-exporter/) - configuration files to deploy x509-certificate-exporter.
