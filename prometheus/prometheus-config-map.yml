@@ -51,7 +51,7 @@ data:
           description: "Load average over 20 in the last 15 minutes"
           summary: "The node {{ $labels.instance }} load average is over 20 in the last 15 minutes"
       - alert: KubernetesNodeDiskPressure
-        expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+        expr: kube_node_status_condition{app="kube-state-metrics",condition="DiskPressure",status="true"} == 1
         for: 10m
         labels:
           severity: "warning"
@@ -61,7 +61,7 @@ data:
           description: "Insufficient disk space"
           summary: "Node {{ $labels.node }} under pressure due to insufficient available disk space"
       - alert: KubernetesNodeMemoryPressure
-        expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+        expr: kube_node_status_condition{app="kube-state-metrics",condition="MemoryPressure",status="true"} == 1
         for: 10m
         labels:
           severity: "warning"
@@ -70,10 +70,30 @@ data:
         annotations:
           description: "Insufficient memory"
           summary: "Node {{ $labels.node }} under pressure due to insufficient available memory"
+      - alert: KubernetesNodePIDPressure
+        expr: kube_node_status_condition{app="kube-state-metrics",condition="PIDPressure",status="true"} == 1
+        for: 10m
+        labels:
+          severity: "warning"
+          context: "node"
+          cluster:
+        annotations:
+          description: "Too many processes on the node"
+          summary: "Node {{ $labels.node }} under pressure due to too many processes"
+      - alert: KubernetesNodeUnschedulable
+        expr: sum by(node) (kube_node_spec_unschedulable{app="kube-state-metrics"} == 1)
+        for: 15m
+        labels:
+          severity: warning
+          context: node
+          environment:
+        annotations:
+          description: "Node unschedulable"
+          summary: "Node {{ $labels.node }} is unschedulable for more than 15 min"
     - name: pod.alerts
       rules:
       - alert: KubernetesPodWaiting
-        expr: (sum(kube_pod_container_status_waiting_reason) by (container,namespace,reason)) > 0
+        expr: (sum(kube_pod_container_status_waiting_reason{app="kube-state-metrics"}) by (container,namespace,reason)) > 0
         for: 15m
         labels:
           severity: "warning"
@@ -81,9 +101,9 @@ data:
           cluster:
         annotations:
           description: "Pod waiting to start"
-          summary: "Pod {{ $labels.container }} in {{ $labels.namespace }} namespace waiting to start for more than 30 min"
+          summary: "Pod {{ $labels.container }} in {{ $labels.namespace }} namespace waiting to start for more than 15 min"
       - alert: KubernetesPodHighAvailability
-        expr: (sum by(container,namespace) (kube_pod_container_status_running{namespace="kube-system",container="coredns"} or kube_pod_container_status_running{namespace="kube-system",container="etcd"} or kube_pod_container_status_running{namespace="kube-system",container="kube-apiserver"}) < 2)
+        expr: (sum by(container,namespace) (kube_pod_container_status_running{app="kube-state-metrics",namespace="kube-system",container="coredns"} or kube_pod_container_status_running{app="kube-state-metrics",namespace="kube-system",container="etcd"} or kube_pod_container_status_running{app="kube-state-metrics",namespace="kube-system",container="kube-apiserver"}) < 2)
         for: 15m
         labels:
           severity: "warning"
@@ -92,6 +112,26 @@ data:
         annotations:
           description: "Pod high availability requirements not met"
           summary: "Pod {{ $labels.container }} in {{ $labels.namespace }} namespace does not meet HA requirements, less than 2 pods running"
+      - alert: KubernetesPodPhasePending
+        expr: sum by(namespace) (kube_pod_status_phase{app="kube-state-metrics",phase="Pending"} > 0)
+        for: 15m
+        labels:
+          severity: warning
+          context: pod
+          environment:
+        annotations:
+          description: "Pod in pending phase"
+          summary: "At least one pod in {{ $labels.namespace }} namespace is pending for more than 15 min"
+      - alert: KubernetesPodUnscheduleable
+        expr: sum by(namespace) (kube_pod_status_unschedulable > 0)
+        for: 15m
+        labels:
+          severity: warning
+          context: pod
+          environment:
+        annotations:
+          description: "Pod in unschedulable state"
+          summary: "At least one pod in {{ $labels.namespace }} namespace is unschedulable for more than 15 min"
     - name: CPU
       rules:
       - expr: sum(rate(container_cpu_usage_seconds_total{container_name!=""}[5m]))
@@ -407,11 +447,11 @@ data:
             labels:
               alias: raspberrypi
 
-      - job_name: 'pihole'
+      - job_name: 'pihole-exporter'
         static_configs:
-          - targets: ['10.11.1.7:9617']
+          - targets: ['pihole-exporter.monitoring.svc:9617']
             labels:
-              alias: pihole
+              alias: pihole-exporter
 
       - job_name: 'vps'
         static_configs:
