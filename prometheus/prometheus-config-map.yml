@@ -178,7 +178,7 @@ data:
       scrape_interval: 15s
       scrape_timeout: 10s
       external_labels:
-        cluster: ${CLUSTER_NAME}
+        cluster: $CLUSTER_NAME
     rule_files:
       - /etc/prometheus/prometheus.rules
 
