@@ -9,3 +9,7 @@ A Prometheus exporter for Pi-hole Raspberry Pi ad blocker.
 ```
 kubectl apply -f ./pihole-exporter
 ```
+
+## Grafana Dashboard
+
+![Grafana Dashboard Pi-hole Exporter](../docs/grafana/grafana-dashboard-pihole-exporter.png)
