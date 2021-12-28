@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "pii_demo" {
-  pattern = "../pii-demo/*.y*ml"
+  pattern = "../pii-demo-blue-green/*.y*ml"
 }
 
 resource "kubectl_manifest" "pii_demo" {
