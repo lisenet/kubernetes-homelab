@@ -9,3 +9,7 @@ A Prometheus Exporter for Mikrotik devices.
 ```
 kubectl apply -f ./mikrotik-exporter
 ```
+
+## Grafana Dashboard
+
+![Grafana Dashboard Mikrotik Exporter](../docs/grafana/grafana-dashboard-mikrotik-exporter.png)
