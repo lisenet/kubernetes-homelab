@@ -30,6 +30,14 @@ See required IAM account permissions [docs/terraform-aws-iam-permissions.json](.
 
 Requires Terraform v1.0 or above.
 
+Terraform has not been configured to create certain namespaces, therefore run the following:
+
+```
+$ kubectl create ns kubecost
+$ kubectl create ns logging
+$ kubectl create ns speedtest
+```
+
 Change to your project directory and run the following:
 
 ```
