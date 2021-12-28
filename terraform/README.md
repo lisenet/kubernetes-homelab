@@ -28,10 +28,13 @@ See required IAM account permissions [docs/terraform-aws-iam-permissions.json](.
 
 ## Apply Terraform Configuration
 
+Requires Terraform v1.0 or above.
+
 Change to your project directory and run the following:
+
 ```
-terraform init
-terraform apply
+$ terraform init
+$ terraform apply
 ```
 
 # References
