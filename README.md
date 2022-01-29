@@ -7,6 +7,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 [![last commit](https://img.shields.io/github/last-commit/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/commits/master)
 [![commit activity](https://img.shields.io/github/commit-activity/y/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/commits/master)
 [![issues](https://img.shields.io/github/issues/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/issues)
+[![pull_requests_closed](https://img.shields.io/github/issues-pr-closed/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/pulls)
 
 # Content of the Repository
 
