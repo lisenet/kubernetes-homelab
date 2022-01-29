@@ -244,3 +244,7 @@ $ kubectl apply -f istio-addons/kiali
 * [Blue/Green Deployment with Istio: Match Host Header and sourceLabels for Pod to Pod Communication](https://www.lisenet.com/2021/blue-green-deployment-with-istio-match-host-header-and-sourcelabels-for-pod-to-pod-communication/)
 * [Install Kubecost to Help Optimise Kubernetes Applications](https://www.lisenet.com/2021/install-kubecost-to-help-optimise-kubernetes-applications/)
 * [Speedtest with InfluxDB and Grafana on Kubernetes](https://www.lisenet.com/2021/speedtest-with-influxdb-and-grafana-on-kubernetes/)
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/lisenet/kubernetes-homelab.svg)](https://starchart.cc/lisenet/kubernetes-homelab)
