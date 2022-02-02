@@ -120,7 +120,7 @@ See [`terraform/README.md`](./terraform/README.md).
 
 Use this to deploy various Kubernetes resources with Terraform.
 
-## Kubernetes Resources
+## Manage Kubernetes Homelab Manually
 
 Create a monitoring namespace:
 ```
