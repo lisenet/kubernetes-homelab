@@ -3,7 +3,7 @@
 set -ex
 
 source bin/_helpers.sh
-ensure-environment "VPN_PROTOCOL VPN_HOSTNAME VPN_PORT DNS_SERVER NETWORK_CIDR"
+ensure-environment "VPN_PROTOCOL VPN_HOSTNAME VPN_PORT DNS_SERVER NETWORK_CIDR APP_VERSION"
 
 echo "Generating OpenVPN config..."
 docker run --net=none --rm -it -v "${PWD}/ovpn0:/etc/openvpn" "lisenet/openvpn:${APP_VERSION}" ovpn_genconfig \

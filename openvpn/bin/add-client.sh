@@ -3,7 +3,7 @@
 set -ex
 
 source bin/_helpers.sh
-ensure-environment "CLIENT_NAME"
+ensure-environment "CLIENT_NAME APP_VERSION"
 
 if [[ ! -z "${USE_RSA}" ]] && [[ "${USE_RSA}" == "true" ]]; then
   echo "Will generate RSA certificates instead of ECC"
