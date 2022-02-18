@@ -9,12 +9,34 @@ A repository to keep resources and configuration files used with my Kubernetes h
 [![issues](https://img.shields.io/github/issues/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/issues)
 [![pull_requests_closed](https://img.shields.io/github/issues-pr-closed/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/pulls)
 
+# Quick Links
+
+1. [Content of the Repository](#content-of-the-repository)
+2. [Homelab Network Diagram](#homelab-network-diagram)
+3. [Network Configuration](#network-configuration)
+4. [Homelab Infrastructure](#homelab-infrastructure)
+    * [Hardware](#hardware)
+    * [Guest Provisioning](#guest-provisioning)
+    * [Shared Storage](#shared-storage)
+    * [Other Services](#other-services)
+    * [Homelab Root CA](#homelab-root-ca)
+    * [Average Power Consumption](#average-power-consumption)
+5. [Deployment](#deployment)
+    * [Ansible-defined Kubernetes Homelab](#ansible-defined-kubernetes-homelab)
+    * [Manage Kubernetes Homelab with Terraform](#manage-kubernetes-homelab-with-terraform)
+    * [Manage Kubernetes Homelab Manually](#manage-kubernetes-homelab-manually)
+    * [Install Istio](#install-istio)
+6. [Upgrades](#upgrades)
+7. [Blog Posts](#blog-posts)
+8. [Stargazers Over Time](#stargazers-over-time)
+
 # Content of the Repository
 
 * [`alertmanager`](./alertmanager/) - configuration files to deploy Alertmanager.
 * [`ansible`](./ansible/README.md) - Ansible playbooks to deploy Kubernetes homelab.
 * [`calico`](./calico/) - configuration files to deploy Calico CNI.
 * [`charts`](./charts/) - Helm charts.
+* [`cka`](./cka/) - CKA study notes.
 * [`dashboard`](./dashboard/) - configuration files to deploy Kubernetes dashboard.
 * [`docs`](./docs/) - images and documentation files.
 * [`grafana`](./grafana/) - configuration files to deploy Grafana.
@@ -41,6 +63,38 @@ A repository to keep resources and configuration files used with my Kubernetes h
 # Homelab Network Diagram
 
 ![Homelab Network Diagram](./docs/kubernetes-homelab-diagram.png)
+
+# Network Configuration
+
+Network is configured as follows:
+
+* LAN: `10.11.1.0/24`
+* Gateway: `10.11.1.1`
+* DNS/DHCP/NTP/SMTP servers: `10.11.1.2` and `10.11.1.3`.
+* Managed switch: `10.11.1.4` currently no special config but a couple of VLANs to separate homelab devices from the rest of the home network.
+* PXE boot server: `10.11.1.20`.
+* DNS private zone: `hl.test`.
+* DHCP: range `10.11.1.140-10.11.1.149`.
+
+| Hostname          | IP Address   | Information                                            |
+|:------------------|:-------------|:-------------------------------------------------------|
+| mikrotik.hl.test  | 10.11.1.1    | Mikrotik router                                        |
+| admin1.hl.test    | 10.11.1.2    | DNS/DHCP master, NTP, SMTP, HAProxy master, Keepalived |
+| admin2.hl.test    | 10.11.1.3    | DNS/DHCP slave, NTP, SMTP, HAProxy backup, Keepalived  |
+| switch.hl.test    | 10.11.1.4    | Managed switch                                         |
+| truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      |
+| pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     |
+| kvm1.hl.test      | 10.11.1.21   | KVM hypervisor                                         |
+| kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         |
+| kvm3.hl.test      | 10.11.1.23   | KVM hypervisor                                         |
+| kubelb.hl.test    | 10.11.1.30   | Virtual IP address for HAProxy/keepalived              |
+| srv31.hl.test     | 10.11.1.31   | Kubernetes control plane                               |
+| srv32.hl.test     | 10.11.1.32   | Kubernetes control plane                               |
+| srv33.hl.test     | 10.11.1.33   | Kubernetes control plane                               |
+| srv34.hl.test     | 10.11.1.34   | Kubernetes worker node                                 |
+| srv35.hl.test     | 10.11.1.35   | Kubernetes worker node                                 |
+| srv36.hl.test     | 10.11.1.36   | Kubernetes worker node                                 |
+
 
 # Homelab Infrastructure
 
@@ -247,7 +301,7 @@ $ kubectl apply -f istio-addons/kiali
 * [Install Kubecost to Help Optimise Kubernetes Applications](https://www.lisenet.com/2021/install-kubecost-to-help-optimise-kubernetes-applications/)
 * [Speedtest with InfluxDB and Grafana on Kubernetes](https://www.lisenet.com/2021/speedtest-with-influxdb-and-grafana-on-kubernetes/)
 
-## Stargazers over time
+## Stargazers Over Time
 
 [![Stargazers over time](https://starchart.cc/lisenet/kubernetes-homelab.svg)](https://starchart.cc/lisenet/kubernetes-homelab)
 
