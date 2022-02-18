@@ -68,13 +68,15 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 Network is configured as follows:
 
-* LAN: `10.11.1.0/24`
-* Gateway: `10.11.1.1`
+* LAN: `10.11.1.0/24`.
+* Gateway: `10.11.1.1`.
 * DNS/DHCP/NTP/SMTP servers: `10.11.1.2` and `10.11.1.3`.
 * Managed switch: `10.11.1.4` currently no special config but a couple of VLANs to separate homelab devices from the rest of the home network.
 * PXE boot server: `10.11.1.20`.
 * DNS private zone: `hl.test`.
 * DHCP: range `10.11.1.140-10.11.1.149`.
+
+Hostnames and their IP addresses:
 
 | Hostname          | IP Address   | Information                                            |
 |:------------------|:-------------|:-------------------------------------------------------|
@@ -300,6 +302,7 @@ $ kubectl apply -f istio-addons/kiali
 * [Blue/Green Deployment with Istio: Match Host Header and sourceLabels for Pod to Pod Communication](https://www.lisenet.com/2021/blue-green-deployment-with-istio-match-host-header-and-sourcelabels-for-pod-to-pod-communication/)
 * [Install Kubecost to Help Optimise Kubernetes Applications](https://www.lisenet.com/2021/install-kubecost-to-help-optimise-kubernetes-applications/)
 * [Speedtest with InfluxDB and Grafana on Kubernetes](https://www.lisenet.com/2021/speedtest-with-influxdb-and-grafana-on-kubernetes/)
+* [OpenVPN Server on Kubernetes](https://www.lisenet.com/2022/openvpn-server-on-kubernetes/)
 
 ## Stargazers Over Time
 
