@@ -1,0 +1,135 @@
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false
+description: "This priority class should be used for OpenVPN service pods only."
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openvpn
+  namespace: openvpn
+  labels:
+    app: openvpn
+spec:
+  selector:
+    app: openvpn
+  ports:
+  - name: openvpn
+    port: 31194
+    protocol: TCP
+    targetPort: openvpn
+  type: LoadBalancer
+  loadBalancerIP: 10.11.1.53
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openvpn
+  namespace: openvpn
+  labels:
+    app: openvpn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openvpn
+  template:
+    metadata:
+      name: openvpn
+      labels:
+        app: openvpn
+    spec:
+      initContainers:
+      - image: busybox:1.35.0
+        imagePullPolicy: IfNotPresent
+        name: init-busybox
+        command:
+        - sh
+        - -c
+        - sysctl -w net.ipv4.ip_forward=1 && sysctl -w net.ipv4.conf.all.forwarding=1
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+          privileged: true
+      containers:
+      - image: lisenet/openvpn:2.5
+        imagePullPolicy: IfNotPresent
+        name: openvpn
+        ports:
+        - containerPort: 1194
+          name: openvpn
+          protocol: TCP
+        # The kubelet will send the first readiness probe 5 seconds after the container starts.
+        # This will attempt to connect to the openvpn container on port 1194. If the probe succeeds,
+        # the Pod will be marked as ready. The kubelet will continue to run this check every 30 seconds.
+        readinessProbe:
+          tcpSocket:
+            port: 1194
+          initialDelaySeconds: 5
+          periodSeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        # In addition to the readiness probe, this configuration includes a liveness probe.
+        # The kubelet will run the first liveness probe 15 seconds after the container starts.
+        # Similar to the readiness probe, this will attempt to connect to the container on port 1194.
+        # If the liveness probe fails, the container will be restarted.
+        livenessProbe:
+          tcpSocket:
+            port: 1194
+          initialDelaySeconds: 15
+          periodSeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 2
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 16Mi
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+        volumeMounts:
+        - mountPath: /etc/openvpn/pki/private
+          name: ovpn0-key
+        - mountPath: /etc/openvpn/pki/issued
+          name: ovpn0-cert
+        - mountPath: /etc/openvpn/pki
+          name: ovpn0-pki
+        - mountPath: /etc/openvpn
+          name: ovpn0-conf
+        - mountPath: /etc/openvpn/ccd
+          name: ccd0
+      priorityClassName: high-priority
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: ovpn0-key
+        secret:
+          defaultMode: 384
+          secretName: ovpn0-key
+      - name: ovpn0-cert
+        secret:
+          defaultMode: 420
+          secretName: ovpn0-cert
+      - name: ovpn0-pki
+        secret:
+          defaultMode: 384
+          secretName: ovpn0-pki
+      - configMap:
+          defaultMode: 420
+          name: ovpn0-conf
+        name: ovpn0-conf
+      - configMap:
+          defaultMode: 420
+          name: ccd0
+        name: ccd0
