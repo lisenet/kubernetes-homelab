@@ -258,7 +258,7 @@ If default routing is not desired, then `redirect-gateway def1` could be removed
 | VPN_HOSTNAME      | VPN hostname                       |             |
 | VPN_PORT          | VPN port for Kubernetes service    | 31194       |
 | VPN_PROTOCOL      | VPN server protocol                | tcp         |
-| DNS_SERVER        | DNS server IP address              | 1.1.1.1     |
+| DNS_SERVER        | DNS server IP address (CloudFlare) | 1.1.1.1     |
 | NETWORK_CIDR      | VPN server subnet                  | 10.8.0.0/24 |
 | CLIENT_NAME       | VPN client name                    |             |
 | APP_VERSION       | OpenVPN version (docker build tag) | 2.5         |
