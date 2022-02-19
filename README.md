@@ -48,6 +48,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`metallb`](./metallb/) - configuration files to deploy MetalLB.
 * [`mikrotik-exporter`](./mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
 * [`openvpn`](./openvpn/) - configuration files to deploy OpenVPN server.
+* [`packer`](./packer/) - configuration files build Qemu/KVM images with Packer.
 * [`pihole-exporter`](./pihole-exporter/) - configuration files to deploy a Prometheus exporter for Pi-hole Raspberry Pi ad blocker.
 * [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
 * [`pii-demo-blue-green`](./pii-demo-blue-green/) - a demo PII application based that uses blue/green deployment.
