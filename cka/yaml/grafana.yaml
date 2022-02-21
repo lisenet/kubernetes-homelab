@@ -1,0 +1,33 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-ini
+  namespace: cka
+data:
+  grafana.ini: |
+    [server]
+      protocol = http
+      http_port = 3000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: grafana
+  name: grafana
+  namespace: cka
+spec:
+  containers:
+  - image: grafana/grafana:8.1.2
+    name: grafana
+    volumeMounts:
+      - name: grafana-config
+        mountPath: /etc/grafana/grafana.ini
+        subPath: grafana.ini
+  volumes:
+    - name: grafana-config
+      configMap:
+        # Provide the name of the ConfigMap containing the files you want
+        # to add to the container
+        name: grafana-ini

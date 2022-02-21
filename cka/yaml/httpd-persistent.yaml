@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-httpd-webroot
+spec:
+  capacity:
+    storage: 64Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-httpd-webroot
+  namespace: cka
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 64Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: httpd-persistent
+  name: httpd-persistent
+  namespace: cka
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: httpd-persistent
+  template:
+    metadata:
+      labels:
+        app: httpd-persistent
+    spec:
+      containers:
+      - image: httpd:2.4
+        name: httpd
+        volumeMounts:
+          - mountPath: "/usr/local/apache2/htdocs"
+            name: pvc-httpd-persistent
+      volumes:
+      - name: pvc-httpd-persistent
+        persistentVolumeClaim:
+          claimName: pvc-httpd-webroot
+...

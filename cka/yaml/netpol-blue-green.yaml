@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-blue-green
+  namespace: cka
+spec:
+  podSelector:
+    matchLabels:
+      app: admin
+  policyTypes:
+    - Egress # policy is only about Egress
+  egress:
+    - to: # first condition "to"
+      - podSelector:
+          matchLabels:
+            app: blue
+      ports: # second condition "port"
+      - protocol: TCP
+        port: 80
+...
