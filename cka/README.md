@@ -100,7 +100,7 @@ Unless stated otherwise, all Kubernetes resources should be created in the `cka`
 
 ### Provision underlying infrastructure to deploy a Kubernetes cluster
 
-We have a six-node (three control planes and three worker nodes) Kubernetes homelab cluster running Rocky Linux already.
+We have a [six-node](../docs/kubernetes-homelab-diagram.png) (three control planes and three worker nodes) Kubernetes homelab cluster running [Rocky Linux](https://www.lisenet.com/2021/migrating-ha-kubernetes-cluster-from-centos-7-to-rocky-linux-8/) already.
 
 For the sake of this excercise, we will create a new two-node cluster, with one control plane and one worker node, using Ubuntu 18.04 LTS. It makes sense to use a Debian-based distribution here because we have a RHEL-based homelab cluster already.
 
@@ -364,7 +364,7 @@ If any API servers are running in your cluster, you should not attempt to restor
 * Restore state in all etcd instances.
 * Restart all API server instances.
 
-Stop all controlplane components:
+Stop all control plane components:
 
 ```
 cd /etc/kubernetes/manifests/
@@ -395,7 +395,7 @@ Tell etcd to use the new directory `/var/lib/etcd_backup`:
 sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/manifests/etcd.yaml
 ```
 
-Start all controlplane components:
+Start all control plane components:
 
 ```
 cd /etc/kubernetes/manifests/
@@ -473,6 +473,7 @@ srv40   Ready    <none>                 33m   v1.23.3
 Docs: 
 * https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 * https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/
+* https://kubernetes.io/docs/tasks/administer-cluster/certificates/
 
 **Exercise 1**: perform the following tasks.
 
