@@ -5,6 +5,7 @@ Preparation and study material for Certified Kubernetes Administrator exam v1.22
 - [Reasoning](#reasoning)
 - [Aliases](#aliases)
 - [Allowed Kubernetes documentation resources](#allowed-kubernetes-documentation-resources)
+- [CKA Environment](#cka-environment)
 - [CKA Exam Simulator](#cka-exam-simulator)
 - [Cluster Architecture, Installation and Configuration](#cluster-architecture-installation-and-configuration)
     - [Provision underlying infrastructure to deploy a Kubernetes cluster](#provision-underlying-infrastructure-to-deploy-a-kubernetes-cluster)
@@ -52,14 +53,38 @@ Keep it simple:
 alias k=kubectl
 alias do="--dry-run=client -o yaml"
 alias now="--force --grace-period 0"
+
+alias kc="kubectl config"
+alias kcgc="kubectl config get-contexts"
+alias kccc="kubectl config current-context"
 ```
 
 ## Allowed Kubernetes documentation resources
 
 * [kubectl Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
+* [kubectl-commands Reference](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
 * [Kubernetes Documentation](https://kubernetes.io/docs)
 * [GitHub Kubernetes](https://github.com/kubernetes/kubernetes)
 * [Kubernetes Blog](https://kubernetes.io/blog)
+
+## CKA Environment
+
+See https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad#cka-and-ckad-environment
+
+There are six clusters (CKA) that comprise the exam environment, made up of varying numbers of containers, as follows:
+
+Cluster | Members | CNI | Description
+--- | --- | --- | ---
+k8s | 1 master, 2 worker | flannel | k8s cluster
+hk8s | 1 master, 2 worker | calico | k8s cluster
+bk8s | 1 master, 1 worker | flannel | k8s cluster
+wk8s | 1 master, 2 worker | flannel | k8s cluster
+ek8s | 1 master, 2 worker | flannel | k8s cluster
+ik8s | 1 master, 1 base node | loopback | k8s cluster − missing worker node
+
+At the start of each task you'll be provided with the command to ensure you are on the correct cluster to complete the task.
+
+Command-like tools `kubectl`, `jq`, `tmux`, `curl`, `wget` and `man` are pre-installed in all environments.
 
 ## CKA Exam Simulator
 
@@ -286,7 +311,7 @@ Install etcd client package on the **control plane** using a package manager (th
 sudo apt-get -y install etcd-client
 ```
 
-Alternaitvelly:
+Alternativelly:
 
 ```
 ETCD_VER=v3.5.2
@@ -344,6 +369,12 @@ Stop all controlplane components:
 ```
 cd /etc/kubernetes/manifests/
 mv ./*yaml ../
+```
+
+Make sure all control plane pods are `NotReady`:
+
+```
+crictl pods | egrep "kube|etcd"
 ```
 
 Restore the snapshot into a specific directory:
@@ -1220,6 +1251,62 @@ Unless stated otherwise, all Kubernetes resources should be created in the `cka`
 
 Doc: https://kubernetes.io/docs/concepts/cluster-administration/networking/
 
+**Exercise 1**: perform the following tasks.
+
+1. Change the Service CIDR to `10.112.0.0/12` for the cluster.
+2. Create a new service `new-cluster-ip` of type `ClusterIP` that exposes port `8080`.
+3. Save the `iptables` rules of the control plane node for the created service `new-cluster-ip` to a file `/tmp/iptables.txt`.
+
+Imperative commands. Check the cluster IP:
+
+```
+kubectl get svc/kubernetes
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   12d
+```
+
+Change the Service CIDR on the kube-apiserver:
+
+```
+sed -i 's/10.96.0.0/10.112.0.0/g' /etc/kubernetes/manifests/kube-apiserver.yaml
+```
+
+Give it a some time for the kube-apiserver to restart. Check the pod was restarted using `crictl`:
+
+```
+crictl ps | grep kube-controller-manager
+a34270848373d  f40be0088a83e  About a minute ago  Running  kube-apiserver ...
+```
+
+Do the same for the controller manager:
+
+```
+sed -i 's/10.96.0.0/10.112.0.0/g' /etc/kubernetes/manifests/kube-controller-manager.yaml
+```
+
+Give it some time for the controller-manager to restart. Check the pod was restarted using `crictl`:
+
+```
+crictl ps | grep kube-controller-manager
+e5666a46b88ac  b07520cd7ab76  46 seconds ago  Running  kube-controller-manager ...
+```
+
+Create a new service and verify its IP address:
+
+```
+kubectl create svc clusterip new-cluster-ip --tcp 8080
+
+kubectl get svc/new-cluster-ip
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+new-cluster-ip   ClusterIP   10.118.114.114   <none>        8080/TCP   7s
+```
+
+Kubernetes services are implemented using `iptables` rules on all nodes. Save firewall rules for the service:
+
+```
+iptables-save | grep new-cluster-ip > /tmp/iptables.txt
+```
+
 ### Understand connectivity between Pods
 
 Doc: https://kubernetes.io/docs/concepts/services-networking/
@@ -2095,6 +2182,18 @@ Show the latest events in the whole cluster, ordered by time (see `kubectl` chea
 
 ```
 kubectl get events -A --sort-by=.metadata.creationTimestamp
+```
+
+Check the status of the nodes:
+
+```
+kubectl get nodes
+```
+
+Check the status of the Docker service:
+
+```
+systemctl status docker
 ```
 
 View `kubelet` systemd service logs:
