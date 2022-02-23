@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+  namespace: cka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+      volumes:
+      - name: pv-mysql
+        persistentVolumeClaim:
+          claimName: pvc-mysql
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.35
+          command: ["sh", "-c", "chown -R 65534:65534 /var/lib/mysql"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: pv-mysql
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: pv-mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: mysql_root_password

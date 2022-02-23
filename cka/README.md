@@ -40,6 +40,7 @@ Preparation and study material for Certified Kubernetes Administrator exam v1.22
     - [Troubleshoot application failure](#troubleshoot-application-failure)
     - [Troubleshoot cluster component failure](#troubleshoot-cluster-component-failure)
     - [Troubleshoot networking](#troubleshoot-networking)
+- [Bonus Exercise: am I ready for the CKA exam?](#bonus-exercise-am-i-ready-for-the-cka-exam)
 
 ## Reasoning
 
@@ -704,7 +705,9 @@ spec:
         name: httpd-pii-demo
 ```
 
-Docs: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+Docs:
+* https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+* https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 
 **Exercise 2**: perform the following tasks.
 
@@ -734,6 +737,7 @@ spec:
   tolerations:
   - effect: NoSchedule
     key: node-role.kubernetes.io/control-plane
+    operator: Exists
   nodeSelector:
     node-role.kubernetes.io/control-plane: ""
 ```
@@ -2395,3 +2399,410 @@ kubectl run busybox --image=busybox --rm --restart=Never -it sh
 ```
 
 Now you can run things like `nslookup`, `nc` or `telnet` into Mordor.
+
+## Bonus Exercise: am I ready for the CKA exam?
+
+If you can's solve this then you're likely **not** ready.
+
+**Bonus exercise**: perform the following tasks to create a stateful application.
+
+Docs: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/
+
+1. Create a namespace called `cka`. All resources should be created in this namespace.
+2. Create a new secret `mysql-password` that has the following key=value pair:
+    * `mysql_root_password` = Mysql5.6Password
+3. Create a new `PersistentVolume` named `pv-mysql`.
+    * Set capacity to `1Gi`.
+    * Set `accessMode` to `ReadWriteOnce`.
+    * Set `hostPath` to `/data_mysql`.
+    * Set `persistentVolumeReclaimPolicy` to `Retain`.
+    * The volume should have no `storageClassName` defined.
+4. Create a new `PersistentVolumeClaim` named `pvc-mysql`. It should request `1Gi` storage, accessMode `ReadWriteOnce` and should not define a `storageClassName`. The PVC should bound to the PV correctly.
+5. Create a new `StatefulSet` named `mysql`.
+    * Use container image `mysql:5.6`.
+    * The container in the pod should `runAsUser=65534` and `runAsGroup=65534`.
+    * Mount the persistent volume at `/var/lib/mysql`.
+    * There should be only `1 replica` running.
+    * Define `initContainer` called `fix-permissions` that uses image `busybox:1.35`.
+    * The `initContainer` should `runAsUser=0`.
+    * The `initContainer` should to mount the persistent volume and run the following command: `["sh", "-c", "chown -R 65534:65534 /var/lib/mysql"]`.
+6. Configure `mysql` stateful set deployment so that the underlying container has the following environment variables set:
+    * `MYSQL_ROOT_PASSWORD` from secret key `mysql_root_password`.
+7. Create a new `ClusterIP` service named `mysql` which exposes `mysql` pods on port `3306`.
+8. Create a new `Deployment` named `wordpress`.
+    * Use container image `wordpress:4.8-apache`.
+    * Use deployment strategy `Recreate`.
+    * There should be `3 replicas` created.
+    * The pods should request `10m` cpu and `64Mi` memory.
+    * The `livenessProbe` should perform an HTTP GET request to the path `/readme.html` and port `80` every 5 seconds.
+    * Configure `PodAntiAffinity` to ensure that the scheduler does not co-locate replicas on a single node.
+    * Pods of this deployment should be able to run on master nodes as well, create the proper `toleration`.
+9. Configure `wordpress` deployment so that the underlying container has the following environment variables set:
+    * `WORDPRESS_DB_PASSWORD` from secret key `mysql_root_password`.
+    * `WORDPRESS_DB_HOST` set to value of `mysql`.
+10. Create a `NodePort` service named `wordpress` which exposes `wordpress` deployment on port `80` and connects to the container on port `80`. The port on the node should be set to `31234`.
+11. Create a `NetworkPolicy` called `netpol-mysql`. Use the `app` label of pods in your policy. The policy should allow the `mysql-*` pods to:
+    * accept ingress traffic on port `3306` from `wordpres-*` pods only.
+    * connect to IP block `10.0.0.0/8`.
+12. Navigate your web browser to http://${NODE_IP_ADDRESS}:31234/ and take a moment to enjoy a brand new instance of WordPress on Kubernetes.
+13. Take a backup of `etcd` running on the control plane and save it on the control plane to `/tmp/etcd-backup.db`.
+14. Delete `wordpress` deployment configuration from the cluster. Verify that the application is no longer accessible.
+15. Restore `etcd` configuration from the backup file `/tmp/etcd-backup.db`. Confirm that the cluster is working and that all `wordpress` pods are back.
+
+Imperative commands:
+
+```
+kubectl create ns cka
+
+kubectl create secret generic mysql-password \
+  --from-literal=mysql_root_password="Mysql5.6Password" -n cka
+
+cat > pv-mysql.yaml <<EOF
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-mysql
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data_mysql"
+EOF
+
+cat > pvc-mysql.yaml <<EOF
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-mysql
+  namespace: cka
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+EOF
+
+kubectl apply -f pv-mysql.yaml
+kubectl apply -f pvc-mysql.yaml
+
+kubectl create deploy mysql --image=mysql:5.6 --replicas=1 \
+  --dry-run=client -o yaml -n cka > deployment-mysql.yaml
+```
+
+Edit the file `deployment-mysql.yaml`, change `Deployment` to `StatefulSet` and add required configuration:
+
+```
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+  namespace: cka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+      volumes:
+      - name: pv-mysql
+        persistentVolumeClaim:
+          claimName: pvc-mysql
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.35
+          command: ["sh", "-c", "chown -R 65534:65534 /var/lib/mysql"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: pv-mysql
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: pv-mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: mysql_root_password
+```
+
+Create the deployment and verify mysql pod logs:
+
+```
+kubectl apply -f deployment-mysql.yaml
+
+kubectl logs $(kubectl get po -n cka -l app=mysql -o name) -n cka | tail -n1
+Version: '5.6.51'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)
+```
+
+Create a service for mysql, which serves on port 3306:
+
+```
+kubectl create svc clusterip mysql --tcp=3306 -n cka
+
+kubectl get svc -n cka
+NAME    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+mysql   ClusterIP   10.107.189.130   <none>        3306/TCP   111s
+```
+
+Create a deplopyment file for wordpress.
+
+```
+kubectl create deploy wordpress --image=wordpress:4.8-apache --replicas=3 \
+  --dry-run=client -o yaml -n cka > deployment-wordpress.yaml
+```
+
+Edit the file `deployment-wordpress.yaml` and add required configuration:
+
+```
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wordpress
+  name: wordpress
+  namespace: cka
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    strategy:
+      type: Recreate
+    spec:
+      # The deployment has PodAntiAffinity configured to ensure
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - wordpress
+            topologyKey: "kubernetes.io/hostname"
+      # The following toleration "matches" the taint on the master node, therefore
+      # a pod with this toleration would be able to schedule onto master.
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - image: wordpress:4.8-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: mysql_root_password
+        - name: WORDPRESS_DB_HOST
+          value: mysql
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        livenessProbe:
+          httpGet:
+            path: /readme.html
+            port: 80
+          periodSeconds: 5
+```
+
+Create the deployment and verify wordpress pod logs:
+
+```
+kubectl apply -f deployment-wordpress.yaml
+
+kubectl logs $(kubectl get po -n cka -l app=wordpress -o name|head -n1) -n cka | grep WordPress
+WordPress not found in /var/www/html - copying now...
+Complete! WordPress has been successfully copied to /var/www/html
+```
+
+While the wordpress pods can run on both the worker and master nodes because of `tolerations`, we only have one of each (single master and single worker node), meaning that the 3rd replica of wordpress cannot be scheduled and will be in a pending state.
+
+Create a service for wordpress, which serves on port 80 and connects to the containers on port 80:
+
+```
+kubectl expose deployment wordpress --type=NodePort --port=80 --target-port=80 \
+  --dry-run=client -o yaml -n cka > service-wordpress.yaml
+```
+
+Edit the file `service-wordpress.yaml` and add `nodePort`:
+
+```
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: wordpress
+  name: wordpress
+  namespace: cka
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 31234
+  selector:
+    app: wordpress
+  type: NodePort
+```
+
+Create the service and verify:
+
+```
+kubectl apply -f service-wordpress.yaml
+
+kubectl get svc -n cka
+NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+mysql       ClusterIP   10.107.189.130   <none>        3306/TCP       20m
+wordpress   NodePort    10.110.61.109    <none>        80:31234/TCP   20m
+```
+
+Create a file `netpol-wordpress.yaml` that contains our network policy configuration:
+
+```
+cat > netpol-mysql.yaml <<EOF
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-mysql
+  namespace: cka
+spec:
+  podSelector:
+    matchLabels:
+      app: mysql
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: wordpress
+      ports:
+      - protocol: TCP
+        port: 3306
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/8
+EOF
+```
+
+Deploy the network policy:
+
+```
+kubectl apply -f netpol-mysql.yaml
+```
+
+Now, navigate your browser to **http://{NODE_IP_ADDRESS}:31234/** and enjoy a brand new instance of WordPress on Kubernetes.
+
+Take an `etcd` snapshot on the control plane by specifying the endpoint and certificates:
+
+```
+ETCDCTL_API=3 etcdctl \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot save /tmp/etcd-backup.db
+```
+
+Delete wordpress deployment:
+
+```
+kubectl delete deploy/wordpress -n cka
+```
+
+No wordpress pods should be present at this point.
+
+Restore `etcd` configuration from the snapshot. On the control plane, identify the default `data-dir`:
+
+```
+grep data-dir /etc/kubernetes/manifests/etcd.yaml
+    - --data-dir=/var/lib/etcd
+```
+
+Stop all control plane components:
+
+```
+cd /etc/kubernetes/manifests/
+mv ./*yaml ../
+```
+
+Make sure that all control plane pods are `NotReady`:
+
+```
+crictl pods | egrep "kube|etcd"
+```
+
+Restore the snapshot to directory `/var/lib/etcd_backup`:
+
+```
+ETCDCTL_API=3 etcdctl \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  --data-dir /var/lib/etcd_backup \
+  snapshot restore /tmp/etcd-backup.db
+```
+
+Configure etcd to use the new directory `/var/lib/etcd_backup`:
+
+```
+sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/manifests/etcd.yaml
+```
+
+Start all control plane components:
+
+```
+cd /etc/kubernetes/manifests/
+mv ../*yaml ./
+```
+
+Give it some time (up to several minutes) for etcd to restart, and verify that wordpress pods are back.
+
+```
+kubectl get po -n cka
+NAME                        READY   STATUS    RESTARTS   AGE
+mysql-0                     1/1     Running   0          40m
+wordpress-c7b5c7666-bntkc   1/1     Running   0          38s
+wordpress-c7b5c7666-djrzl   0/1     Pending   0          38s
+wordpress-c7b5c7666-lf6l7   1/1     Running   0          38s
+```
+
+For declarative YAML solution, see [bonus-task-solution.yaml](./yaml/bonus-task-solution.yaml).

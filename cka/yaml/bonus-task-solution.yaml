@@ -1,0 +1,202 @@
+---
+apiVersion: v1
+kind: Secret
+data:
+  mysql_root_password: TXlzcWw1LjZQYXNzd29yZA==
+metadata:
+  name: mysql-password
+  namespace: cka
+type: Opaque
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-mysql
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data_mysql"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-mysql
+  namespace: cka
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+  namespace: cka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+      volumes:
+      - name: pv-mysql
+        persistentVolumeClaim:
+          claimName: pvc-mysql
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.35
+          command: ["sh", "-c", "chown -R 65534:65534 /var/lib/mysql"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              name: pv-mysql
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: pv-mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: mysql_root_password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+  namespace: cka
+spec:
+  ports:
+  - name: "3306"
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: mysql
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wordpress
+  name: wordpress
+  namespace: cka
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordpress
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      # See https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#always-co-located-in-the-same-node
+      # The deployment has PodAntiAffinity configured to ensure 
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - wordpress
+            topologyKey: "kubernetes.io/hostname"
+      # See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/#taint-based-evictions
+      # The following toleration "matches" the taint on the master node, therefore
+      # a pod with this toleration would be able to schedule onto master.
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - image: wordpress:4.8-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: mysql_root_password
+        - name: WORDPRESS_DB_HOST
+          value: mysql
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        livenessProbe:
+          httpGet:
+            path: /readme.html
+            port: 80
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: wordpress
+  name: wordpress
+  namespace: cka
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 31234
+  selector:
+    app: wordpress
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-mysql
+  namespace: cka
+spec:
+  podSelector:
+    matchLabels:
+      app: mysql
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: wordpress
+      ports:
+      - protocol: TCP
+        port: 3306
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/8
