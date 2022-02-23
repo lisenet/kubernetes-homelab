@@ -16,7 +16,7 @@ spec:
   capacity:
     storage: 1Gi
   volumeMode: Filesystem
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Recycle
   accessModes:
     - ReadWriteOnce
   hostPath:

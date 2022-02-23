@@ -2415,7 +2415,7 @@ Docs: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-
     * Set capacity to `1Gi`.
     * Set `accessMode` to `ReadWriteOnce`.
     * Set `hostPath` to `/data_mysql`.
-    * Set `persistentVolumeReclaimPolicy` to `Retain`.
+    * Set `persistentVolumeReclaimPolicy` to `Recycle`.
     * The volume should have no `storageClassName` defined.
 4. Create a new `PersistentVolumeClaim` named `pvc-mysql`. It should request `1Gi` storage, accessMode `ReadWriteOnce` and should not define a `storageClassName`. The PVC should bound to the PV correctly.
 5. Create a new `StatefulSet` named `mysql`.
@@ -2467,7 +2467,7 @@ spec:
   capacity:
     storage: 1Gi
   volumeMode: Filesystem
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Recycle
   accessModes:
     - ReadWriteOnce
   hostPath:
