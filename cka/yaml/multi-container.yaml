@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: multi-container
+  name: multi-container
+  namespace: cka
+spec:
+  containers:
+  - image: lisenet/httpd-pii-demo:0.2
+    name: blue
+  - image: lisenet/httpd-healthcheck:0.1
+    name: healthcheck
+  initContainers:
+  - name: busybox
+    image: busybox:1.35.0
+    command: ['sh', '-c', 'echo FIRSH']
+...

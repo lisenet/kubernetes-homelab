@@ -1,0 +1,29 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: peasant-role
+  namespace: cka
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: peasant-role-binding
+  namespace: cka
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: peasant-role
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: peasant

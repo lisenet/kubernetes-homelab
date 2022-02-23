@@ -561,7 +561,7 @@ Create a cluser role:
 
 ```
 kubectl create clusterrole kubernetes-dashboard-clusterrole \
-  --verb=get,list,watch --resource=pods,nodes 
+  --verb=get,list,watch --resource=pods,nodes \
   --dry-run=client -o yaml | sed 's/- ""/- metrics.k8s.io/g' | kubectl apply -f -
 ```
 
@@ -1125,6 +1125,109 @@ spec:
 Docs: 
 * https://kubernetes.io/docs/concepts/workloads/controllers/deployment/ 
 * https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+* https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+* https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+
+**Exercise 1**: perform the following tasks.
+
+1. Create a pod `httpd-liveness-readiness` that uses `lisenet/httpd-healthcheck:0.1` image.
+2. Configure both `liveness` and `readiness` probes for a TCP check on port `10001`.
+3. Set `initialDelaySeconds` to 5. The probe should be performed every 10 seconds.
+
+Imperative commands:
+
+```
+kubectl run httpd-liveness-readiness --image=lisenet/httpd-healthcheck:0.1 \
+  --dry-run=client -o yaml -n cka > httpd-liveness-readiness.yaml
+```
+
+Edit the file `httpd-liveness-readiness.yaml` and add probes:
+
+```
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: httpd-liveness-readiness
+  name: httpd-liveness-readiness
+  namespace: cka
+spec:
+  containers:
+  - image: lisenet/httpd-healthcheck:0.1
+    name: httpd-liveness-readiness
+    readinessProbe:
+      tcpSocket:
+        port: 10001
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 10001
+      initialDelaySeconds: 5
+      periodSeconds: 10
+```
+
+Deploy the pod:
+
+```
+kubectl apply -f httpd-liveness-readiness.yaml
+```
+
+Verify:
+
+```
+kubectl describe po/httpd-liveness-readiness -n cka | grep tcp
+    Liveness:       tcp-socket :10001 delay=5s timeout=1s period=10s #success=1 #failure=3
+    Readiness:      tcp-socket :10001 delay=5s timeout=1s period=10s #success=1 #failure=3
+```
+
+**Exercise 2**: perform the following tasks.
+
+1. Create a pod called `multi-container` that has the following:
+    * A container named `blue` with `lisenet/httpd-pii-demo:0.2` image.
+    * A container named `healthcheck` with `lisenet/httpd-healthcheck:0.1` image.
+    * An `initContainer` named `busybox` with `busybox:1.35.0` image. Container runs the following command: `echo FIRST`.
+
+Imperative commands:
+
+```
+kubectl run multi-container --image=lisenet/httpd-healthcheck:0.1 \
+  --dry-run=client -o yaml -n cka > multi-container.yaml
+```
+
+Edit the file `multi-container.yaml` and add containers.
+
+```
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: multi-container
+  name: multi-container
+  namespace: cka
+spec:
+  containers:
+  - image: lisenet/httpd-pii-demo:0.2
+    name: blue
+  - image: lisenet/httpd-healthcheck:0.1
+    name: healthcheck
+  initContainers:
+  - name: busybox
+    image: busybox:1.35.0
+    command: ['sh', '-c', 'echo FIRSH']
+```
+
+Deploy the pod and verify that 2 containers are running:
+
+```
+kubectl apply -f multi-container.yaml
+
+kubectl get po/multi-container -n cka
+NAME              READY   STATUS    RESTARTS   AGE
+multi-container   2/2     Running   0          11s
+```
 
 ### Understand how resource limits can affect Pod scheduling
 

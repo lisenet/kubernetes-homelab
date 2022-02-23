@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: httpd-liveness-readiness
+  name: httpd-liveness-readiness
+  namespace: cka
+spec:
+  containers:
+  - image: lisenet/httpd-healthcheck:0.1
+    name: httpd-liveness-readiness
+    readinessProbe:
+      tcpSocket:
+        port: 10001
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 10001
+      initialDelaySeconds: 5
+      periodSeconds: 10
+...
