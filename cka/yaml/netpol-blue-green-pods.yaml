@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: blue
+  name: httpd-netpol-blue
+  namespace: cka
+spec:
+  containers:
+  - image: lisenet/httpd-pii-demo:0.2
+    name: httpd-netpol-blue
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: green
+  name: httpd-netpol-green
+  namespace: cka
+spec:
+  containers:
+  - image: lisenet/httpd-pii-demo:0.3
+    name: httpd-netpol-green
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: admin
+  name: curl-netpol
+  namespace: cka
+spec:
+  containers:
+  - args:
+    - "sleep"
+    - "1800"
+    image: curlimages/curl:7.81.0
+    name: curl-netpol
+...

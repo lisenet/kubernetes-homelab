@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: httpd-pii-demo
+  name: httpd-pii-demo
+  namespace: cka
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: httpd-pii-demo
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+  template:
+    metadata:
+      labels:
+        app: httpd-pii-demo
+    spec:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      containers:
+      - image: lisenet/httpd-pii-demo:0.2
+        name: httpd-pii-demo
+...

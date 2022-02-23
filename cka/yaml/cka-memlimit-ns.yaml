@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cka-memlimit
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cka-memlimit
+  namespace: cka-memlimit
+spec:
+  limits:
+  - max:
+      memory: 30Mi
+    type: Container
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: httpd-healthcheck-memlimit
+  name: httpd-healthcheck-memlimit
+  namespace: cka-memlimit
+spec:
+  containers:
+  - image: lisenet/httpd-healthcheck:0.1
+    name: httpd-healthcheck-memlimit
+    resources:
+      requests:
+        memory: 100Mi
+...

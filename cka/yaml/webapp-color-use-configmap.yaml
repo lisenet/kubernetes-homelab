@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-color
+  namespace: cka
+data:
+  color: blue
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: webapp-color
+  name: webapp-color
+  namespace: cka
+spec:
+  containers:
+  - image: kodekloud/webapp-color
+    name: webapp-color
+    env:
+      # Define the environment variable
+      - name: APP_COLOR
+        valueFrom:
+          configMapKeyRef:
+            name: webapp-color
+            # Specify the key associated with the value
+            key: color
+...
