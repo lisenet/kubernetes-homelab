@@ -2402,7 +2402,7 @@ Now you can run things like `nslookup`, `nc` or `telnet` into Mordor.
 
 ## Bonus Exercise: am I ready for the CKA exam?
 
-If you can's solve this then you're likely **not** ready.
+If you can't solve this then you're likely **not** ready.
 
 **Bonus exercise**: perform the following tasks to create a stateful application.
 
