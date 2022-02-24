@@ -73,7 +73,7 @@ Network is configured as follows:
 * DNS/DHCP/NTP/SMTP servers: `10.11.1.2` and `10.11.1.3`.
 * Managed switch: `10.11.1.4` currently no special config but a couple of VLANs to separate homelab devices from the rest of the home network.
 * PXE boot server: `10.11.1.20`.
-* DNS private zone: `hl.test`.
+* DNS private zone: `hl.test` (a reserved top level DNS name .test, see [rfc2606](https://datatracker.ietf.org/doc/html/rfc2606#section-2)).
 * DHCP: range `10.11.1.140-10.11.1.149`.
 
 Hostnames and their IP addresses:
@@ -114,6 +114,8 @@ Commodity hardware is used to keep costs to a minimum.
 | kvm2.hl.test | 8 | 16384 | 120GB SSD |
 | kvm3.hl.test | 8 | 16384 | 120GB SSD |
 | truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool |
+| mikrotik.hl.test | 1 | 128 | 128MB |
+| pi.hl.test | 1 | 512 | 8GB |
 
 ## Guest Provisioning
 
