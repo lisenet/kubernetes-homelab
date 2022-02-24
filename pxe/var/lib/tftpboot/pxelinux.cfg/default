@@ -1,0 +1,19 @@
+default menu.c32
+prompt 0
+timeout 50
+menu title Homelab PXE Menu
+label Install Rocky Linux 8 K8s Node
+  kernel /networkboot/Rocky8/vmlinuz
+  append initrd=/networkboot/Rocky8/initrd.img inst.repo=ftp://10.11.1.20/pub/pxe/Rocky8 inst.ks=ftp://10.11.1.20/pub/pxe/rocky8-k8s-ks.cfg
+label Install CentOS 7 Server
+  kernel /networkboot/CentOS7/vmlinuz
+  append initrd=/networkboot/CentOS7/initrd.img inst.repo=ftp://10.11.1.20/pub/pxe/CentOS7 ks=ftp://10.11.1.20/pub/pxe/centos7-ks.cfg
+label Install CentOS 7 K8s Node
+  kernel /networkboot/CentOS7/vmlinuz
+  append initrd=/networkboot/CentOS7/initrd.img inst.repo=ftp://10.11.1.20/pub/pxe/CentOS7 ks=ftp://10.11.1.20/pub/pxe/centos7-k8s-ks.cfg
+label Install Ubuntu 18.04 LTS Server
+  kernel /networkboot/Ubuntu1804/linux
+  append initrd=/networkboot/Ubuntu1804/initrd.gz ks=nfs:10.11.1.20:/var/nfs/Ubuntu1804Server/preseed/ubuntu.seed ---
+label Install Ubuntu 18.04 LTS Desktop
+  kernel /networkboot/Ubuntu1804/linux
+  append initrd=/networkboot/Ubuntu1804/initrd.gz ks=nfs:10.11.1.20:/var/nfs/Ubuntu1804Desktop/preseed/ubuntu.seed ---
