@@ -117,7 +117,9 @@ Commodity hardware is used to keep costs to a minimum.
 
 ## Guest Provisioning
 
-Provisioninig of KVM guests is done by using a [PXE boot server](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) with Kickstart templates.
+Previously, provisioning of KVM guests was done by using a [PXE boot server](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) with Kickstart templates.
+
+I have since migrated to [Packer](./packer/README.md) to make the VM deployment process faster. PXE boot is still used to provision physical hosts (hypervisors).
 
 ![Homelab PXE Boot](./docs/homelab-pxe-boot-menu.png)
 
