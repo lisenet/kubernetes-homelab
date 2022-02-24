@@ -8,6 +8,8 @@ Packer is a tool that enables us to create identical machine images for multiple
 
 Speed. Deploying KVM guests with Packer-built images takes less time than provisioning servers using PXE boot.
 
+Are you getting rid of PXE? Not anytime soon. PXE is still used to provision physical hosts (KVM hypervisors).
+
 ## Install Packer
 
 For RHEL-based systems:
