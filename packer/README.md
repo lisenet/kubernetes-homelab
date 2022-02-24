@@ -74,3 +74,41 @@ sudo virt-install \
   --import \
   --wait 0
 ```
+
+## Provision Homelab KVM Guests
+
+```
+for i in 1 2 3; do \
+  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/mnt/storage-luks/libvirt/packer_srv3${i}.qcow2 && \
+  virt-install \
+  --connect qemu+ssh://root@kvm${i}.hl.test/system \
+  --name srv3${i}-master \
+  --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:3${i} \
+  --disk path=/mnt/storage-luks/libvirt/packer_srv3${i}.qcow2,size=32 \
+  --ram 4096 \
+  --vcpus 2 \
+  --os-type linux \
+  --os-variant centos7.0 \
+  --sound none \
+  --rng /dev/urandom \
+  --virt-type kvm \
+  --wait 0; \
+done
+
+for i in 1 2 3; do \
+  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/mnt/storage-luks/libvirt/packer_srv3${i}.qcow2 && \
+  virt-install \
+  --connect qemu+ssh://root@kvm${i}.hl.test/system \
+  --name srv3$(($i + 3))-node \
+  --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:3$(($i + 3)) \
+  --disk path=/mnt/storage-luks/libvirt/packer_srv3$(($i + 3)).qcow2,size=32 \
+  --ram 8192 \
+  --vcpus 2 \
+  --os-type linux \
+  --os-variant centos7.0 \
+  --sound none \
+  --rng /dev/urandom \
+  --virt-type kvm \
+  --wait 0; \
+done
+```
