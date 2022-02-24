@@ -48,6 +48,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`metallb`](./metallb/) - configuration files to deploy MetalLB.
 * [`mikrotik-exporter`](./mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
 * [`openvpn`](./openvpn/) - configuration files to deploy OpenVPN server.
+* [`packer`](./packer/) - configuration files build Qemu/KVM images with Packer.
 * [`pihole-exporter`](./pihole-exporter/) - configuration files to deploy a Prometheus exporter for Pi-hole Raspberry Pi ad blocker.
 * [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
 * [`pii-demo-blue-green`](./pii-demo-blue-green/) - a demo PII application based that uses blue/green deployment.
@@ -116,7 +117,9 @@ Commodity hardware is used to keep costs to a minimum.
 
 ## Guest Provisioning
 
-Provisioninig of KVM guests is done by using a [PXE boot server](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) with Kickstart templates.
+Previously, provisioning of KVM guests was done by using a [PXE boot server](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) with Kickstart templates.
+
+I have since migrated to [Packer](./packer/README.md) to make the VM deployment process faster. PXE boot is still used to provision physical hosts (hypervisors).
 
 ![Homelab PXE Boot](./docs/homelab-pxe-boot-menu.png)
 
