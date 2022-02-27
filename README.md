@@ -163,7 +163,7 @@ $ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key
 
 ~80W
 
-Monthly, the homelab costs (((80W * 24h) / 1000) * £0.16/kWh * 365days) / 12months = £9.34 (~13$).
+Monthly, the homelab costs (((80W * 24h) / 1000) * £0.19/kWh * 365days) / 12months = £11.10 (~15$).
 
 # Deployment
 
