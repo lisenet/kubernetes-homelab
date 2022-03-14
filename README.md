@@ -86,6 +86,7 @@ Hostnames and their IP addresses:
 | switch.hl.test    | 10.11.1.4    | Managed switch                                         |
 | truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      |
 | pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     |
+| pxe.hl.test       | 10.11.1.20   | PXE boot server                                        |
 | kvm1.hl.test      | 10.11.1.21   | KVM hypervisor                                         |
 | kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         |
 | kvm3.hl.test      | 10.11.1.23   | KVM hypervisor                                         |
