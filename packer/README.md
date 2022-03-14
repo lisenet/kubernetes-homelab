@@ -79,12 +79,13 @@ sudo virt-install \
 
 ```
 for i in 1 2 3; do \
-  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/mnt/storage-luks/libvirt/packer_srv3${i}.qcow2 && \
+  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
   virt-install \
   --connect qemu+ssh://root@kvm${i}.hl.test/system \
   --name srv3${i}-master \
   --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:3${i} \
-  --disk path=/mnt/storage-luks/libvirt/packer_srv3${i}.qcow2,size=32 \
+  --disk path=/var/lib/libvirt/images/srv3${i}.qcow2,size=32 \
+  --import \
   --ram 4096 \
   --vcpus 2 \
   --os-type linux \
@@ -96,12 +97,13 @@ for i in 1 2 3; do \
 done
 
 for i in 1 2 3; do \
-  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/mnt/storage-luks/libvirt/packer_srv3${i}.qcow2 && \
+  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
   virt-install \
   --connect qemu+ssh://root@kvm${i}.hl.test/system \
   --name srv3$(($i + 3))-node \
   --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:3$(($i + 3)) \
-  --disk path=/mnt/storage-luks/libvirt/packer_srv3$(($i + 3)).qcow2,size=32 \
+  --disk path=/var/lib/libvirt/image/srv3$(($i + 3)).qcow2,size=32 \
+  --import \
   --ram 8192 \
   --vcpus 2 \
   --os-type linux \
