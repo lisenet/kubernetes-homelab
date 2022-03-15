@@ -241,7 +241,7 @@ Install Istio add-on Kiali:
 kubectl apply -f ./istio-addons/kiali
 ```
 
-### Create Monitoring Namespace:
+### Create Monitoring Namespace
 
 ```
 kubectl apply -f ./monitoring-ns-istio-injection-enabled.yml
