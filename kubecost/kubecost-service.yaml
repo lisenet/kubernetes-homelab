@@ -14,3 +14,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 9090
+  loadBalancerIP: 10.11.1.52
