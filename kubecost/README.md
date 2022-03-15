@@ -43,7 +43,7 @@ helm upgrade --install kubecost \
   --set kubecostModel.resources.requests.cpu="20m" \
   --set kubecostModel.resources.requests.memory="128Mi" \
   --set kubecostFrontend.imagePullPolicy="IfNotPresent" \
-  --set networkCosts.enabled=true \
+  --set networkCosts.enabled=false \
   --set networkCosts.imagePullPolicy="IfNotPresent" \
   --set persistentVolume.enabled=true \
   --set persistentVolume.size="10Gi" \

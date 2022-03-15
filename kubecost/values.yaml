@@ -38,7 +38,7 @@ prometheus:
     enabled: false
 
 networkCosts:
-  enabled: true
+  enabled: false
   imagePullPolicy: IfNotPresent
   resources:
     requests:
