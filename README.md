@@ -380,7 +380,7 @@ helm upgrade --install kibana \
 * [Install Kubecost to Help Optimise Kubernetes Applications](https://www.lisenet.com/2021/install-kubecost-to-help-optimise-kubernetes-applications/)
 * [Speedtest with InfluxDB and Grafana on Kubernetes](https://www.lisenet.com/2021/speedtest-with-influxdb-and-grafana-on-kubernetes/)
 * [OpenVPN Server on Kubernetes](https://www.lisenet.com/2022/openvpn-server-on-kubernetes/)
-* [Building Qemu KVM Images with Packer](https://www.lisenet.com/2022/building-qemu-kvm-images-with-packer/f)
+* [Building Qemu KVM Images with Packer](https://www.lisenet.com/2022/building-qemu-kvm-images-with-packer/)
 
 ## Stargazers Over Time
 
