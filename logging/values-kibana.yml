@@ -53,7 +53,7 @@ resources:
 
 service:
   type: LoadBalancer
-  loadBalancerIP: ""
+  loadBalancerIP: "10.11.1.58"
   port: 5601
   nodePort: ""
   labels: {}
