@@ -17,4 +17,5 @@ spec:
       - name: influxdb
         port: 8086
         targetPort: 8086
+    loadBalancerIP: 10.11.1.55
 ...
