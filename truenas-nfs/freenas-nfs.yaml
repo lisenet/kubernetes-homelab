@@ -49,8 +49,8 @@ driver:
       datasetEnableQuotas: true
       datasetEnableReservation: false
       datasetPermissionsMode: "0777"
-      datasetPermissionsUser: root
-      datasetPermissionsGroup: wheel
+      datasetPermissionsUser: 0
+      datasetPermissionsGroup: 0
     nfs:
       shareHost: 10.11.1.5
       shareAlldirs: false
