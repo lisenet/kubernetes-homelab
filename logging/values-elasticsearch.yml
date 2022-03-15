@@ -64,18 +64,18 @@ volumeClaimTemplate:
   storageClassName: "freenas-nfs-csi"
   resources:
     requests:
-      storage: 30Gi
+      storage: 64Gi
 
 service:
   enabled: true
   labels: {}
   labelsHeadless: {}
-  type: ClusterIP
+  type: LoadBalancer
   nodePort: ""
   annotations: {}
   httpPortName: https
   transportPortName: transport
-  loadBalancerIP: ""
+  loadBalancerIP: "10.11.1.59"
   loadBalancerSourceRanges: []
   externalTrafficPolicy: ""
 
