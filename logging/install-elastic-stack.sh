@@ -38,9 +38,7 @@ if [ -e ./values-elasticsearch.yml ]; then
     elastic/elasticsearch \
     --namespace "${NAMESPACE}" \
     --version "${STACK_VERSION}" \
-    --values ./values-elasticsearch.yml \
-    --set service.type="LoadBalancer" \
-    --set service.LoadBalancerIP="10.11.1.59"
+    --values ./values-elasticsearch.yml
 else
   printf "%s\\n" "Helm values file for Elasticsearch not found"
   exit 1
