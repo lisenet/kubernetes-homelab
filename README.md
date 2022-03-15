@@ -185,100 +185,171 @@ Use this to deploy various Kubernetes resources with Terraform.
 
 ## Manage Kubernetes Homelab Manually
 
-Create a monitoring namespace:
-```
-$ kubectl apply -f ./monitoring-ns-istio-injection-enabled.yml
-```
+### Install democratic-csi Shared Storage Driver
 
-### kube-state-metrics
-
-Deploy `kube-state-metrics`:
-```
-$ kubectl apply -f ./kube-state-metrics
-```
-
-### Prometheus
-
-Create a secret called **prometheus-cluster-name** that contains the cluster name the Prometheus instance is running in:
+Democratic CSI implements the container storage interface spec providing storage for Kubernetes.
 
 ```
-$ kubectl -n monitoring create secret generic \
-  prometheus-cluster-name --from-literal=CLUSTER_NAME=kubernetes-homelab
+helm repo add democratic-csi https://democratic-csi.github.io/charts/
+helm repo update
+
+helm upgrade --install zfs-nfs \
+  democratic-csi/democratic-csi \
+  --namespace democratic-csi \
+  --create-namespace \
+  --version "0.8.3" \
+  --values ./truenas-nfs/freenas-nfs.yaml
 ```
 
-Deploy `prometheus`:
-```
-$ kubectl apply -f ./prometheus
-```
-
-### Grafana
-
-Deploy `grafana`:
-```
-$ kubectl apply -f ./grafana
-```
-
-### Alertmanager
-
-Alertmanager uses the Incoming Webhooks feature of Slack, therefore you need to set it up if you want to receive Slack alerts.
-
-Update the config map [`alertmanager/alertmanager-config-map.yml`](./alertmanager/alertmanager-config-map.yml) and specify your incoming webhook URL. Deploy `alertmanager`:
-```
-$ kubectl apply -f ./alertmanager
-```
-
-### Mikrotik-exporter
-
-Update the secret file [`mikrotik-exporter/mikrotik-exporter-secret.yml`](./mikrotik-exporter/mikrotik-exporter-secret.yml) and specify your password for the Mikrotik API user. Deploy `mikrotik-exporter`:
-```
-$ kubectl apply -f ./mikrotik-exporter
-```
-
-### X509 Certificate Exporter
-
-Deploy the Helm chart:
-```
-$ helm install x509-certificate-exporter \
-  enix/x509-certificate-exporter \
-  --namespace monitoring \
-  --values ./x509-certificate-exporter/values.yml
-```
-
-### MetalLB
+### Install MetalLB
 
 Update the config map [`metallb/metallb-config-map.yml`](./metallb/metallb-config-map.yml) and specify the IP address range. Deploy MetalLB network load-balancer:
+
 ```
-$ kubectl apply -f ./metallb
+kubectl apply -f ./metallb
 ```
 
-## Install Istio
+### Install Istio
 
 The Istio namespace must be created manually.
 
 ```
-$ kubectl create ns istio-system
+kubectl create ns istio-system
 ```
 
 The `kubectl apply` command may show transient errors due to resources not being available in the cluster in the correct order. If that happens, simply run the command again.
+
 ```
 kubectl apply -f ./istio/istio-kubernetes.yml
 ```
 
 Install httpd-healthcheck:
-```
-$ kubectl apply -f ./httpd-healthcheck
-```
-
-### Install Istio Addons - Prometheus
 
 ```
-$ kubectl apply -f istio-addons/prometheus
+kubectl apply -f ./httpd-healthcheck
 ```
 
-### Install Istio Addons - Kiali
+Install Istio add-on Prometheus:
 
 ```
-$ kubectl apply -f istio-addons/kiali
+kubectl apply -f ./istio-addons/prometheus
+```
+
+Install Istio add-on Kiali:
+
+```
+kubectl apply -f ./istio-addons/kiali
+```
+
+### Create Monitoring Namespace:
+
+```
+kubectl apply -f ./monitoring-ns-istio-injection-enabled.yml
+kubectl apply -f ./monitoring-ns-with-istio
+```
+
+### Install kube-state-metrics
+
+Deploy `kube-state-metrics`:
+
+```
+kubectl apply -f ./kube-state-metrics
+```
+
+### Install Prometheus
+
+Create a secret called **prometheus-cluster-name** that contains the cluster name the Prometheus instance is running in:
+
+```
+kubectl -n monitoring create secret generic \
+  prometheus-cluster-name --from-literal=CLUSTER_NAME=kubernetes-homelab
+```
+
+Deploy `prometheus`:
+
+```
+kubectl apply -f ./prometheus
+```
+
+### Install Grafana
+
+```
+kubectl apply -f ./grafana
+```
+
+### Install Alertmanager
+
+Alertmanager uses the Incoming Webhooks feature of Slack, therefore you need to set it up if you want to receive Slack alerts.
+
+Update the config map [`alertmanager/alertmanager-config-map.yml`](./alertmanager/alertmanager-config-map.yml) and specify your incoming webhook URL. Deploy `alertmanager`:
+
+```
+kubectl apply -f ./alertmanager
+```
+
+### Install Mikrotik-exporter
+
+Update the secret file [`mikrotik-exporter/mikrotik-exporter-secret.yml`](./mikrotik-exporter/mikrotik-exporter-secret.yml) and specify your password for the Mikrotik API user. Deploy `mikrotik-exporter`:
+
+```
+kubectl apply -f ./mikrotik-exporter
+```
+
+### Install Pi-hole Exporter
+
+```
+kubectl apply -f ./pihole-exporter
+```
+
+### Install X509 Certificate Exporter
+
+Deploy the Helm chart:
+
+```
+helm repo add enix https://charts.enix.io
+
+helm install x509-certificate-exporter \
+  enix/x509-certificate-exporter \
+  --namespace monitoring \
+  --values ./x509-certificate-exporter/values.yml
+```
+
+### Install Kubecost
+
+```
+kubectl create namespace kubecost
+
+helm repo add kubecost https://kubecost.github.io/cost-analyzer/
+
+helm upgrade --install kubecost \
+  kubecost/cost-analyzer \
+  --namespace kubecost \
+  --version 1.87.3 \
+  --values ./kubecost/values.yaml
+
+kubectl apply -f ./kubecost-service.yaml
+```
+
+### Install ElasticSearch and Kibana
+
+```
+kubectl create namespace logging
+kubectl apply -f ./logging/elastic-credentials-secret.yml
+kubectl apply -f ./logging/elastic-certificates-secret.yml
+
+helm repo add elastic https://helm.elastic.co
+
+helm upgrade --install elasticsearch \
+  elastic/elasticsearch \
+  --namespace logging \
+  --version "7.16.2" \
+  --values ./logging/values-elasticsearch.yml
+
+helm upgrade --install kibana \
+  elastic/kibana \
+  --namespace logging \
+  --version "7.16.2" \
+  --values ./logging/values-kibana.yml
 ```
 
 # Upgrades
@@ -309,6 +380,7 @@ $ kubectl apply -f istio-addons/kiali
 * [Install Kubecost to Help Optimise Kubernetes Applications](https://www.lisenet.com/2021/install-kubecost-to-help-optimise-kubernetes-applications/)
 * [Speedtest with InfluxDB and Grafana on Kubernetes](https://www.lisenet.com/2021/speedtest-with-influxdb-and-grafana-on-kubernetes/)
 * [OpenVPN Server on Kubernetes](https://www.lisenet.com/2022/openvpn-server-on-kubernetes/)
+* [Building Qemu KVM Images with Packer](https://www.lisenet.com/2022/building-qemu-kvm-images-with-packer/f)
 
 ## Stargazers Over Time
 
