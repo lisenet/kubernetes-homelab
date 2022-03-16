@@ -78,25 +78,25 @@ Network is configured as follows:
 
 Hostnames and their IP addresses:
 
-| Hostname          | IP Address   | Information                                            |
-|:------------------|:-------------|:-------------------------------------------------------|
-| mikrotik.hl.test  | 10.11.1.1    | Mikrotik router                                        |
-| admin1.hl.test    | 10.11.1.2    | DNS/DHCP master, NTP, SMTP, HAProxy master, Keepalived |
-| admin2.hl.test    | 10.11.1.3    | DNS/DHCP slave, NTP, SMTP, HAProxy backup, Keepalived  |
-| switch.hl.test    | 10.11.1.4    | Managed switch                                         |
-| truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      |
-| pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     |
-| pxe.hl.test       | 10.11.1.20   | PXE boot server                                        |
-| kvm1.hl.test      | 10.11.1.21   | KVM hypervisor                                         |
-| kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         |
-| kvm3.hl.test      | 10.11.1.23   | KVM hypervisor                                         |
-| kubelb.hl.test    | 10.11.1.30   | Virtual IP address for HAProxy/keepalived              |
-| srv31.hl.test     | 10.11.1.31   | Kubernetes control plane                               |
-| srv32.hl.test     | 10.11.1.32   | Kubernetes control plane                               |
-| srv33.hl.test     | 10.11.1.33   | Kubernetes control plane                               |
-| srv34.hl.test     | 10.11.1.34   | Kubernetes worker node                                 |
-| srv35.hl.test     | 10.11.1.35   | Kubernetes worker node                                 |
-| srv36.hl.test     | 10.11.1.36   | Kubernetes worker node                                 |
+| Hostname          | IP Address   | Information                                            | OS |
+|:------------------|:-------------|:-------------------------------------------------------|:---|
+| mikrotik.hl.test  | 10.11.1.1    | Mikrotik router                                        | RouterOS |
+| admin1.hl.test    | 10.11.1.2    | DNS/DHCP master, NTP, SMTP, HAProxy master, Keepalived | Rocky 8 |
+| admin2.hl.test    | 10.11.1.3    | DNS/DHCP slave, NTP, SMTP, HAProxy backup, Keepalived  | Rocky 8 |
+| switch.hl.test    | 10.11.1.4    | Managed switch                                         | N/A |
+| truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      | TrueNAS Core 12 |
+| pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     | Raspbian |
+| pxe.hl.test       | 10.11.1.20   | PXE boot server                                        | Rocky 8 |
+| kvm1.hl.test      | 10.11.1.21   | KVM hypervisor                                         | Rocky 8 |
+| kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         | Rocky 8 |
+| kvm3.hl.test      | 10.11.1.23   | KVM hypervisor                                         | Rocky 8 |
+| kubelb.hl.test    | 10.11.1.30   | Virtual IP address for HAProxy/keepalived              | N/A |
+| srv31.hl.test     | 10.11.1.31   | Kubernetes control plane                               | Rocky 8 |
+| srv32.hl.test     | 10.11.1.32   | Kubernetes control plane                               | Rocky 8 |
+| srv33.hl.test     | 10.11.1.33   | Kubernetes control plane                               | Rocky 8 |
+| srv34.hl.test     | 10.11.1.34   | Kubernetes worker node                                 | Rocky 8 |
+| srv35.hl.test     | 10.11.1.35   | Kubernetes worker node                                 | Rocky 8 |
+| srv36.hl.test     | 10.11.1.36   | Kubernetes worker node                                 | Rocky 8 |
 
 
 # Homelab Infrastructure
