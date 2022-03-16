@@ -109,15 +109,15 @@ Kubernetes environment runs on three KVM hypervisors. The goal is to maintain se
 
 Commodity hardware is used to keep costs to a minimum.
 
-| Hostname | CPU Cores | RAM (MB) | Storage |
-| --- | --- | --- | --- |
-| pxe.hl.test  | 4 | 8192  | 120GB SSD |
-| kvm1.hl.test | 8 | 22528 | 240GB SSD |
-| kvm2.hl.test | 8 | 18432 | 240GB SSD |
-| kvm3.hl.test | 8 | 18432 | 240GB SSD |
-| truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool |
-| mikrotik.hl.test | 1 | 128 | 128MB |
-| pi.hl.test | 1 | 512 | 8GB |
+| Hostname | CPU Cores | RAM (MB) | Storage | OS |
+| --- | --- | --- | --- | --- |
+| pxe.hl.test  | 4 | 8192  | 120GB SSD | Rocky 8 |
+| kvm1.hl.test | 8 | 22528 | 240GB SSD | Rocky 8 |
+| kvm2.hl.test | 8 | 18432 | 240GB SSD | Rocky 8 |
+| kvm3.hl.test | 8 | 18432 | 240GB SSD | Rocky 8 |
+| truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool | TrueNAS Core 12 |
+| mikrotik.hl.test | 1 | 128 | 128MB | RouterOS |
+| pi.hl.test | 1 | 512 | 8GB | Raspbian |
 
 ## Guest Provisioning
 
