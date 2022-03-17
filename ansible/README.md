@@ -1,3 +1,11 @@
+# DEPRECATION NOTICE
+
+Originally Ansible playbooks (used to deploy Kubernetes cluster) were part of this repository. It has, however, proved challenging to maintain them here because of other roles/playbooks that weren't in the repository (e.g. PXE server deployment, KVM server deployment etc).
+
+A decision has therefore been made to move Ansible playbooks from this repository to their own dedicated GitHub repository called [homelab-ansible](https://github.com/lisenet/homelab-ansible).
+
+Files in this folder are left for references only, and are no longer maintained. Ansible playbooks to configure Kubernetes homelab can be found in [homelab-ansible](https://github.com/lisenet/homelab-ansible) repository.
+
 # Ansible-defined Kubernetes Homelab
 
 Ansible playbooks to configure Kubernetes homelab.
