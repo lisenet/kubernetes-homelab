@@ -36,7 +36,7 @@ Deploy a single node Elasticsearch with authentication, certificates for TLS and
 helm upgrade --install elasticsearch \
   elastic/elasticsearch \
   --namespace logging \
-  --version "7.16.2" \
+  --version "7.17.1" \
   --values ./values-elasticsearch.yml
 ```
 
@@ -48,7 +48,7 @@ Deploy Kibana using authentication and TLS to connect to Elasticsearch (see [val
 helm upgrade --install kibana \
   elastic/kibana \
   --namespace logging \
-  --version "7.16.2" \
+  --version "7.17.1" \
   --values ./values-kibana.yml
 ```
 
@@ -60,13 +60,13 @@ Deploy Filebeat using authentication and TLS to connect to Elasticsearch (see [v
 helm upgrade --install filebeat \
   elastic/filebeat \
   --namespace logging \
-  --version "7.16.2" \
+  --version "7.17.1" \
   --values ./values-filebeat.yml
 ```
 
 # Essential Reading
 
-https://www.elastic.co/guide/en/elasticsearch/reference/7.16/configuring-stack-security.html
+https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-stack-security.html
 
-https://www.elastic.co/guide/en/elasticsearch/reference/7.16/security-settings.html
+https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-settings.html
 
