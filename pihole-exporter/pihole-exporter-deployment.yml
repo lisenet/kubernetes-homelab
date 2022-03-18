@@ -30,7 +30,7 @@ spec:
             topologyKey: "kubernetes.io/hostname"
       containers:
         - name: pihole-exporter
-          image: ekofr/pihole-exporter:v0.1.0
+          image: ekofr/pihole-exporter:v0.3.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9617
