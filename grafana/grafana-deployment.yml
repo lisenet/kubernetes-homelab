@@ -36,7 +36,7 @@ spec:
         runAsUser: 472
       containers:
       - name: grafana
-        image: grafana/grafana:8.1.2
+        image: grafana/grafana:8.4.4
         imagePullPolicy: IfNotPresent
         ports:
         - name: grafana
