@@ -2534,8 +2534,8 @@ spec:
                   from this pool.
                 type: boolean
               disableBGPExport:
-                description: 'Disable exporting routes from this IP Pool’s CIDR over
-                  BGP. [Default: false]'
+                description: "Disable exporting routes from this IP Pool's CIDR over
+                  BGP. [Default: false]"
                 type: boolean
               ipip:
                 description: 'Deprecated: this field is only used for APIv1 backwards
@@ -4083,7 +4083,7 @@ spec:
         # It can be deleted if this is a fresh installation, or if you have already
         # upgraded to use calico-ipam.
         - name: upgrade-ipam
-          image: docker.io/calico/cni:v3.21.0
+          image: docker.io/calico/cni:v3.22.1
           command: ["/opt/cni/bin/calico-ipam", "-upgrade"]
           envFrom:
           - configMapRef:
@@ -4110,7 +4110,7 @@ spec:
         # This container installs the CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
-          image: docker.io/calico/cni:v3.21.0
+          image: docker.io/calico/cni:v3.22.1
           command: ["/opt/cni/bin/install"]
           envFrom:
           - configMapRef:
@@ -4151,7 +4151,7 @@ spec:
         # Adds a Flex Volume Driver that creates a per-pod Unix Domain Socket to allow Dikastes
         # to communicate with Felix over the Policy Sync API.
         - name: flexvol-driver
-          image: docker.io/calico/pod2daemon-flexvol:v3.21.0
+          image: docker.io/calico/pod2daemon-flexvol:v3.22.1
           volumeMounts:
           - name: flexvol-driver-host
             mountPath: /host/driver
@@ -4162,7 +4162,7 @@ spec:
         # container programs network policy and routes on each
         # host.
         - name: calico-node
-          image: docker.io/calico/node:v3.21.0
+          image: docker.io/calico/node:v3.22.1
           envFrom:
           - configMapRef:
               # Allow KUBERNETES_SERVICE_HOST and KUBERNETES_SERVICE_PORT to be overridden for eBPF mode.
@@ -4381,7 +4381,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
         - name: calico-kube-controllers
-          image: docker.io/calico/kube-controllers:v3.21.0
+          image: docker.io/calico/kube-controllers:v3.22.1
           env:
             # Choose which controllers to run.
             - name: ENABLED_CONTROLLERS
