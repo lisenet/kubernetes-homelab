@@ -1,4 +1,4 @@
-# Inspired by https://raw.githubusercontent.com/istio/istio/release-1.11/samples/addons/prometheus.yaml
+# Inspired by https://raw.githubusercontent.com/istio/istio/release-1.13/samples/addons/prometheus.yaml
 # Modified to include workload_rules.yml and --storage.tsdb.retention.time=6h
 ---
 # Source: prometheus/templates/server/serviceaccount.yaml
@@ -9,7 +9,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-14.6.1
+    chart: prometheus-15.0.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
@@ -24,7 +24,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-14.6.1
+    chart: prometheus-15.0.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
@@ -125,19 +125,22 @@ data:
         - __meta_kubernetes_service_annotation_prometheus_io_port
         target_label: __address__
       - action: labelmap
+        regex: __meta_kubernetes_service_annotation_prometheus_io_param_(.+)
+        replacement: __param_$1
+      - action: labelmap
         regex: __meta_kubernetes_service_label_(.+)
       - action: replace
         source_labels:
         - __meta_kubernetes_namespace
-        target_label: kubernetes_namespace
+        target_label: namespace
       - action: replace
         source_labels:
         - __meta_kubernetes_service_name
-        target_label: kubernetes_name
+        target_label: service
       - action: replace
         source_labels:
         - __meta_kubernetes_pod_node_name
-        target_label: kubernetes_node
+        target_label: node
     - job_name: kubernetes-service-endpoints-slow
       kubernetes_sd_configs:
       - role: endpoints
@@ -164,19 +167,22 @@ data:
         - __meta_kubernetes_service_annotation_prometheus_io_port
         target_label: __address__
       - action: labelmap
+        regex: __meta_kubernetes_service_annotation_prometheus_io_param_(.+)
+        replacement: __param_$1
+      - action: labelmap
         regex: __meta_kubernetes_service_label_(.+)
       - action: replace
         source_labels:
         - __meta_kubernetes_namespace
-        target_label: kubernetes_namespace
+        target_label: namespace
       - action: replace
         source_labels:
         - __meta_kubernetes_service_name
-        target_label: kubernetes_name
+        target_label: service
       - action: replace
         source_labels:
         - __meta_kubernetes_pod_node_name
-        target_label: kubernetes_node
+        target_label: node
       scrape_interval: 5m
       scrape_timeout: 30s
     - honor_labels: true
@@ -212,10 +218,10 @@ data:
         regex: __meta_kubernetes_service_label_(.+)
       - source_labels:
         - __meta_kubernetes_namespace
-        target_label: kubernetes_namespace
+        target_label: namespace
       - source_labels:
         - __meta_kubernetes_service_name
-        target_label: kubernetes_name
+        target_label: service
     - job_name: kubernetes-pods
       kubernetes_sd_configs:
       - role: pod
@@ -242,15 +248,18 @@ data:
         - __meta_kubernetes_pod_annotation_prometheus_io_port
         target_label: __address__
       - action: labelmap
+        regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)
+        replacement: __param_$1
+      - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
       - action: replace
         source_labels:
         - __meta_kubernetes_namespace
-        target_label: kubernetes_namespace
+        target_label: namespace
       - action: replace
         source_labels:
         - __meta_kubernetes_pod_name
-        target_label: kubernetes_pod_name
+        target_label: pod
       - action: drop
         regex: Pending|Succeeded|Failed|Completed
         source_labels:
@@ -281,15 +290,18 @@ data:
         - __meta_kubernetes_pod_annotation_prometheus_io_port
         target_label: __address__
       - action: labelmap
+        regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)
+        replacement: __param_$1
+      - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
       - action: replace
         source_labels:
         - __meta_kubernetes_namespace
-        target_label: kubernetes_namespace
+        target_label: namespace
       - action: replace
         source_labels:
         - __meta_kubernetes_pod_name
-        target_label: kubernetes_pod_name
+        target_label: pod
       - action: drop
         regex: Pending|Succeeded|Failed|Completed
         source_labels:
@@ -368,7 +380,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-14.6.1
+    chart: prometheus-15.0.1
     heritage: Helm
   name: prometheus
 rules:
@@ -410,7 +422,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-14.6.1
+    chart: prometheus-15.0.1
     heritage: Helm
   name: prometheus
 subjects:
@@ -430,7 +442,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-14.6.1
+    chart: prometheus-15.0.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
@@ -455,7 +467,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-14.6.1
+    chart: prometheus-15.0.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
@@ -472,7 +484,7 @@ spec:
         component: "server"
         app: prometheus
         release: prometheus
-        chart: prometheus-14.6.1
+        chart: prometheus-15.0.1
         heritage: Helm
         
         sidecar.istio.io/inject: "false"
@@ -494,7 +506,7 @@ spec:
               readOnly: true
 
         - name: prometheus-server
-          image: "prom/prometheus:v2.26.0"
+          image: "prom/prometheus:v2.31.1"
           imagePullPolicy: "IfNotPresent"
           args:
             - --storage.tsdb.retention.time=6h
@@ -516,6 +528,7 @@ spec:
             httpGet:
               path: /-/ready
               port: 9090
+              scheme: HTTP
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 4
@@ -525,6 +538,7 @@ spec:
             httpGet:
               path: /-/healthy
               port: 9090
+              scheme: HTTP
             initialDelaySeconds: 30
             periodSeconds: 15
             timeoutSeconds: 10
