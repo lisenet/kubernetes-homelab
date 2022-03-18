@@ -7,7 +7,7 @@ Kubernetes development continues to grow at a rapid pace, and keeping up to date
 * Rocky Linux 8 (not officially supported, use CentOS 7 instead)
 * Kubernetes 1.23.5
 * Calico CNI 3.22
-* docker-ce 20.10.11
+* docker-ce 20.10.13
 * kubernetes-cni 0.8.7
 * Istio 1.13
 
