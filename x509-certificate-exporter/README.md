@@ -23,5 +23,6 @@ helm upgrade --install \
   x509-certificate-exporter \
   enix/x509-certificate-exporter \
   --namespace monitoring \
+  --version "1.20.0" \
   --values ./values.yml
 ```
