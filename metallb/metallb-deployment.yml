@@ -1,4 +1,3 @@
----
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -339,6 +338,7 @@ spec:
       - args:
         - --port=7472
         - --config=config
+        - --log-level=info
         env:
         - name: METALLB_NODE_NAME
           valueFrom:
@@ -364,7 +364,7 @@ spec:
             secretKeyRef:
               name: memberlist
               key: secretkey
-        image: quay.io/metallb/speaker:v0.10.2
+        image: quay.io/metallb/speaker:v0.12.1
         imagePullPolicy: IfNotPresent
         name: speaker
         ports:
@@ -382,6 +382,24 @@ spec:
           requests:
             cpu: 11m
             memory: 64Mi
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: monitoring
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: monitoring
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -427,12 +445,13 @@ spec:
       - args:
         - --port=7472
         - --config=config
+        - --log-level=info
         env:
         - name: METALLB_ML_SECRET_NAME
           value: memberlist
         - name: METALLB_DEPLOYMENT
           value: controller
-        image: quay.io/metallb/controller:v0.10.2
+        image: quay.io/metallb/controller:v0.12.1
         imagePullPolicy: IfNotPresent
         name: controller
         ports:
@@ -445,6 +464,24 @@ spec:
           requests:
             cpu: 10m
             memory: 36Mi
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: monitoring
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: monitoring
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -456,5 +493,6 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
+        fsGroup: 65534
       serviceAccountName: controller
       terminationGracePeriodSeconds: 0
