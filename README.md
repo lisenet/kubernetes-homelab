@@ -197,7 +197,7 @@ helm upgrade --install zfs-nfs \
   democratic-csi/democratic-csi \
   --namespace democratic-csi \
   --create-namespace \
-  --version "0.8.3" \
+  --version "0.11.1" \
   --values ./truenas-nfs/freenas-nfs.yaml
 ```
 
@@ -311,6 +311,7 @@ helm repo add enix https://charts.enix.io
 helm install x509-certificate-exporter \
   enix/x509-certificate-exporter \
   --namespace monitoring \
+  --version "1.20.0" \
   --values ./x509-certificate-exporter/values.yml
 ```
 
@@ -324,7 +325,7 @@ helm repo add kubecost https://kubecost.github.io/cost-analyzer/
 helm upgrade --install kubecost \
   kubecost/cost-analyzer \
   --namespace kubecost \
-  --version 1.87.3 \
+  --version "1.91.2" \
   --values ./kubecost/values.yaml
 
 kubectl apply -f ./kubecost-service.yaml
@@ -342,13 +343,13 @@ helm repo add elastic https://helm.elastic.co
 helm upgrade --install elasticsearch \
   elastic/elasticsearch \
   --namespace logging \
-  --version "7.16.2" \
+  --version "7.17.1" \
   --values ./logging/values-elasticsearch.yml
 
 helm upgrade --install kibana \
   elastic/kibana \
   --namespace logging \
-  --version "7.16.2" \
+  --version "7.17.1" \
   --values ./logging/values-kibana.yml
 ```
 
