@@ -387,6 +387,12 @@ data:
             labels:
               alias: admin2
 
+      - job_name: 'pxe'
+        static_configs:
+          - targets: ['10.11.1.20:9100']
+            labels:
+              alias: pxe
+
       - job_name: 'kvm1'
         static_configs:
           - targets: ['10.11.1.21:9100']

@@ -383,6 +383,7 @@ helm upgrade --install kibana \
 * [Speedtest with InfluxDB and Grafana on Kubernetes](https://www.lisenet.com/2021/speedtest-with-influxdb-and-grafana-on-kubernetes/)
 * [OpenVPN Server on Kubernetes](https://www.lisenet.com/2022/openvpn-server-on-kubernetes/)
 * [Building Qemu KVM Images with Packer](https://www.lisenet.com/2022/building-qemu-kvm-images-with-packer/)
+* [Deploy Elasticsearch and Kibana on Kubernetes with Helm](https://www.lisenet.com/2022/deploy-elasticsearch-and-kibana-on-kubernetes-with-helm/)
 
 ## Stargazers Over Time
 
