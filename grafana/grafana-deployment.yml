@@ -84,6 +84,8 @@ spec:
             mountPath: /var/lib/grafana/dashboards/mikrotik-summary
           - name: dashboards-x509-cert-summary
             mountPath: /var/lib/grafana/dashboards/x509-cert-summary
+          - name: dashboards-velero-stats
+            mountPath: /var/lib/grafana/dashboards/velero-stats
           - name: dashboards-aws-billing
             mountPath: /var/lib/grafana/dashboards/cloudwatch-aws-billing
           - name: dashboards-aws-ec2
@@ -159,6 +161,9 @@ spec:
         - name: dashboards-x509-cert-summary
           configMap:
             name: grafana-dashboards-x509-cert-summary
+        - name: dashboards-velero-stats
+          configMap:
+            name: grafana-dashboards-velero-stats
         - name: dashboards-aws-billing
           configMap:
             name: grafana-dashboards-aws-billing
