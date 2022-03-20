@@ -58,6 +58,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`speedtest-influxdb`](./speedtest-influxdb/) - configuration files to deploy a Speedtest service that stores results in InfluxDB.
 * [`terraform`](./terraform/) - configuration files to manage Kubernetes with Terraform.
 * [`truenas-nfs`](./truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
+* [`velero`](./velero/) - configuration files to deploy Velero backup software.
 * [`x509-certificate-exporter`](./x509-certificate-exporter/) - configuration files to deploy x509-certificate-exporter.
 
 # Homelab Network Diagram
