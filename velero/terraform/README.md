@@ -16,7 +16,7 @@ See configuration instructions here:
 
 https://www.lisenet.com/2020/terraform-with-aws-s3-and-dynamodb-for-remote-state-files/
 
-See required IAM account permissions [docs/terraform-aws-iam-permissions.json](../docs/terraform-aws-iam-permissions.json).
+See required IAM account permissions [docs/terraform-aws-iam-permissions.json](../../docs/terraform-aws-iam-permissions.json).
 
 ## Apply Terraform Configuration
 
