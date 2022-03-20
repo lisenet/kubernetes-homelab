@@ -17,6 +17,8 @@ spec:
       name: speedtest-influxdb
       labels:
         app: influxdb
+      annotations:
+        backup.velero.io/backup-volumes: influxdb-data
     spec:
       containers:
         - name: influxdb
