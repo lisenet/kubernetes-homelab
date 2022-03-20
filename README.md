@@ -19,6 +19,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
     * [Guest Provisioning](#guest-provisioning)
     * [Shared Storage](#shared-storage)
     * [Other Services](#other-services)
+    * [Backups](#backups)
     * [Homelab Root CA](#homelab-root-ca)
     * [Average Power Consumption](#average-power-consumption)
 5. [Deployment](#deployment)
@@ -141,6 +142,10 @@ Homelab provides other services to Kubernetes that aren't covered here:
 * [DHCP failover with dynamic DNS](https://www.lisenet.com/2018/configure-dhcp-failover-with-dynamic-dns-on-centos-7/)
 * [Peered NTP servers](https://www.lisenet.com/2018/configure-peered-ntp-servers-on-centos-7/)
 * [Redundant SMTP relays](https://www.lisenet.com/2018/configure-postfix-to-relay-mail-to-an-external-smtp-server-on-centos-7/)
+
+## Backups
+
+[Velero](./velero/) is used to safely backup and restore Kubernetes cluster resources and persistent volumes.
 
 ## Homelab Root CA
 
