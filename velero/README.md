@@ -1,6 +1,6 @@
 # Velero Backups
 
-See https://velero.io and https://github.com/vmware-tanzu/helm-charts and 
+See https://velero.io and https://github.com/vmware-tanzu/helm-charts
 
 ## Pre-requisites
 
