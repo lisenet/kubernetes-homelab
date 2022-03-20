@@ -61,6 +61,12 @@ data:
         path: /var/lib/grafana/dashboards/x509-cert-summary
       orgId: 1
       type: file
+    - name: velero-stats
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/velero-stats
+      orgId: 1
+      type: file
     - name: cloudwatch-aws-billing
       folder: aws
       options:

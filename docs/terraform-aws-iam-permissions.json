@@ -12,7 +12,10 @@
                 "s3:GetObject",
                 "s3:PutObject"
             ],
-            "Resource": "arn:aws:s3:::terraform-homelab-remote-state/state.tfstate"
+            "Resource": [
+                "arn:aws:s3:::terraform-homelab-remote-state/state.tfstate",
+                "arn:aws:s3:::terraform-homelab-remote-state/velero.tfstate"
+            ]
         },
         {
             "Effect": "Allow",
