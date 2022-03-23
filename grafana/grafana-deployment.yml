@@ -96,6 +96,8 @@ spec:
             mountPath: /var/lib/grafana/dashboards/cloudwatch-amazon-ec2
           - name: dashboards-pihole-exporter
             mountPath: /var/lib/grafana/dashboards/pihole-exporter
+          - name: dashboards-mysqld-exporter
+            mountPath: /var/lib/grafana/dashboards/mysqld-exporter
           - name: dashboards-speedtest
             mountPath: /var/lib/grafana/dashboards/speedtest
 
@@ -179,6 +181,9 @@ spec:
         - name: dashboards-pihole-exporter
           configMap:
             name: grafana-dashboards-pihole-exporter
+        - name: dashboards-mysqld-exporter
+          configMap:
+            name: grafana-dashboards-mysqld-exporter
         - name: dashboards-speedtest
           configMap:
             name: grafana-dashboards-speedtest

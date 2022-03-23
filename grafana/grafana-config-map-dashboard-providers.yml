@@ -97,6 +97,12 @@ data:
         path: /var/lib/grafana/dashboards/pihole-exporter
       orgId: 1
       type: file
+    - name: mysqld-exporter
+      folder: homelab
+      options:
+        path: /var/lib/grafana/dashboards/mysqld-exporter
+      orgId: 1
+      type: file
     - name: speedtest
       folder: speedtest
       options:
