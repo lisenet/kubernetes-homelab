@@ -471,6 +471,12 @@ data:
             labels:
               alias: vps
 
+      - job_name: 'mysql'
+        static_configs:
+          - targets: ['vps.hl.test:9104']
+            labels:
+              alias: mysql
+
       - job_name: 'mikrotik-exporter'
         scrape_interval: 30s
         static_configs:
