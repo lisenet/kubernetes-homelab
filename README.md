@@ -35,6 +35,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 * [`alertmanager`](./alertmanager/) - configuration files to deploy Alertmanager.
 * [`ansible`](./ansible/README.md) - Ansible playbooks to deploy Kubernetes homelab.
+* [`argocd`](./argocd/) - configuration files to deploy Argo CD.
 * [`calico`](./calico/) - configuration files to deploy Calico CNI.
 * [`cka`](./cka/) - CKA study notes.
 * [`dashboard`](./dashboard/) - configuration files to deploy Kubernetes dashboard.

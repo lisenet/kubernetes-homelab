@@ -14,6 +14,7 @@ Kubernetes development continues to grow at a rapid pace, and keeping up to date
 Other services (in alphabetical order):
 
 * Alertmanager 0.23
+* Argo CD 2.3.2
 * CoreDNS 1.8.6
 * Democratic CSI 0.11.1
 * ElasticSearch/Kibana 7.17.1
