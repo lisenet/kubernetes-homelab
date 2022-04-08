@@ -492,3 +492,19 @@ data:
             target_label: instance
           - target_label: __address__
             replacement: mikrotik-exporter:9436
+
+      - job_name: 'mikrotik-lte-exporter'
+        scrape_interval: 30s
+        static_configs:
+          - targets:
+            - 10.11.1.11 # your Mikrotik LTE router IP you wish to monitor
+        metrics_path: /metrics
+        params:
+          module: [my_router]
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: instance
+          - target_label: __address__
+            replacement: mikrotik-lte-exporter:9437

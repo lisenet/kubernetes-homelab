@@ -31,23 +31,97 @@ spec:
       containers:
         - name: mikrotik-exporter
           image: nshttpd/mikrotik-exporter:1.0.11
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "DEVICE"
+              valueFrom:
+                configMapKeyRef:
+                  name: mikrotik-exporter-conf
+                  key: device1
+            - name: "ADDRESS"
+              valueFrom:
+                configMapKeyRef:
+                  name: mikrotik-exporter-conf
+                  key: address1
+            - name: "USER"
+              valueFrom:
+                configMapKeyRef:
+                  name: mikrotik-exporter-conf
+                  key: user1
+            - name: "PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: mikrotik-exporter-secret
+                  key: password
+            - name: "LOG_LEVEL"
+              value: DEBUG
+          ports:
+            - containerPort: 9436
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 512m
+            requests:
+              memory: 64Mi
+              cpu: 15m
+          volumeMounts:
+            - name: mikrotik-exporter-volume
+              mountPath: /etc/mikrotik-exporter
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: mikrotik-exporter-volume
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mikrotik-lte-exporter
+  namespace: monitoring
+  labels:
+    app: mikrotik-lte-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mikrotik-lte-exporter
+  template:
+    metadata:
+      labels:
+        app: mikrotik-lte-exporter
+    spec:
+      # Deployment has PodAntiAffinity configured to ensure that
+      # the scheduler does not co-locate replicas on a single node.
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - mikrotik-lte-exporter
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: mikrotik-exporter
+          image: nshttpd/mikrotik-exporter:1.0.11
           imagePullPolicy: IfNotPresent          
           env:
             - name: "DEVICE"
               valueFrom:
                 configMapKeyRef:
                   name: mikrotik-exporter-conf
-                  key: device
+                  key: device2
             - name: "ADDRESS"
               valueFrom:
                 configMapKeyRef:
                   name: mikrotik-exporter-conf
-                  key: address
+                  key: address2
             - name: "USER"
               valueFrom:
                 configMapKeyRef:
                   name: mikrotik-exporter-conf
-                  key: user
+                  key: user2
             - name: "PASSWORD"
               valueFrom:
                 secretKeyRef:

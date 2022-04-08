@@ -7,6 +7,9 @@ metadata:
   labels:
     app: mikrotik-exporter
 data:
-  device: mikrotik
-  address: 10.11.1.1
-  user: prometheus
+  device1: mikrotik
+  address1: 10.11.1.1
+  user1: prometheus
+  device2: mikrotik
+  address2: 10.11.1.11
+  user2: prometheus
