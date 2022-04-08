@@ -39,7 +39,7 @@ podLabels: {}
 # https://velero.io/docs/v1.6/customize-installation/#customize-resource-requests-and-limits
 resources:
   requests:
-    cpu: 500m
+    cpu: 10m
     memory: 128Mi
   limits:
     cpu: 1000m
@@ -351,8 +351,8 @@ restic:
   # https://velero.io/docs/v1.6/customize-installation/#customize-resource-requests-and-limits
   resources:
     requests:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 10m
+      memory: 256Mi
     limits:
       cpu: 1000m
       memory: 1024Mi
