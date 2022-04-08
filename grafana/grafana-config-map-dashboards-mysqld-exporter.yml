@@ -5294,10 +5294,10 @@ data:
         ],
         "type": "timepicker"
       },
-      "timezone": "browser",,
+      "timezone": "browser",
       "title": "MySQL Exporter",
       "uid": "e053b823L",
-      "version": 3,
+      "version": 3
     }
 kind: ConfigMap
 metadata:
