@@ -9,3 +9,8 @@ Grafana allows you to query, visualise and alert on metrics that are stored in P
 ```
 kubectl apply -f ./grafana
 ```
+
+## Grafana Dashboards
+
+![Grafana Dashboard Kubernetes](../docs/grafana/grafana-dashboard-kubernetes.png)
+
