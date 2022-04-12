@@ -50,10 +50,10 @@ spec:
               protocol: TCP
           resources:
             limits:
-              memory: 2Gi
+              memory: 3Gi
               cpu: 1000m
             requests:
-              memory: 1024Mi
+              memory: 1526Mi
               cpu: 150m
           volumeMounts:
             - name: prometheus-config-volume

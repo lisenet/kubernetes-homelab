@@ -53,7 +53,7 @@ spec:
               memory: "1024Mi"
               cpu: "200m"
             requests: 
-              memory: "64Mi"
+              memory: "200Mi"
               cpu: "10m"
           volumeMounts:
             - name: influxdb-data

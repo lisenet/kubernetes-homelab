@@ -62,8 +62,8 @@ spec:
               memory: 512Mi
               cpu: 512m
             requests:
-              memory: 64Mi
-              cpu: 15m
+              memory: 20Mi
+              cpu: 10m
           volumeMounts:
             - name: mikrotik-exporter-volume
               mountPath: /etc/mikrotik-exporter
@@ -136,8 +136,8 @@ spec:
               memory: 512Mi
               cpu: 512m
             requests:
-              memory: 64Mi
-              cpu: 15m
+              memory: 20Mi
+              cpu: 10m
           volumeMounts:
             - name: mikrotik-exporter-volume
               mountPath: /etc/mikrotik-exporter
