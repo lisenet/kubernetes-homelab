@@ -169,9 +169,9 @@ openssl x509 -req -in "${DOMAIN}".csr -CA homelab-ca.crt -CAkey homelab-ca.key -
 
 ## Average Power Consumption
 
-~80W
+~170W
 
-Monthly, the homelab costs (((80W * 24h) / 1000) * £0.19/kWh * 365days) / 12months = £11.10 (~15$).
+Monthly, the homelab costs (((170W * 24h) / 1000) * £0.27/kWh * 365days) / 12months = £33.50 (~44$).
 
 # Deployment
 
