@@ -7,7 +7,7 @@ metadata:
   labels:
     app: speedtest-to-influxdb
 spec:
-  schedule: "45 * * * *"
+  schedule: "10,40 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 10
   jobTemplate:
