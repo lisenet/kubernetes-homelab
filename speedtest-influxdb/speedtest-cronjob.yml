@@ -7,13 +7,23 @@ metadata:
   labels:
     app: speedtest-to-influxdb
 spec:
-  schedule: "10,40 * * * *"
+  schedule: "45 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 10
   jobTemplate:
     spec:
       template:
         spec:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                    - srv34
+                    - srv35
           containers:
           - name: speedtest-to-influxdb
             image: lisenet/speedtest-to-influxdb:1.0.0
