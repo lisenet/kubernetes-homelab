@@ -28,7 +28,7 @@ done
 
 for i in "${WORKER_NODE_ARRAY[@]}";do
   printf "%s\\n" "${i}"
-  ${CMD} "${i}" node.kubernetes.io/instance-type=m5a.large
+  ${CMD} "${i}" node.kubernetes.io/instance-type=c5a.xlarge
   ${CMD} "${i}" topology.kubernetes.io/region=eu-west-2
   ${CMD} "${i}" failure-domain.beta.kubernetes.io/region=eu-west-2
 done
