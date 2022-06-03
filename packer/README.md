@@ -102,7 +102,7 @@ for i in 1 2 3; do \
   --connect qemu+ssh://root@kvm${i}.hl.test/system \
   --name srv3$(($i + 3))-node \
   --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:3$(($i + 3)) \
-  --disk path=/var/lib/libvirt/image/srv3$(($i + 3)).qcow2,size=32 \
+  --disk path=/var/lib/libvirt/images/srv3$(($i + 3)).qcow2,size=32 \
   --import \
   --ram 8192 \
   --vcpus 2 \
