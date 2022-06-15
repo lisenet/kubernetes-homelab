@@ -53,7 +53,7 @@ spec:
               memory: 3Gi
               cpu: 1000m
             requests:
-              memory: 1526Mi
+              memory: 1536Mi
               cpu: 150m
           volumeMounts:
             - name: prometheus-config-volume
