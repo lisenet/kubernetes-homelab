@@ -1,5 +1,6 @@
 data "kubectl_path_documents" "httpd_healthcheck" {
-  pattern = "../httpd-healthcheck/*.y*ml"
+  pattern          = "../httpd-healthcheck/*.y*ml"
+  disable_template = true
 }
 
 resource "kubectl_manifest" "httpd_healthcheck" {

@@ -1,5 +1,6 @@
 data "kubectl_path_documents" "dashboard" {
-  pattern = "../dashboard/*.y*ml"
+  pattern          = "../dashboard/*.y*ml"
+  disable_template = true
 }
 
 resource "kubectl_manifest" "dashboard" {
