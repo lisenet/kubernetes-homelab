@@ -1,5 +1,6 @@
 data "kubectl_path_documents" "grafana" {
-  pattern = "../grafana/*.y*ml"
+  pattern          = "../grafana/*.y*ml"
+  disable_template = true
 }
 
 resource "kubectl_manifest" "grafana" {
