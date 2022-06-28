@@ -1,5 +1,6 @@
 data "kubectl_path_documents" "metallb" {
-  pattern = "../metallb/*.y*ml"
+  pattern          = "../metallb/*.y*ml"
+  disable_template = true
 }
 
 resource "kubectl_manifest" "metallb" {

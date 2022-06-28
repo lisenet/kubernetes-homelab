@@ -1,5 +1,6 @@
 data "kubectl_path_documents" "pii_demo" {
-  pattern = "../pii-demo-blue-green/*.y*ml"
+  pattern          = "../pii-demo-blue-green/*.y*ml"
+  disable_template = true
 }
 
 resource "kubectl_manifest" "pii_demo" {

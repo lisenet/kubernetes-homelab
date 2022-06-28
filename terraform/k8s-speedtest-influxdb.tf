@@ -1,5 +1,6 @@
 data "kubectl_path_documents" "speedtest-influxdb" {
-  pattern = "../speedtest-influxdb/*.y*ml"
+  pattern          = "../speedtest-influxdb/*.y*ml"
+  disable_template = true
 }
 
 resource "kubectl_manifest" "speedtest-influxdb" {

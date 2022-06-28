@@ -1,5 +1,6 @@
 data "kubectl_path_documents" "prometheus" {
-  pattern = "../prometheus/*.y*ml"
+  pattern          = "../prometheus/*.y*ml"
+  disable_template = true
 }
 
 resource "kubectl_manifest" "prometheus" {
