@@ -334,7 +334,7 @@ helm upgrade --install kubecost \
   --version "1.91.2" \
   --values ./kubecost/values.yaml
 
-kubectl apply -f ./kubecost-service.yaml
+kubectl apply -f ./kubecost/kubecost-service.yaml
 ```
 
 ### Install ElasticSearch and Kibana
