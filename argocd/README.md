@@ -24,6 +24,12 @@ kubectl -n argocd create secret tls argocd-repo-server-tls \
   --key=../hl-ca/wildcard.hl.test.key
 ```
 
+Retrieve ArgoCD password:
+
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
 Log in:
 
 ```
