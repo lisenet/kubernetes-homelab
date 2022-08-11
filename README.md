@@ -89,6 +89,7 @@ Hostnames and their IP addresses:
 | switch.hl.test    | 10.11.1.4    | Managed switch                                         | N/A |
 | truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      | TrueNAS Core 12 |
 | pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     | Raspbian |
+| mikrotik-lte.hl.test | 10.11.1.11 | Mikrotik wireless access point with LTE antennas      | RouterOS |
 | pxe.hl.test       | 10.11.1.20   | PXE boot server                                        | Rocky 8 |
 | kvm1.hl.test      | 10.11.1.21   | KVM hypervisor                                         | Rocky 8 |
 | kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         | Rocky 8 |
