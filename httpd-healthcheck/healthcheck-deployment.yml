@@ -39,7 +39,7 @@ spec:
             topologyKey: "kubernetes.io/hostname"
       containers:
       - name: httpd-healthcheck
-        image: lisenet/httpd-healthcheck:0.1
+        image: lisenet/httpd-healthcheck:1.0.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 10001
