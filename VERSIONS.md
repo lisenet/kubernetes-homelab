@@ -6,7 +6,7 @@ Kubernetes development continues to grow at a rapid pace, and keeping up to date
 
 * Rocky Linux 8.6 (not officially supported, use CentOS 7 instead)
 * Kubernetes 1.23.5
-* Calico CNI 3.22
+* Calico CNI 3.23
 * docker-ce 20.10.13
 * kubernetes-cni 0.8.7
 * Istio 1.13
@@ -30,7 +30,7 @@ Other services (in alphabetical order):
 * Prometheus 2.34
 * x509-certificate-exporter 2.12.0
 
-Calico 3.22 has been tested against the following Kubernetes versions: 1.21, 1.22, 1.23.
+Calico 3.23 has been tested against the following Kubernetes versions: 1.21, 1.22, 1.23.
 
 Istio 1.13 has been tested with these Kubernetes releases: 1.20, 1.21, 1.22, 1.23.
 
