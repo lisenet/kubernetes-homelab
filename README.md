@@ -19,6 +19,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
     * [Guest Provisioning](#guest-provisioning)
     * [Shared Storage](#shared-storage)
     * [Other Services](#other-services)
+    * [Kubernetes Cluster Configuration](#kubernetes-cluster-configuration)
     * [Backups](#backups)
     * [Homelab Root CA](#homelab-root-ca)
     * [Average Power Consumption](#average-power-consumption)
@@ -148,6 +149,17 @@ Homelab provides other services to Kubernetes that aren't covered here:
 ## Backups
 
 [Velero](./velero/) is used to safely backup and restore Kubernetes cluster resources and persistent volumes.
+
+## Kubernetes Cluster Configuration
+
+| Component | Software    |
+|:------|:----------------|
+| CNI   | Calico          |
+| CRI   | Docker          |
+| CSI   | Democratic CSI  |
+| DNS   | CoreDNS         |
+| Load Balancer | MetalLB |
+| Service Mesh | Istio    |
 
 ## Homelab Root CA
 
