@@ -26,7 +26,7 @@ spec:
                     - srv35
           containers:
           - name: speedtest-to-influxdb
-            image: lisenet/speedtest-to-influxdb:1.0.0
+            image: lisenet/speedtest-to-influxdb:1.0.1
             imagePullPolicy: IfNotPresent
             env:
             - name: INFLUXDB_DATABASE
