@@ -20,7 +20,7 @@ print ("Dummy request to test influxdb connection")
 influx_client.get_list_database()
 
 print ("Running a speedtest using default server")
-s = speedtest.Speedtest()
+s = speedtest.Speedtest(secure=True)
 s.get_best_server()
 s.download()
 s.upload()
