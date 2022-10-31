@@ -5,5 +5,6 @@ terraform {
     key            = "state.tfstate"
     dynamodb_table = "terraform-homelab-remote-state-lock"
     encrypt        = true
+    profile        = "terraform_homelab"
   }
 }
