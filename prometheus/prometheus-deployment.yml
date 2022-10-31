@@ -34,6 +34,16 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
       containers:
+        - name: prometheus-server-configmap-reload
+          image: jimmidyson/configmap-reload:v0.8.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - '--volume-dir=/etc/config'
+            - '--webhook-url=http://127.0.0.1:9090/-/reload'
+          volumeMounts:
+            - name: prometheus-config-volume
+              readOnly: true
+              mountPath: /etc/config
         - name: prometheus
           image: prom/prometheus:v2.34.0
           imagePullPolicy: IfNotPresent
@@ -42,6 +52,7 @@ spec:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
             - "--enable-feature=expand-external-labels"
+            - "--web.enable-lifecycle"
           envFrom:
             - secretRef:
                 name: prometheus-cluster-name
