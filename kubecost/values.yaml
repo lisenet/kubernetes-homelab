@@ -37,6 +37,12 @@ prometheus:
   nodeExporter:
     enabled: false
 
+reporting:
+  logCollection: false
+  productAnalytics: false
+  errorReporting: false
+  valuesReporting: false
+
 networkCosts:
   enabled: false
   imagePullPolicy: IfNotPresent

@@ -7,7 +7,7 @@ variable "elastic_stack_repository" {
 variable "elastic_stack_version" {
   description = "Elastic stack Helm chart version"
   type        = string
-  default     = "7.16.2"
+  default     = "7.17.1"
 }
 
 variable "elastic_stack_namespace" {
