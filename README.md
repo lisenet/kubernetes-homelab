@@ -155,7 +155,7 @@ Homelab provides other services to Kubernetes that aren't covered here:
 | Component | Software    |
 |:------|:----------------|
 | CNI   | Calico          |
-| CRI   | Docker          |
+| CRI   | Containerd      |
 | CSI   | Democratic CSI  |
 | DNS   | CoreDNS         |
 | Load Balancer | MetalLB |
@@ -374,6 +374,7 @@ helm upgrade --install kibana \
 
 # Upgrades
 
+* [Upgrading Kubernetes from 1.23 to 1.24](https://www.lisenet.com/2022/upgrading-homelab-kubernetes-cluster-from-1-23-to-1-24/)
 * [Upgrading Kubernetes from 1.22 to 1.23](https://www.lisenet.com/2022/upgrading-homelab-kubernetes-cluster-from-1-22-to-1-23/)
 * [Upgrading Kubernetes from 1.21 to 1.22](https://www.lisenet.com/2021/upgrading-homelab-kubernetes-cluster-from-1-21-to-1-22/)
 * [Upgrading Kubernetes from 1.20 to 1.21](https://www.lisenet.com/2021/upgrading-homelab-kubernetes-cluster-from-1-20-to-1-21/)
@@ -403,6 +404,7 @@ helm upgrade --install kibana \
 * [OpenVPN Server on Kubernetes](https://www.lisenet.com/2022/openvpn-server-on-kubernetes/)
 * [Building Qemu KVM Images with Packer](https://www.lisenet.com/2022/building-qemu-kvm-images-with-packer/)
 * [Deploy Elasticsearch and Kibana on Kubernetes with Helm](https://www.lisenet.com/2022/deploy-elasticsearch-and-kibana-on-kubernetes-with-helm/)
+* [Backup Kubernetes Cluster Resources to AWS S3 with Velero](https://www.lisenet.com/2022/backup-kubernetes-cluster-resources-to-aws-s3-with-velero/)
 
 ## Stargazers Over Time
 
