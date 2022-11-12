@@ -155,7 +155,7 @@ Homelab provides other services to Kubernetes that aren't covered here:
 | Component | Software    |
 |:------|:----------------|
 | CNI   | Calico          |
-| CRI   | Docker          |
+| CRI   | Containerd      |
 | CSI   | Democratic CSI  |
 | DNS   | CoreDNS         |
 | Load Balancer | MetalLB |
