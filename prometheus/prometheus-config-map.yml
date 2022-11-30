@@ -86,7 +86,7 @@ data:
         labels:
           severity: warning
           context: node
-          environment:
+          cluster:
         annotations:
           description: "Node unschedulable"
           summary: "Node {{ $labels.node }} is unschedulable for more than 15 min"
@@ -118,7 +118,7 @@ data:
         labels:
           severity: warning
           context: pod
-          environment:
+          cluster:
         annotations:
           description: "Pod in pending phase"
           summary: "At least one pod in {{ $labels.namespace }} namespace is pending for more than 15 min"
@@ -128,7 +128,7 @@ data:
         labels:
           severity: warning
           context: pod
-          environment:
+          cluster:
         annotations:
           description: "Pod in unschedulable state"
           summary: "At least one pod in {{ $labels.namespace }} namespace is unschedulable for more than 15 min"
