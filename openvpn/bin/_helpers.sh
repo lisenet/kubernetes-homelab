@@ -37,8 +37,8 @@ ensure-environment() {
   fi
 
   if [[ $1 == *"APP_VERSION"* ]] && [[ -z "${APP_VERSION}" ]]; then
-    echo "No APP_VERSION specified. Defaulting to 2.5"
-    APP_VERSION="2.5"
+    echo "No APP_VERSION specified. Defaulting to 2.5.8"
+    APP_VERSION="2.5.8"
   fi
 
   VPN_URI=${VPN_PROTOCOL}://${VPN_HOSTNAME}:${VPN_PORT}
