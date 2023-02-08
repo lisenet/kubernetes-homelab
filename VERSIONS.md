@@ -4,7 +4,7 @@
 
 Kubernetes development continues to grow at a rapid pace, and keeping up to date can be a challenge. Therefore it’s important to know which software versions can work together without breaking things.
 
-* Rocky Linux 8.6 (not officially supported, use CentOS 7 instead)
+* Rocky Linux 8.7 (not officially supported, use CentOS 7 instead)
 * Kubernetes 1.24.6
 * Calico CNI 3.24
 * containerd 1.6.8
