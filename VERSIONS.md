@@ -5,11 +5,11 @@
 Kubernetes development continues to grow at a rapid pace, and keeping up to date can be a challenge. Therefore it’s important to know which software versions can work together without breaking things.
 
 * Rocky Linux 8.7 (not officially supported, use CentOS 7 instead)
-* Kubernetes 1.24.6
-* Calico CNI 3.24
+* Kubernetes 1.25.5
+* Calico CNI 3.25
 * containerd 1.6.8
 * kubernetes-cni 1.1.1
-* Istio 1.14
+* Istio 1.16
 
 Other services (in alphabetical order):
 
@@ -30,9 +30,9 @@ Other services (in alphabetical order):
 * Prometheus 2.34
 * x509-certificate-exporter 2.12.0
 
-Calico 3.24 has been tested against the following Kubernetes versions: 1.22, 1.23, 1.24.
+Calico 3.25 has been tested against the following Kubernetes versions: 1.23, 1.24, 1.25, 1.26.
 
-Istio 1.14 has been tested with these Kubernetes releases: 1.21, 1.22, 1.23, 1.24.
+Istio 1.16 has been tested with these Kubernetes releases: 1.22, 1.23, 1.24, 1.25.
 
 Kubernetes 1.21 updated the latest validated version of Docker to 20.10. As of Kubernetes 1.24, Docker runtime support using dockshim in the kubelet has been completely removed.
 

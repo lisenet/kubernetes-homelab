@@ -374,6 +374,7 @@ helm upgrade --install kibana \
 
 # Upgrades
 
+* [Upgrading Kubernetes from 1.24 to 1.25](https://www.lisenet.com/2023/upgrading-homelab-kubernetes-cluster-from-1-24-to-1-25/)
 * [Upgrading Kubernetes from 1.23 to 1.24](https://www.lisenet.com/2022/upgrading-homelab-kubernetes-cluster-from-1-23-to-1-24/)
 * [Upgrading Kubernetes from 1.22 to 1.23](https://www.lisenet.com/2022/upgrading-homelab-kubernetes-cluster-from-1-22-to-1-23/)
 * [Upgrading Kubernetes from 1.21 to 1.22](https://www.lisenet.com/2021/upgrading-homelab-kubernetes-cluster-from-1-21-to-1-22/)
