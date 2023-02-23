@@ -319,7 +319,7 @@ sudo apt-get -y install etcd-client
 Alternativelly:
 
 ```bash
-ETCD_VER=v3.5.2
+ETCD_VER=v3.5.7
 GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
 DOWNLOAD_URL=${GITHUB_URL}
 
@@ -329,7 +329,7 @@ tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd-download-test --s
 rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
 
 /tmp/etcd-download-test/etcdctl version
-etcdctl version: 3.5.2
+etcdctl version: 3.5.7
 API version: 3.5
 ```
 
@@ -2338,7 +2338,7 @@ ETCDCTL_API=3 etcdctl \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
   --key=/etc/kubernetes/pki/etcd/server.key \
     endpoint status
-https://127.0.0.1:2379, 9dc11d4117b1b759, 3.5.0, 4.7 MB, true, 3, 561317
+https://127.0.0.1:2379, 9dc11d4117b1b759, 3.5.5, 4.7 MB, true, 3, 561317
 ```
 
 ### Understand how to monitor applications
