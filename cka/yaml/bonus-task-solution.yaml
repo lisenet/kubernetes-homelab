@@ -139,7 +139,7 @@ spec:
         operator: Exists
         effect: NoSchedule
       containers:
-      - image: wordpress:6.1-apache
+      - image: wordpress:5.6-apache
         name: wordpress
         env:
         - name: WORDPRESS_DB_PASSWORD

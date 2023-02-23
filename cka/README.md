@@ -2441,7 +2441,7 @@ Docs: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-
     * `MYSQL_ROOT_PASSWORD` from secret key `mysql_root_password`.
 7. Create a new `ClusterIP` service named `mysql` which exposes `mysql` pods on port `3306`.
 8. Create a new `Deployment` named `wordpress`.
-    * Use container image `wordpress:6.1-apache`.
+    * Use container image `wordpress:5.6-apache`.
     * Use deployment strategy `Recreate`.
     * There should be `3 replicas` created.
     * The pods should request `10m` cpu and `64Mi` memory.
@@ -2583,7 +2583,7 @@ mysql   ClusterIP   10.107.189.130   <none>        3306/TCP   111s
 Create a deplopyment file for wordpress.
 
 ```bash
-kubectl create deploy wordpress --image=wordpress:6.1-apache --replicas=3 \
+kubectl create deploy wordpress --image=wordpress:5.6-apache --replicas=3 \
   --dry-run=client -o yaml -n cka > deployment-wordpress.yaml
 ```
 
@@ -2629,7 +2629,7 @@ spec:
         operator: Exists
         effect: NoSchedule
       containers:
-      - image: wordpress:6.1-apache
+      - image: wordpress:5.6-apache
         name: wordpress
         env:
         - name: WORDPRESS_DB_PASSWORD
