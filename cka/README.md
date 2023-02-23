@@ -1068,14 +1068,14 @@ Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scal
 
 **Exercise**: perform the following tasks.
 
-1. Create a deployment object `nginx-deployment` consisting of 2 pods containing a single `nginx:1.21` container.
+1. Create a deployment object `nginx-deployment` consisting of 2 pods containing a single `nginx:1.22` container.
 2. Increase the deployment size by adding 1 additional pod. Record the action.
 3. Decrease the deployment back to its original size of 2 pods. Record the action.
 
 Imperative commands:
 
 ```bash
-kubectl create deploy nginx-deployment --image=nginx:1.21 --replicas=2 -n cka
+kubectl create deploy nginx-deployment --image=nginx:1.22 --replicas=2 -n cka
 kubectl scale deploy nginx-deployment --replicas=3 --record -n cka
 kubectl scale deploy nginx-deployment --replicas=2 --record -n cka
 ```
@@ -1102,7 +1102,7 @@ spec:
         app: nginx-deployment
     spec:
       containers:
-      - image: nginx:1.21
+      - image: nginx:1.22
         name: nginx
 ```
 
@@ -1128,7 +1128,7 @@ spec:
         app: nginx-deployment
     spec:
       containers:
-      - image: nginx:1.21
+      - image: nginx:1.22
         name: nginx
 ```
 
