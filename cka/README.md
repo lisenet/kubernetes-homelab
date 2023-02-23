@@ -1446,7 +1446,7 @@ Docs: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
 1. Create a pod `httpd-netpol-blue` that uses image `lisenet/httpd-pii-demo:0.2` and has a label of `app=blue`.
 2. Create a pod `httpd-netpol-green` that uses image `lisenet/httpd-pii-demo:0.3` and has a label of `app=green`.
-3. Create a pod `curl-netpol` that uses image `curlimages/curl:7.81.0` and has a label of `app=admin`. The pod should run the following command `sleep 1800`.
+3. Create a pod `curl-netpol` that uses image `curlimages/curl:7.87.0` and has a label of `app=admin`. The pod should run the following command `sleep 1800`.
 4. Create a `NetworkPolicy` called `netpol-blue-green`.
 5. The policy should allow the `busybox` pod only to:
     * connect to `httpd-netpol-blue` pods on port `80`.
@@ -1459,7 +1459,7 @@ Imperative commands. Create pods:
 ```bash
 kubectl run httpd-netpol-blue --image="lisenet/httpd-pii-demo:0.2" --labels=app=blue -n cka
 kubectl run httpd-netpol-green --image="lisenet/httpd-pii-demo:0.3" --labels=app=green -n cka
-kubectl run curl-netpol --image="curlimages/curl:7.81.0" --labels=app=admin -n cka -- sleep 1800
+kubectl run curl-netpol --image="curlimages/curl:7.87.0" --labels=app=admin -n cka -- sleep 1800
 ```
 
 Get IP addresses of pods and test web access.
@@ -1595,7 +1595,7 @@ spec:
   - args:
     - "sleep"
     - "1800"
-    image: curlimages/curl:7.81.0
+    image: curlimages/curl:7.87.0
     name: curl-netpol
 ```
 
