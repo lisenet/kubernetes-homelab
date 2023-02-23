@@ -103,7 +103,7 @@ Unless stated otherwise, all Kubernetes resources should be created in the `cka`
 
 We have a [six-node](../docs/kubernetes-homelab-diagram.png) (three control planes and three worker nodes) Kubernetes homelab cluster running [Rocky Linux](https://www.lisenet.com/2021/migrating-ha-kubernetes-cluster-from-centos-7-to-rocky-linux-8/) already.
 
-For the sake of this excercise, we will create a new two-node cluster, with one control plane and one worker node, using Ubuntu 18.04 LTS. It makes sense to use a Debian-based distribution here because we have a RHEL-based homelab cluster already.
+For the sake of this excercise, we will create a new two-node cluster, with one control plane and one worker node, using Ubuntu 20.04 LTS. It makes sense to use a Debian-based distribution here because we have a RHEL-based homelab cluster already.
 
 Libvirt/KVM nodes:
 
@@ -122,7 +122,7 @@ virt-install \
   --ram 4096 \
   --vcpus 2 \
   --os-type linux \
-  --os-variant ubuntu18.04 \
+  --os-variant ubuntu20.04 \
   --sound none \
   --rng /dev/urandom \
   --virt-type kvm \
@@ -141,7 +141,7 @@ virt-install \
   --ram 4096 \
   --vcpus 2 \
   --os-type linux \
-  --os-variant ubuntu18.04 \
+  --os-variant ubuntu20.04 \
   --sound none \
   --rng /dev/urandom \
   --virt-type kvm \
