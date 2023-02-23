@@ -50,7 +50,7 @@ After using Kubernetes in production for over a year now (both on-prem and AWS/E
 
 Keep it simple:
 
-```
+```bash
 alias k=kubectl
 alias do="--dry-run=client -o yaml"
 alias now="--force --grace-period 0"
@@ -112,7 +112,7 @@ Libvirt/KVM nodes:
 
 Provision a KVM guest for the **control plane**:
 
-```
+```bash
 virt-install \
   --connect qemu+ssh://root@kvm1.hl.test/system \
   --name srv39-master \
@@ -131,7 +131,7 @@ virt-install \
 
 Provision a KVM guest for the **worker node**:
 
-```
+```bash
 virt-install \
   --connect qemu+ssh://root@kvm1.hl.test/system \
   --name srv40-node \
@@ -156,7 +156,7 @@ Docs: https://kubernetes.io/docs/setup/production-environment/container-runtimes
 
 Install container runtime on all nodes:
 
-```
+```bash
 cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
@@ -176,7 +176,7 @@ sudo sysctl --system
 
 Install `containerd` on all nodes:
 
-```
+```bash
 sudo apt-get update
 sudo apt-get -y install apt-transport-https ca-certificates curl gnupg lsb-release
 
@@ -205,7 +205,7 @@ To use the `systemd` cgroup driver in `/etc/containerd/config.toml` with `runc`,
 
 Make sure to restart containerd:
 
-```
+```bash
 sudo systemctl restart containerd
 ```
 
@@ -213,7 +213,7 @@ Docs: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/crea
 
 Install `kubeadm`, `kubelet` and `kubectl` (v1.25):
 
-```
+```bash
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -234,7 +234,7 @@ Initialise the **control plane** node. Set pod network CIDR based on the CNI tha
 
 We are going to use Flannel, hence `10.244.0.0/16`.
 
-```
+```bash
 sudo kubeadm init \
   --kubernetes-version "1.25.5" \
   --pod-network-cidr "10.244.0.0/16"
@@ -242,7 +242,7 @@ sudo kubeadm init \
 
 Configure `kubectl` access on the **control plane**:
 
-```
+```bash
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -250,7 +250,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 Run the output of the init command on the **worker node**:
 
-```
+```bash
 kubeadm join 10.11.1.39:6443 --token "ktlb43.llip8nym905afakm" \
 	--discovery-token-ca-cert-hash sha256:b3f1c31e2777bd54b3f7a797659a96072711809ae84e8c9be3fba449c8e32dd4
 ```
@@ -259,25 +259,25 @@ Install a pod network to the cluster. You can choose one of the following: Calic
 
 * To install Calico, run the following:
 
-```
+```bash
 kubectl apply -f "https://projectcalico.docs.tigera.io/manifests/calico.yaml"
 ```
 
 * To install Flannel (for Kubernetes v1.17+), run the following:
 
-```
+```bash
 kubectl apply -f "https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml"
 ```
 
 * To install Weave Net, run the following:
 
-```
+```bash
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
 
 Check the cluster to make sure that all nodes are running and ready:
 
-```
+```bash
 kubectl get nodes
 NAME    STATUS   ROLES                  AGE    VERSION
 srv39   Ready    control-plane,master   14m    v1.25.5
@@ -290,13 +290,13 @@ Docs: https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-join/
 
 Create a new token on the control plane:
 
-```
+```bash
 kubeadm token create --print-join-command
 ```
 
 The output will be something like this:
 
-```
+```bash
 kubeadm join 10.11.1.39:6443 --token hh{truncated}g4 --discovery-token-ca-cert-hash sha256:77{truncated}28
 ```
 
@@ -308,13 +308,13 @@ Docs: https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd
 
 Install etcd client package on the **control plane** using a package manager (this may not always install the version of the package that you want):
 
-```
+```bash
 sudo apt-get -y install etcd-client
 ```
 
 Alternativelly:
 
-```
+```bash
 ETCD_VER=v3.5.2
 GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
 DOWNLOAD_URL=${GITHUB_URL}
@@ -331,7 +331,7 @@ API version: 3.5
 
 Find paths of certificates and keys:
 
-```
+```bash
 egrep "cert-|key-|trusted-" /etc/kubernetes/manifests/etcd.yaml|grep -ve peer
     - --cert-file=/etc/kubernetes/pki/etcd/server.crt
     - --client-cert-auth=true
@@ -341,7 +341,7 @@ egrep "cert-|key-|trusted-" /etc/kubernetes/manifests/etcd.yaml|grep -ve peer
 
 Take a snapshot by specifying the endpoint and certificates:
 
-```
+```bash
 ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -354,7 +354,7 @@ Do not use `snapshot status` command because it can alter the snapshot file and 
 
 Restore an etcd cluster from the snapshot. Identify the default `data-dir`:
 
-```
+```bash
 grep data-dir /etc/kubernetes/manifests/etcd.yaml
     - --data-dir=/var/lib/etcd
 ```
@@ -367,20 +367,20 @@ If any API servers are running in your cluster, you should not attempt to restor
 
 Stop all control plane components:
 
-```
+```bash
 cd /etc/kubernetes/manifests/
 mv ./*yaml ../
 ```
 
 Make sure all control plane pods are `NotReady`:
 
-```
+```bash
 crictl pods | egrep "kube|etcd"
 ```
 
 Restore the snapshot into a specific directory:
 
-```
+```bash
 ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -392,13 +392,13 @@ ETCDCTL_API=3 etcdctl \
 
 Tell etcd to use the new directory `/var/lib/etcd_backup`:
 
-```
+```bash
 sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/manifests/etcd.yaml
 ```
 
 Start all control plane components:
 
-```
+```bash
 cd /etc/kubernetes/manifests/
 mv ../*yaml ./
 ```
@@ -413,14 +413,14 @@ We will upgrade previously deployed Kubernetes cluster v1.25 to v1.26.
 
 Find the latest version in the list:
 
-```
+```bash
 apt-get update
 apt-cache madison kubeadm
 ```
 
 Upgrade the **control plane**:
 
-```
+```bash
 apt-mark unhold kubeadm && \
 apt-get update && apt-get install -y kubeadm=1.26.1-00 && \
 apt-mark hold kubeadm
@@ -442,7 +442,7 @@ kubectl uncordon srv39
 
 Upgrade the **worker node**:
 
-```
+```bash
 apt-mark unhold kubeadm && \
 apt-get update && apt-get install -y kubeadm=1.26.1-00 && \
 apt-mark hold kubeadm
@@ -462,7 +462,7 @@ kubectl uncordon srv40
 
 Verify the status of the cluster:
 
-```
+```bash
 kubectl get nodes
 NAME    STATUS   ROLES                  AGE   VERSION
 srv39   Ready    control-plane,master   38m   v1.26.1
@@ -487,14 +487,14 @@ A few steps are required in order to get a normal user to be able to authenticat
 
 Create a private key and a CSR using `openssl`:
 
-```
+```bash
 openssl genrsa -out peasant.key 2048
 openssl req -new -key peasant.key -out peasant.csr
 ```
 
 Create a `CertificateSigningRequest` and submit it to a Kubernetes cluster:
 
-```
+```bash
 cat peasant.csr | base64 | tr -d "\n"
 
 cat > peasant-csr.yaml <<EOF
@@ -514,7 +514,7 @@ kubectl apply -f peasant-csr.yaml
 
 Approve certificate signing request:
 
-```
+```bash
 kubectl get csr
 NAME      AGE   SIGNERNAME                            REQUESTOR          REQUESTEDDURATION   CONDITION
 peasant   10s   kubernetes.io/kube-apiserver-client   kubernetes-admin   <none>              Pending
@@ -524,14 +524,14 @@ kubectl certificate approve peasant
 
 Create a role and rolebinding:
 
-```
+```bash
 kubectl create role peasant-role --resource=pods,svc --verb=get,list -n cka
 kubectl create rolebinding peasant-role-binding --role=peasant-role --user=peasant -n cka
 ```
 
 Verify:
 
-```
+```bash
 kubectl auth can-i get pods --as=peasant -n cka
 yes
 
@@ -554,13 +554,13 @@ no
 
 Create a service account:
 
-```
+```bash
 kubectl create sa kubernetes-dashboard-sa -n cka
 ```
 
 Create a cluser role:
 
-```
+```bash
 kubectl create clusterrole kubernetes-dashboard-clusterrole \
   --verb=get,list,watch --resource=pods,nodes \
   --dry-run=client -o yaml | sed 's/- ""/- metrics.k8s.io/g' | kubectl apply -f -
@@ -568,7 +568,7 @@ kubectl create clusterrole kubernetes-dashboard-clusterrole \
 
 Create a cluster role binding:
 
-```
+```bash
 kubectl create clusterrolebinding kubernetes-dashboard-role-binding \
   --clusterrole=kubernetes-dashboard-clusterrole \
   --serviceaccount=cka:kubernetes-dashboard-sa
@@ -584,7 +584,7 @@ A stacked HA cluster is a topology where the distributed data storage cluster pr
 
 Create a kube-apiserver load balancer with a name that resolves to DNS. Install HAProxy and allow it to listen on kube-apiserver port 6443, configure firewall to allow inbound HAProxy traffic on kube-apiserver port 6443.
 
-```
+```bash
 sudo apt-get -y install haproxy psmisc
 ```
 
@@ -626,18 +626,20 @@ backend kubernetes-master-nodes
 
 Configure DNS:
 
-```
+```bash
 host kubelb.hl.test
 kubelb.hl.test has address 10.11.1.30
 ```
 
 Enable and start HAProxy service:
-```
+
+```bash
 sudo systemctl enable --now haproxy
 ```
 
 Initialise the control plane:
-```
+
+```bash
 sudo kubeadm init \
   --control-plane-endpoint "kubelb.hl.test:6443" \
   --upload-certs
@@ -663,7 +665,7 @@ Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#roll
 
 Imperative commands:
 
-```
+```bash
 kubectl create deploy httpd-pii-demo --image=lisenet/httpd-pii-demo:0.2 --replicas=4 -n cka
 kubectl describe deploy httpd-pii-demo -n cka
 kubectl edit deploy httpd-pii-demo -n cka
@@ -674,7 +676,7 @@ kubectl rollout status deploy/httpd-pii-demo -n cka
 
 Declarative YAML (updated):
 
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -716,13 +718,13 @@ Docs:
 
 Imperative commands:
 
-```
+```bash
 kubectl run httpd --image=httpd:2.4 --dry-run=client -o yaml -n cka > httpd-control-plane.yaml
 ```
 
 Edit the file `httpd-control-plane.yaml` and add `tolerations` and `nodeSelector` sections:
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -744,7 +746,7 @@ spec:
 
 Deploy the pod:
 
-```
+```bash
 kubectl apply -f ./httpd-control-plane.yaml
 ```
 
@@ -763,7 +765,7 @@ Docs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-con
 
 Imperative commands:
 
-```
+```bash
 kubectl create cm webapp-color --from-literal=color=blue -n cka
 kubectl run webapp-color --image=kodekloud/webapp-color \
   --dry-run=client -o yaml -n cka > webapp-color.yaml
@@ -771,7 +773,7 @@ kubectl run webapp-color --image=kodekloud/webapp-color \
 
 Edit the file `webapp-color.yaml` and add `env` section:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -797,14 +799,14 @@ spec:
 
 Deploy the pod and validate:
 
-```
+```bash
 kubectl apply -f webapp-color.yml
 kubectl logs webapp-color -n cka | grep "Color from environment variable"
 ```
 
 Declarative YAML:
 
-```
+```yaml
 ---
 apiVersion: v1
 data:
@@ -839,7 +841,7 @@ spec:
 **Exercise 2**: perform the following tasks to configure application to use a configmap.
 
 1. Create a configmap `grafana-ini` that containes a file named `grafana.ini` with the following content:
-```
+```ini
 [server]
   protocol = http
   http_port = 3000
@@ -849,7 +851,7 @@ spec:
 
 Imperative commands:
 
-```
+```bash
 cat > grafana.ini <<EOF
 [server]
   protocol = http
@@ -864,7 +866,8 @@ kubectl run grafana --image=grafana/grafana:8.1.2 \
 
 Edit the file `grafana.yaml` and add `volumes` and `volumeMounts` sections:
 
-```
+```yaml
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -890,7 +893,7 @@ spec:
 
 Deploy the pod and verify:
 
-```
+```bash
 kubectl apply -f grafana.yml
 
 kubectl exec grafana -n cka -- cat /etc/grafana/grafana.ini
@@ -901,7 +904,7 @@ kubectl exec grafana -n cka -- cat /etc/grafana/grafana.ini
 
 Declarative YAML:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -953,7 +956,7 @@ Docs: https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as
 
 Imperative commands:
 
-```
+```bash
 kubectl create secret generic mysql-credentials \
   --from-literal=mysql_root_password="Mysql5.7RootPassword" \
   --from-literal=mysql_username=dbadmin \
@@ -965,7 +968,8 @@ kubectl run mysql-pod-secret --image=mysql:5.7 \
 ```
 
 Edit the file `mysql-pod-secret.yaml` and add `env` section:
-```
+
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -998,10 +1002,10 @@ spec:
 
 Deploy the pod and validate:
 
-```
+```bash
 kubectl apply -f mysql-pod-secret.yaml
 ```
-```
+```bash
 kubectl exec mysql-pod-secret -n cka -- env | grep ^MYSQL
 MYSQL_MAJOR=5.7
 MYSQL_VERSION=5.7.37-1debian10
@@ -1012,7 +1016,7 @@ MYSQL_PASSWORD=Mysql5.7UserPassword
 
 Declarative YAML:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Secret
@@ -1066,7 +1070,7 @@ Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scal
 
 Imperative commands:
 
-```
+```bash
 kubectl create deploy nginx-deployment --image=nginx:1.21 --replicas=2 -n cka
 kubectl scale deploy nginx-deployment --replicas=3 --record -n cka
 kubectl scale deploy nginx-deployment --replicas=2 --record -n cka
@@ -1074,7 +1078,7 @@ kubectl scale deploy nginx-deployment --replicas=2 --record -n cka
 
 Declarative YAML (initial):
 
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1100,7 +1104,7 @@ spec:
 
 Declarative YAML (updated):
 
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1140,14 +1144,14 @@ Docs:
 
 Imperative commands:
 
-```
+```bash
 kubectl run httpd-liveness-readiness --image=lisenet/httpd-healthcheck:0.1 \
   --dry-run=client -o yaml -n cka > httpd-liveness-readiness.yaml
 ```
 
 Edit the file `httpd-liveness-readiness.yaml` and add probes:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -1174,13 +1178,13 @@ spec:
 
 Deploy the pod:
 
-```
+```bash
 kubectl apply -f httpd-liveness-readiness.yaml
 ```
 
 Verify:
 
-```
+```bash
 kubectl describe po/httpd-liveness-readiness -n cka | grep tcp
     Liveness:       tcp-socket :10001 delay=5s timeout=1s period=10s #success=1 #failure=3
     Readiness:      tcp-socket :10001 delay=5s timeout=1s period=10s #success=1 #failure=3
@@ -1195,14 +1199,14 @@ kubectl describe po/httpd-liveness-readiness -n cka | grep tcp
 
 Imperative commands:
 
-```
+```bash
 kubectl run multi-container --image=lisenet/httpd-healthcheck:0.1 \
   --dry-run=client -o yaml -n cka > multi-container.yaml
 ```
 
 Edit the file `multi-container.yaml` and add containers.
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -1225,7 +1229,7 @@ spec:
 
 Deploy the pod and verify that 2 containers are running:
 
-```
+```bash
 kubectl apply -f multi-container.yaml
 
 kubectl get po/multi-container -n cka
@@ -1244,14 +1248,14 @@ Docs: https://kubernetes.io/docs/concepts/configuration/manage-resources-contain
 
 Imperative commands:
 
-```
+```bash
 kubectl run httpd-healthcheck --image=lisenet/httpd-healthcheck:0.1 \
   --dry-run=client -o yaml -n cka > httpd-healthcheck.yaml
 ```
 
 Edit the file `httpd-healthcheck.yaml` and add `resources` section:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -1272,13 +1276,13 @@ spec:
 
 Deploy the pod:
 
-```
+```bash
 kubectl apply -f httpd-healthcheck.yaml
 ```
 
 Verify:
 
-```
+```bash
 kubectl describe po/httpd-healthcheck -n cka | grep -B1 memory
     Limits:
       memory:  128M
@@ -1296,7 +1300,7 @@ Docs: https://kubernetes.io/docs/concepts/policy/limit-range/
 
 Imperative commands:
 
-```
+```bash
 kubectl create ns cka-memlimit
 
 cat > cka-memlimit.yaml <<EOF
@@ -1320,7 +1324,7 @@ kubectl run httpd-healthcheck-memlimit --image=lisenet/httpd-healthcheck:0.1 \
 
 Edit the file `httpd-healthcheck-memlimit.yaml` and add `resources` section:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -1340,7 +1344,7 @@ spec:
 
 Deploy the pod:
 
-```
+```bash
 kubectl apply -f httpd-healthcheck-memlimit.yaml
 The Pod "httpd-healthcheck-memlimit" is invalid: spec.containers[0].resources.requests: Invalid value: "100Mi": must be less than or equal to memory limit
 ```
@@ -1367,7 +1371,7 @@ Doc: https://kubernetes.io/docs/concepts/cluster-administration/networking/
 
 Imperative commands. Check the cluster IP:
 
-```
+```bash
 kubectl get svc/kubernetes
 NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   12d
@@ -1375,33 +1379,33 @@ kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   12d
 
 Change the Service CIDR on the kube-apiserver:
 
-```
+```bash
 sed -i 's/10.96.0.0/10.112.0.0/g' /etc/kubernetes/manifests/kube-apiserver.yaml
 ```
 
 Give it a some time for the kube-apiserver to restart. Check the pod was restarted using `crictl`:
 
-```
+```bash
 crictl ps | grep kube-controller-manager
 a34270848373d  f40be0088a83e  About a minute ago  Running  kube-apiserver ...
 ```
 
 Do the same for the controller manager:
 
-```
+```bash
 sed -i 's/10.96.0.0/10.112.0.0/g' /etc/kubernetes/manifests/kube-controller-manager.yaml
 ```
 
 Give it some time for the controller-manager to restart. Check the pod was restarted using `crictl`:
 
-```
+```bash
 crictl ps | grep kube-controller-manager
 e5666a46b88ac  b07520cd7ab76  46 seconds ago  Running  kube-controller-manager ...
 ```
 
 Create a new service and verify its IP address:
 
-```
+```bash
 kubectl create svc clusterip new-cluster-ip --tcp 8080
 
 kubectl get svc/new-cluster-ip
@@ -1411,7 +1415,7 @@ new-cluster-ip   ClusterIP   10.118.114.114   <none>        8080/TCP   7s
 
 Kubernetes services are implemented using `iptables` rules on all nodes. Save firewall rules for the service:
 
-```
+```bash
 iptables-save | grep new-cluster-ip > /tmp/iptables.txt
 ```
 
@@ -1448,7 +1452,7 @@ After implementation, connections from `busybox` pod to `httpd-netpol-green` pod
 
 Imperative commands. Create pods:
 
-```
+```bash
 kubectl run httpd-netpol-blue --image="lisenet/httpd-pii-demo:0.2" --labels=app=blue -n cka
 kubectl run httpd-netpol-green --image="lisenet/httpd-pii-demo:0.3" --labels=app=green -n cka
 kubectl run curl-netpol --image="curlimages/curl:7.81.0" --labels=app=admin -n cka -- sleep 1800
@@ -1456,7 +1460,7 @@ kubectl run curl-netpol --image="curlimages/curl:7.81.0" --labels=app=admin -n c
 
 Get IP addresses of pods and test web access.
 
-```
+```bash
 kubectl get po -o wide -n cka | awk '{ print $1" "$6 }'
 NAME IP
 curl-netpol 192.168.135.204
@@ -1480,7 +1484,7 @@ Content-Type: text/html; charset=UTF-8
 
 Create a file `netpol-blue-green.yaml` with the following content:
 
-```
+```yaml
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -1505,7 +1509,7 @@ spec:
 
 Create the network policy and verify:
 
-```
+```bash
 kubectl apply -f netpol-blue-green.yaml
 
 kubectl get networkpolicy -n cka
@@ -1515,7 +1519,7 @@ netpol-blue-green   app=admin      29s
 
 Test web access again:
 
-```
+```bash
 kubectl -n cka exec curl-netpol -- curl -sI --max-time 5 http://192.168.137.36
 HTTP/1.1 200 OK
 Date: Mon, 21 Feb 2022 01:05:37 GMT
@@ -1529,7 +1533,7 @@ command terminated with exit code 28
 
 Declarative YAML:
 
-```
+```yaml
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -1611,7 +1615,7 @@ A service is an abstraction which defines a logical set of Pods and a policy by 
 
 Imperative commands:
 
-```
+```bash
 kubectl run httpd-healthcheck-nodeport --image=lisenet/httpd-healthcheck:0.1 -n cka
 
 kubectl expose pod httpd-healthcheck-nodeport \
@@ -1624,7 +1628,7 @@ kubectl expose pod httpd-healthcheck-nodeport \
 
 Edit the file `httpd-healthcheck-nodeport.yaml` and add the given node port:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Service
@@ -1646,7 +1650,7 @@ spec:
 
 Deploy the service and verify:
 
-```
+```bash
 kubectl apply -f httpd-healthcheck-nodeport.yaml
 
 kubectl describe svc/httpd-healthcheck-nodeport -n cka
@@ -1674,7 +1678,7 @@ httpd-healthcheck
 
 Declarative YAML:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -1714,7 +1718,7 @@ spec:
 
 Imperative commands:
 
-```
+```bash
 kubectl run httpd-healthcheck-loadbalancer --image=lisenet/httpd-healthcheck:0.1 -n cka
 
 kubectl expose pod httpd-healthcheck-loadbalancer \
@@ -1727,7 +1731,7 @@ httpd-healthcheck-loadbalancer   LoadBalancer   10.111.116.18   <pending>     10
 
 Declarative YAML:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Pod
@@ -1766,7 +1770,7 @@ Imperative commands:
 2. Verify that the service `httpd-healthcheck-loadbalancer` has an external IP address assigned.
 3. Get the index page through the `LoadBalancer` service using `curl`.
 
-```
+```bash
 kubectl create ns metallb-system
 
 cat > metallb-configmap.yaml <<EOF
@@ -1813,7 +1817,7 @@ Docs: https://kubernetes.io/docs/concepts/services-networking/ingress-controller
 
 Imperative commands:
 
-```
+```bash
 kubectl create deploy httpd-pii-demo-blue --image=lisenet/httpd-pii-demo:0.2 -n cka
 kubectl expose deploy/httpd-pii-demo-blue --port=80 --target-port=80 --type=LoadBalancer -n cka
 
@@ -1830,7 +1834,7 @@ ingress-nginx-controller-admission   ClusterIP      10.100.251.17   <none>      
 
 Create a manifest file `ingress-blue-green.yaml` for an ingress resource:
 
-```
+```yaml
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -1862,7 +1866,7 @@ spec:
 
 Deploy ingress resource and verify:
 
-```
+```bash
 kubectl apply -f ingress-blue-green.yaml
 
 kubectl describe ingress/ingress-blue-green -n cka
@@ -1900,7 +1904,7 @@ As of Kubernetes v1.12, CoreDNS is the recommended DNS Server, replacing kube-dn
 
 Imperative commands:
 
-```
+```bash
 kubectl -n cka run busybox --image=busybox -- sleep 7200
 
 kubectl -n cka exec busybox  -- cat /etc/resolv.conf
@@ -1911,7 +1915,7 @@ options ndots:5
 
 Execute `nslookup` command and check with the service to make sure the IPs match.
 
-```
+```bash
 kubectl -n cka exec busybox -- nslookup httpd-healthcheck-loadbalancer
 Server:		10.96.0.10
 Address:	10.96.0.10:53
@@ -1920,7 +1924,7 @@ Name:	httpd-healthcheck-loadbalancer.cka.svc.cluster.local
 Address: 10.111.116.18
 ```
 
-```
+```bash
 kubectl -n cka get svc/httpd-healthcheck-loadbalancer
 NAME                             TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)           AGE
 httpd-healthcheck-loadbalancer   LoadBalancer   10.111.116.18   10.11.1.61    10001:32465/TCP   11h
@@ -1928,7 +1932,7 @@ httpd-healthcheck-loadbalancer   LoadBalancer   10.111.116.18   10.11.1.61    10
 
 Update coredns configmap and delete pods to pick up changes:
 
-```
+```bash
 kubectl edit cm/coredns -n kube-system
 
 for i in $(kubectl get po -n kube-system -l k8s-app=kube-dns -o name); do
@@ -2008,7 +2012,7 @@ Docs:
 
 Imperative commands:
 
-```
+```bash
 cat > storageclass.yaml <<EOF
 ---
 apiVersion: storage.k8s.io/v1
@@ -2026,13 +2030,13 @@ EOF
 kubectl apply -f storageclass.yaml
 ```
 
-```
+```bash
 kubectl get storageclass
 NAME              PROVISIONER                     RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
 portworx-csi      kubernetes.io/portworx-volume   Delete          Immediate           true                   5s
 ```
 
-```
+```bash
 cat > persistentvolume.yaml <<EOF
 apiVersion: v1
 kind: PersistentVolume
@@ -2101,7 +2105,7 @@ Docs: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#claims-as-
 
 Imperative commands:
 
-```
+```bash
 cat > pv-httpd-webroot.yaml <<EOF
 apiVersion: v1
 kind: PersistentVolume
@@ -2122,7 +2126,7 @@ EOF
 kubectl apply -f pv-httpd-webroot.yaml
 ```
 
-```
+```bash
 kubectl get pv
 NAME               CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
 pv-httpd-webroot   64Mi       RWX            Retain           Available           manual                  15s
@@ -2146,13 +2150,13 @@ EOF
 kubectl apply -f pvc-httpd-webroot.yaml
 ```
 
-```
+```bash
 kubectl get pvc -n cka
 NAME                STATUS   VOLUME             CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 pvc-httpd-webroot   Bound    pv-httpd-webroot   64Mi       RWX            manual         8s
 ```
 
-```
+```bash
 kubectl create deploy httpd-persistent \
   --image=httpd:2.4 --replicas=2 \
   --dry-run=client -o yaml -n cka > httpd-persistent.yaml
@@ -2160,7 +2164,7 @@ kubectl create deploy httpd-persistent \
 
 Edit the file `httpd-persistent.yaml` and add `volumes` and `volumeMounts` sections:
 
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -2193,31 +2197,33 @@ spec:
 
 Create deployment:
 
-```
+```bash
 kubectl apply -f httpd-persistent.yaml
 ```
 
 Create a blank file:
 
-```
+```bash
 kubectl -n cka exec $(k get po -n cka | grep httpd-persistent | cut -d" " -f1 | head -n1) -- touch /usr/local/apache2/htdocs/blank.html
 ```
 
 Delete and re-create the deployment:
-```
+
+```bash
 kubectl delete deploy/httpd-persistent -n cka
 kubectl apply -f httpd-persistent.yaml
 ```
 
 Verify the blank file exists:
-```
+
+```bash
 kubectl -n cka exec $(k get po -n cka | grep httpd-persistent | cut -d" " -f1 | head -n1) -- ls /usr/local/apache2/htdocs/blank.html
 /usr/local/apache2/htdocs/blank.html
 ```
 
 Declarative YAML:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -2282,37 +2288,37 @@ spec:
 
 Display addresses of the master and services:
 
-```
+```bash
 kubectl cluster-info
 ```
 
 Show the latest events in the whole cluster, ordered by time (see `kubectl` cheatsheet documentation):
 
-```
+```bash
 kubectl get events -A --sort-by=.metadata.creationTimestamp
 ```
 
 Check the status of the nodes:
 
-```
+```bash
 kubectl get nodes
 ```
 
 Check the status of the Docker service:
 
-```
+```bash
 systemctl status docker
 ```
 
 View `kubelet` systemd service logs:
 
-```
+```bash
 journalctl -u kubelet
 ```
 
 Check etcd health and status:
 
-```
+```bash
 ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -2335,19 +2341,19 @@ https://127.0.0.1:2379, 9dc11d4117b1b759, 3.5.0, 4.7 MB, true, 3, 561317
 
 Dump pod logs to stdout:
 
-```
+```bash
 kubectl logs ${POD_NAME}   
 ```
 
 Dump pod logs for a deployment (single-container case):
 
-```
+```bash
 kubectl logs deploy/${DEPLOYMENT_NAME}
 ```
 
 Dump pod logs for a deployment (multi-container case):
 
-```
+```bash
 kubectl logs deploy/${DEPLOYMENT_NAME} -c ${CONTAINER_NAME}
 ```
 
@@ -2355,14 +2361,14 @@ kubectl logs deploy/${DEPLOYMENT_NAME} -c ${CONTAINER_NAME}
 
 We can write container logs to a file. For example, get container ID of coredns:
 
-```
+```bash
 crictl ps --quiet --name coredns 
 5582a4b80318a741ad0d9a05df6d235642e73a2e88ff53933c103ffd854c0069
 ```
 
 Dump container logs to a file (both the standard output and standard error):
 
-```
+```bash
 crictl logs ${CONTAINER_ID} > ./container.log 2>&1
 ```
 
@@ -2372,7 +2378,7 @@ Docs: https://kubernetes.io/docs/tasks/debug-application-cluster/debug-applicati
 
 Depends on the application. The first step in debugging a pod is taking a look at it. Check the current state of the pod and recent events with the following command:
 
-```
+```bash
 kubectl describe pods ${POD_NAME}
 ```
 
@@ -2394,7 +2400,7 @@ Docs: https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/
 
 Run commands in a pod. The `--rm` parameter deletes the pod after it exits.
 
-```
+```bash
 kubectl run busybox --image=busybox --rm --restart=Never -it sh
 ```
 
@@ -2451,7 +2457,7 @@ Docs: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-
 
 Imperative commands:
 
-```
+```bash
 kubectl create ns cka
 
 kubectl create secret generic mysql-password \
@@ -2499,7 +2505,7 @@ kubectl create deploy mysql --image=mysql:5.6 --replicas=1 \
 
 Edit the file `deployment-mysql.yaml`, change `Deployment` to `StatefulSet` and add required configuration:
 
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -2551,7 +2557,7 @@ spec:
 
 Create the deployment and verify mysql pod logs:
 
-```
+```bash
 kubectl apply -f deployment-mysql.yaml
 
 kubectl logs $(kubectl get po -n cka -l app=mysql -o name) -n cka | tail -n1
@@ -2560,7 +2566,7 @@ Version: '5.6.51'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Comm
 
 Create a service for mysql, which serves on port 3306:
 
-```
+```bash
 kubectl create svc clusterip mysql --tcp=3306 -n cka
 
 kubectl get svc -n cka
@@ -2570,14 +2576,14 @@ mysql   ClusterIP   10.107.189.130   <none>        3306/TCP   111s
 
 Create a deplopyment file for wordpress.
 
-```
+```bash
 kubectl create deploy wordpress --image=wordpress:4.8-apache --replicas=3 \
   --dry-run=client -o yaml -n cka > deployment-wordpress.yaml
 ```
 
 Edit the file `deployment-wordpress.yaml` and add required configuration:
 
-```
+```yaml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -2640,7 +2646,7 @@ spec:
 
 Create the deployment and verify wordpress pod logs:
 
-```
+```bash
 kubectl apply -f deployment-wordpress.yaml
 
 kubectl logs $(kubectl get po -n cka -l app=wordpress -o name|head -n1) -n cka | grep WordPress
@@ -2652,14 +2658,14 @@ While the wordpress pods can run on both the worker and master nodes because of 
 
 Create a service for wordpress, which serves on port 80 and connects to the containers on port 80:
 
-```
+```bash
 kubectl expose deployment wordpress --type=NodePort --port=80 --target-port=80 \
   --dry-run=client -o yaml -n cka > service-wordpress.yaml
 ```
 
 Edit the file `service-wordpress.yaml` and add `nodePort`:
 
-```
+```yaml
 ---
 apiVersion: v1
 kind: Service
@@ -2681,7 +2687,7 @@ spec:
 
 Create the service and verify:
 
-```
+```bash
 kubectl apply -f service-wordpress.yaml
 
 kubectl get svc -n cka
@@ -2692,7 +2698,7 @@ wordpress   NodePort    10.110.61.109    <none>        80:31234/TCP   20m
 
 Create a file `netpol-wordpress.yaml` that contains our network policy configuration:
 
-```
+```bash
 cat > netpol-mysql.yaml <<EOF
 ---
 apiVersion: networking.k8s.io/v1
@@ -2724,7 +2730,7 @@ EOF
 
 Deploy the network policy:
 
-```
+```bash
 kubectl apply -f netpol-mysql.yaml
 ```
 
@@ -2732,7 +2738,7 @@ Now, navigate your browser to **http://{NODE_IP_ADDRESS}:31234/** and enjoy a br
 
 Take an `etcd` snapshot on the control plane by specifying the endpoint and certificates:
 
-```
+```bash
 ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -2743,7 +2749,7 @@ ETCDCTL_API=3 etcdctl \
 
 Delete wordpress deployment:
 
-```
+```bash
 kubectl delete deploy/wordpress -n cka
 ```
 
@@ -2751,27 +2757,27 @@ No wordpress pods should be present at this point.
 
 Restore `etcd` configuration from the snapshot. On the control plane, identify the default `data-dir`:
 
-```
+```bash
 grep data-dir /etc/kubernetes/manifests/etcd.yaml
     - --data-dir=/var/lib/etcd
 ```
 
 Stop all control plane components:
 
-```
+```bash
 cd /etc/kubernetes/manifests/
 mv ./*yaml ../
 ```
 
 Make sure that all control plane pods are `NotReady`:
 
-```
+```bash
 crictl pods | egrep "kube|etcd"
 ```
 
 Restore the snapshot to directory `/var/lib/etcd_backup`:
 
-```
+```bash
 ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -2783,20 +2789,20 @@ ETCDCTL_API=3 etcdctl \
 
 Configure etcd to use the new directory `/var/lib/etcd_backup`:
 
-```
+```bash
 sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/manifests/etcd.yaml
 ```
 
 Start all control plane components:
 
-```
+```bash
 cd /etc/kubernetes/manifests/
 mv ../*yaml ./
 ```
 
 Give it some time (up to several minutes) for etcd to restart, and verify that wordpress pods are back.
 
-```
+```bash
 kubectl get po -n cka
 NAME                        READY   STATUS    RESTARTS   AGE
 mysql-0                     1/1     Running   0          40m
