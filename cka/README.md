@@ -2451,6 +2451,7 @@ Docs: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-
 9. Configure `wordpress` deployment so that the underlying container has the following environment variables set:
     * `WORDPRESS_DB_PASSWORD` from secret key `mysql_root_password`.
     * `WORDPRESS_DB_HOST` set to value of `mysql`.
+    * `WORDPRESS_DB_USER` set to value of `root`.
 10. Create a `NodePort` service named `wordpress` which exposes `wordpress` deployment on port `80` and connects to the container on port `80`. The port on the node should be set to `31234`.
 11. Create a `NetworkPolicy` called `netpol-mysql`. Use the `app` label of pods in your policy. The policy should allow the `mysql-*` pods to:
     * accept ingress traffic on port `3306` from `wordpres-*` pods only.
@@ -2638,6 +2639,8 @@ spec:
               key: mysql_root_password
         - name: WORDPRESS_DB_HOST
           value: mysql
+        - name: WORDPRESS_DB_USER
+          value: root
         resources:
           requests:
             cpu: 10m
