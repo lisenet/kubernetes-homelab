@@ -24,7 +24,7 @@ metadata:
   namespace: cka-memlimit
 spec:
   containers:
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: httpd-healthcheck-memlimit
     resources:
       requests:

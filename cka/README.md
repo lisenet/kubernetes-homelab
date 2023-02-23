@@ -1138,14 +1138,14 @@ Docs:
 
 **Exercise 1**: perform the following tasks.
 
-1. Create a pod `httpd-liveness-readiness` that uses `lisenet/httpd-healthcheck:0.1` image.
+1. Create a pod `httpd-liveness-readiness` that uses `lisenet/httpd-healthcheck:1.0.0` image.
 2. Configure both `liveness` and `readiness` probes for a TCP check on port `10001`.
 3. Set `initialDelaySeconds` to 5. The probe should be performed every 10 seconds.
 
 Imperative commands:
 
 ```bash
-kubectl run httpd-liveness-readiness --image=lisenet/httpd-healthcheck:0.1 \
+kubectl run httpd-liveness-readiness --image=lisenet/httpd-healthcheck:1.0.0 \
   --dry-run=client -o yaml -n cka > httpd-liveness-readiness.yaml
 ```
 
@@ -1162,7 +1162,7 @@ metadata:
   namespace: cka
 spec:
   containers:
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: httpd-liveness-readiness
     readinessProbe:
       tcpSocket:
@@ -1194,13 +1194,13 @@ kubectl describe po/httpd-liveness-readiness -n cka | grep tcp
 
 1. Create a pod called `multi-container` that has the following:
     * A container named `blue` with `lisenet/httpd-pii-demo:0.2` image.
-    * A container named `healthcheck` with `lisenet/httpd-healthcheck:0.1` image.
+    * A container named `healthcheck` with `lisenet/httpd-healthcheck:1.0.0` image.
     * An `initContainer` named `busybox` with `busybox:1.35.0` image. Container runs the following command: `echo FIRST`.
 
 Imperative commands:
 
 ```bash
-kubectl run multi-container --image=lisenet/httpd-healthcheck:0.1 \
+kubectl run multi-container --image=lisenet/httpd-healthcheck:1.0.0 \
   --dry-run=client -o yaml -n cka > multi-container.yaml
 ```
 
@@ -1219,7 +1219,7 @@ spec:
   containers:
   - image: lisenet/httpd-pii-demo:0.2
     name: blue
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: healthcheck
   initContainers:
   - name: busybox
@@ -1243,13 +1243,13 @@ Docs: https://kubernetes.io/docs/concepts/configuration/manage-resources-contain
 
 **Exercise 1**: perform the following tasks.
 
-1. Create a pod `httpd-healthcheck` that uses `lisenet/httpd-healthcheck:0.1` image.
+1. Create a pod `httpd-healthcheck` that uses `lisenet/httpd-healthcheck:1.0.0` image.
 2. Set the pod memory request to 40Mi and memory limit to 128Mi.
 
 Imperative commands:
 
 ```bash
-kubectl run httpd-healthcheck --image=lisenet/httpd-healthcheck:0.1 \
+kubectl run httpd-healthcheck --image=lisenet/httpd-healthcheck:1.0.0 \
   --dry-run=client -o yaml -n cka > httpd-healthcheck.yaml
 ```
 
@@ -1265,7 +1265,7 @@ metadata:
   name: httpd-healthcheck
 spec:
   containers:
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: httpd-healthcheck
     resources:
       requests:
@@ -1295,7 +1295,7 @@ Docs: https://kubernetes.io/docs/concepts/policy/limit-range/
 **Exercise 2**: perform the following tasks.
 
 1. Create a namespace `cka-memlimit` with a container memory limit of 30Mi.
-2. Create a pod `httpd-healthcheck-memlimit` that uses `lisenet/httpd-healthcheck:0.1` image in the `cka-memlimit` namespace, and set the pod memory request to 100Mi.
+2. Create a pod `httpd-healthcheck-memlimit` that uses `lisenet/httpd-healthcheck:1.0.0` image in the `cka-memlimit` namespace, and set the pod memory request to 100Mi.
 3. Observe the error.
 
 Imperative commands:
@@ -1318,7 +1318,7 @@ EOF
 
 kubectl apply -f cka-memlimit.yaml
 
-kubectl run httpd-healthcheck-memlimit --image=lisenet/httpd-healthcheck:0.1 \
+kubectl run httpd-healthcheck-memlimit --image=lisenet/httpd-healthcheck:1.0.0 \
   --dry-run=client -o yaml -n cka-memlimit > httpd-healthcheck-memlimit.yaml
 ```
 
@@ -1335,7 +1335,7 @@ metadata:
   namespace: cka-memlimit
 spec:
   containers:
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: httpd-healthcheck-memlimit
     resources:
       requests:
@@ -1609,14 +1609,14 @@ A service is an abstraction which defines a logical set of Pods and a policy by 
 
 **Exercise 1**: perform the following tasks.
 
-1. Create a pod `httpd-healthcheck-nodeport` that uses `lisenet/httpd-healthcheck:0.1` image.
+1. Create a pod `httpd-healthcheck-nodeport` that uses `lisenet/httpd-healthcheck:1.0.0` image.
 2. Expose the pod's port `10001` through a service of type `NodePort` and set the node port to `30080`.
 3. Get the index page through the `NodePort` using `curl`.
 
 Imperative commands:
 
 ```bash
-kubectl run httpd-healthcheck-nodeport --image=lisenet/httpd-healthcheck:0.1 -n cka
+kubectl run httpd-healthcheck-nodeport --image=lisenet/httpd-healthcheck:1.0.0 -n cka
 
 kubectl expose pod httpd-healthcheck-nodeport \
   --port=10001 \
@@ -1689,7 +1689,7 @@ metadata:
   namespace: cka
 spec:
   containers:
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: httpd-healthcheck-nodeport
 ---
 apiVersion: v1
@@ -1712,14 +1712,14 @@ spec:
 
 **Exercise 2**: perform the following tasks.
 
-1. Create a pod `httpd-healthcheck-loadbalancer` that uses `lisenet/httpd-healthcheck:0.1` image.
+1. Create a pod `httpd-healthcheck-loadbalancer` that uses `lisenet/httpd-healthcheck:1.0.0` image.
 2. Expose the pod's port 10001 through a service of type `LoadBalancer`.
 3. Verify that the service has an external IP pending.
 
 Imperative commands:
 
 ```bash
-kubectl run httpd-healthcheck-loadbalancer --image=lisenet/httpd-healthcheck:0.1 -n cka
+kubectl run httpd-healthcheck-loadbalancer --image=lisenet/httpd-healthcheck:1.0.0 -n cka
 
 kubectl expose pod httpd-healthcheck-loadbalancer \
   --port=10001 --target-port=10001 --type=LoadBalancer -n cka
@@ -1742,7 +1742,7 @@ metadata:
   namespace: cka
 spec:
   containers:
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: httpd-healthcheck-loadbalancer
 ---
 apiVersion: v1
