@@ -1,6 +1,6 @@
 # Certified Kubernetes Administrator (CKA)
 
-Preparation and study material for Certified Kubernetes Administrator exam v1.22.
+Preparation and study material for Certified Kubernetes Administrator exam v1.26.
 
 - [Reasoning](#reasoning)
 - [Aliases](#aliases)
@@ -150,7 +150,7 @@ virt-install \
 
 ### Use Kubeadm to install a basic cluster
 
-We will use `kubeadm` to install a Kubernetes v1.22 cluster.
+We will use `kubeadm` to install a Kubernetes v1.25 cluster. We will upgrade the cluster to v1.26 in the next chapter.
 
 Docs: https://kubernetes.io/docs/setup/production-environment/container-runtimes/
 
@@ -211,7 +211,7 @@ sudo systemctl restart containerd
 
 Docs: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
 
-Install `kubeadm`, `kubelet` and `kubectl` (v1.22):
+Install `kubeadm`, `kubelet` and `kubectl` (v1.25):
 
 ```
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -219,7 +219,7 @@ sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://pack
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 sudo apt-get update
-sudo apt-get install -y kubelet=1.22.6-00 kubeadm=1.22.6-00 kubectl=1.22.6-00
+sudo apt-get install -y kubelet=1.25.5-00 kubeadm=1.25.5-00 kubectl=1.25.5-00
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable kubelet
 ```
@@ -236,7 +236,7 @@ We are going to use Flannel, hence `10.244.0.0/16`.
 
 ```
 sudo kubeadm init \
-  --kubernetes-version "1.22.6" \
+  --kubernetes-version "1.25.5" \
   --pod-network-cidr "10.244.0.0/16"
 ```
 
@@ -280,8 +280,8 @@ Check the cluster to make sure that all nodes are running and ready:
 ```
 kubectl get nodes
 NAME    STATUS   ROLES                  AGE    VERSION
-srv39   Ready    control-plane,master   14m    v1.22.6
-srv40   Ready    <none>                 102s   v1.22.6
+srv39   Ready    control-plane,master   14m    v1.25.5
+srv40   Ready    <none>                 102s   v1.25.5
 ```
 
 ### How to add new worker nodes to the cluster?
@@ -409,7 +409,7 @@ Give it some time (up to several minutes) for etcd to restart.
 
 Docs: https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
-We will upgrade previously deployed Kubernetes cluster v1.22 to v1.23.
+We will upgrade previously deployed Kubernetes cluster v1.25 to v1.26.
 
 Find the latest version in the list:
 
@@ -422,17 +422,17 @@ Upgrade the **control plane**:
 
 ```
 apt-mark unhold kubeadm && \
-apt-get update && apt-get install -y kubeadm=1.23.3-00 && \
+apt-get update && apt-get install -y kubeadm=1.26.1-00 && \
 apt-mark hold kubeadm
 
 kubeadm version
 sudo kubeadm upgrade plan
-sudo kubeadm upgrade apply v1.23.3
+sudo kubeadm upgrade apply v1.26.1
 
 kubectl drain srv39 --ignore-daemonsets
 
 apt-mark unhold kubelet kubectl && \
-apt-get install -y kubelet=1.23.3-00 kubectl=1.23.3-00 && \
+apt-get install -y kubelet=1.26.1-00 kubectl=1.26.1-00 && \
 apt-mark hold kubelet kubectl
 
 sudo systemctl daemon-reload
@@ -444,7 +444,7 @@ Upgrade the **worker node**:
 
 ```
 apt-mark unhold kubeadm && \
-apt-get update && apt-get install -y kubeadm=1.23.3-00 && \
+apt-get update && apt-get install -y kubeadm=1.26.1-00 && \
 apt-mark hold kubeadm
 
 sudo kubeadm upgrade node
@@ -452,7 +452,7 @@ sudo kubeadm upgrade node
 kubectl drain srv40 --ignore-daemonsets
 
 apt-mark unhold kubelet kubectl && \
-apt-get install -y kubelet=1.23.3-00 kubectl=1.23.3-00 && \
+apt-get install -y kubelet=1.26.1-00 kubectl=1.26.1-00 && \
 apt-mark hold kubelet kubectl
 
 sudo systemctl daemon-reload
@@ -465,8 +465,8 @@ Verify the status of the cluster:
 ```
 kubectl get nodes
 NAME    STATUS   ROLES                  AGE   VERSION
-srv39   Ready    control-plane,master   38m   v1.23.3
-srv40   Ready    <none>                 33m   v1.23.3
+srv39   Ready    control-plane,master   38m   v1.26.1
+srv40   Ready    <none>                 33m   v1.26.1
 ```
 
 ### Manage role based access control (RBAC)
