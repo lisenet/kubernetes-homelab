@@ -110,7 +110,7 @@ Libvirt/KVM nodes:
 * srv39-master: 2 vCPUs, 4GB RAM, 16GB disk, 10.11.1.39/24
 * srv40-node: 2 vCPUs, 4GB RAM, 16GB disk, 10.11.1.40/24
 
-Provision a KVM guest for the **control plane**:
+Provision a KVM guest for the **control plane** using PXE boot:
 
 ```bash
 virt-install \
@@ -129,7 +129,11 @@ virt-install \
   --wait 0
 ```
 
-Provision a KVM guest for the **worker node**:
+When asked for an OS, select Ubuntu 20.04 LTS Server option.
+
+![PXE boot menu](../docs/homelab-pxe-boot-menu.png)
+
+Provision a KVM guest for the **worker node** using PXE boot:
 
 ```bash
 virt-install \
