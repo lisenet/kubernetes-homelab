@@ -117,7 +117,7 @@ virt-install \
   --connect qemu+ssh://root@kvm1.hl.test/system \
   --name srv39-master \
   --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:39 \
-  --disk path=/mnt/storage-luks/libvirt/srv39.qcow2,size=16 \
+  --disk path=/var/lib/libvirt/images/srv39.qcow2,size=16 \
   --pxe \
   --ram 4096 \
   --vcpus 2 \
@@ -136,7 +136,7 @@ virt-install \
   --connect qemu+ssh://root@kvm1.hl.test/system \
   --name srv40-node \
   --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:40 \
-  --disk path=/mnt/storage-luks/libvirt/srv40.qcow2,size=16 \
+  --disk path=/var/lib/libvirt/images/srv40.qcow2,size=16 \
   --pxe \
   --ram 4096 \
   --vcpus 2 \
