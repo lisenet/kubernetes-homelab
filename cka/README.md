@@ -729,6 +729,7 @@ kubectl run httpd --image=httpd:2.4 --dry-run=client -o yaml -n cka > httpd-cont
 Edit the file `httpd-control-plane.yaml` and add `tolerations` and `nodeSelector` sections:
 
 ```yaml
+---
 apiVersion: v1
 kind: Pod
 metadata:
