@@ -850,7 +850,7 @@ spec:
   protocol = http
   http_port = 3000
 ```
-2. Create a pod `grafana` that uses `grafana/grafana:8.1.2` image.
+2. Create a pod `grafana` that uses `grafana/grafana:9.3.1` image.
 3. Mount the configmap to the pod using `/etc/grafana/grafana.ini` as a `mountPath` and `grafana.ini` as a `subPath`.
 
 Imperative commands:
@@ -864,7 +864,7 @@ EOF
 
 kubectl create configmap grafana-ini --from-file=grafana.ini -n cka
 
-kubectl run grafana --image=grafana/grafana:8.1.2 \
+kubectl run grafana --image=grafana/grafana:9.3.1 \
   --dry-run=client -o yaml -n cka > grafana.yaml
 ```
 
@@ -881,7 +881,7 @@ metadata:
   namespace: cka
 spec:
   containers:
-  - image: grafana/grafana:8.1.2
+  - image: grafana/grafana:9.3.1
     name: grafana
     volumeMounts:
       - name: grafana-config
@@ -930,7 +930,7 @@ metadata:
   namespace: cka
 spec:
   containers:
-  - image: grafana/grafana:8.1.2
+  - image: grafana/grafana:9.3.1
     name: grafana
     volumeMounts:
       - name: grafana-config
