@@ -283,9 +283,9 @@ Check the cluster to make sure that all nodes are running and ready:
 
 ```bash
 kubectl get nodes
-NAME    STATUS   ROLES                  AGE    VERSION
-srv39   Ready    control-plane,master   14m    v1.25.5
-srv40   Ready    <none>                 102s   v1.25.5
+NAME    STATUS   ROLES           AGE    VERSION
+srv39   Ready    control-plane   14m    v1.25.5
+srv40   Ready    <none>          102s   v1.25.5
 ```
 
 ### How to add new worker nodes to the cluster?
@@ -468,9 +468,9 @@ Verify the status of the cluster:
 
 ```bash
 kubectl get nodes
-NAME    STATUS   ROLES                  AGE   VERSION
-srv39   Ready    control-plane,master   38m   v1.26.1
-srv40   Ready    <none>                 33m   v1.26.1
+NAME    STATUS   ROLES           AGE   VERSION
+srv39   Ready    control-plane   38m   v1.26.1
+srv40   Ready    <none>          33m   v1.26.1
 ```
 
 ### Manage role based access control (RBAC)
@@ -661,7 +661,7 @@ Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#roll
 
 **Exercise 1**: perform the following tasks.
 
-1. Create a deployment object `httpd-pii-demo` consisting of 4 pods, each containing a single `lisenet/httpd-pii-demo:0.2` container. It should be able to run on master nodes as well.
+1. Create a deployment object `httpd-pii-demo` consisting of 4 pods, each containing a single `lisenet/httpd-pii-demo:0.2` container. It should be able to run on control-plane nodes as well.
 2. Identify the update strategy employed by this deployment.
 3. Modify the update strategy so `maxSurge` is equal to `50%` and `maxUnavailable` is equal to `50%`.
 4. Perform a rolling update to this deployment so that the image gets updated to `lisenet/httpd-pii-demo:0.3`.
@@ -705,7 +705,7 @@ spec:
     spec:
       tolerations:
       - effect: NoSchedule
-        key: node-role.kubernetes.io/master
+        key: node-role.kubernetes.io/control-plane
       containers:
       - image: lisenet/httpd-pii-demo:0.2
         name: httpd-pii-demo
@@ -2447,7 +2447,7 @@ Docs: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-
     * The pods should request `10m` cpu and `64Mi` memory.
     * The `livenessProbe` should perform an HTTP GET request to the path `/readme.html` and port `80` every 5 seconds.
     * Configure `PodAntiAffinity` to ensure that the scheduler does not co-locate replicas on a single node.
-    * Pods of this deployment should be able to run on master nodes as well, create the proper `toleration`.
+    * Pods of this deployment should be able to run on control-plane nodes as well, create the proper `toleration`.
 9. Configure `wordpress` deployment so that the underlying container has the following environment variables set:
     * `WORDPRESS_DB_PASSWORD` from secret key `mysql_root_password`.
     * `WORDPRESS_DB_HOST` set to value of `mysql`.
@@ -2621,10 +2621,10 @@ spec:
                 values:
                 - wordpress
             topologyKey: "kubernetes.io/hostname"
-      # The following toleration "matches" the taint on the master node, therefore
-      # a pod with this toleration would be able to schedule onto master.
+      # The following toleration "matches" the taint on the control-plane node, therefore
+      # a pod with this toleration would be able to schedule onto control-plane.
       tolerations:
-      - key: node-role.kubernetes.io/master
+      - key: node-role.kubernetes.io/control-plane
         operator: Exists
         effect: NoSchedule
       containers:
@@ -2659,7 +2659,7 @@ WordPress not found in /var/www/html - copying now...
 Complete! WordPress has been successfully copied to /var/www/html
 ```
 
-While the wordpress pods can run on both the worker and master nodes because of `tolerations`, we only have one of each (single master and single worker node), meaning that the 3rd replica of wordpress cannot be scheduled and will be in a pending state.
+While the wordpress pods can run on both the worker and control-plane nodes because of `tolerations`, we only have one of each (single control-plane and single worker node), meaning that the 3rd replica of wordpress cannot be scheduled and will be in a pending state.
 
 Create a service for wordpress, which serves on port 80 and connects to the containers on port 80:
 

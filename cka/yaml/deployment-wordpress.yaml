@@ -32,10 +32,10 @@ spec:
                 - wordpress
             topologyKey: "kubernetes.io/hostname"
       # See https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/#taint-based-evictions
-      # The following toleration "matches" the taint on the master node, therefore
-      # a pod with this toleration would be able to schedule onto master.
+      # The following toleration "matches" the taint on the control-plane node, therefore
+      # a pod with this toleration would be able to schedule onto control-plane.
       tolerations:
-      - key: node-role.kubernetes.io/master
+      - key: node-role.kubernetes.io/control-plane
         operator: Exists
         effect: NoSchedule
       containers:
