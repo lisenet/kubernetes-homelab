@@ -8,7 +8,7 @@ metadata:
   namespace: cka
 spec:
   containers:
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: httpd-healthcheck-loadbalancer
 ---
 apiVersion: v1

@@ -22,7 +22,7 @@ spec:
     spec:
       tolerations:
       - effect: NoSchedule
-        key: node-role.kubernetes.io/master
+        key: node-role.kubernetes.io/control-plane
       containers:
       - image: lisenet/httpd-pii-demo:0.2
         name: httpd-pii-demo

@@ -10,7 +10,7 @@ spec:
   containers:
   - image: lisenet/httpd-pii-demo:0.2
     name: blue
-  - image: lisenet/httpd-healthcheck:0.1
+  - image: lisenet/httpd-healthcheck:1.0.0
     name: healthcheck
   initContainers:
   - name: busybox

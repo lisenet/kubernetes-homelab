@@ -35,6 +35,6 @@ spec:
   - args:
     - "sleep"
     - "1800"
-    image: curlimages/curl:7.81.0
+    image: curlimages/curl:7.87.0
     name: curl-netpol
 ...
