@@ -1,0 +1,24 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: crondate
+  namespace: ckad
+spec:
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Replace
+  jobTemplate:
+    metadata:
+      name: crondate
+    spec:
+      template:
+        spec:
+          containers:
+          - command:
+            - date
+            image: busybox:1.35
+            imagePullPolicy: IfNotPresent
+            name: crondate
+          restartPolicy: OnFailure
+  schedule: '*/2 * * * *'

@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webapp
+  name: webapp-canary-blue
+  namespace: ckad
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - image: kodekloud/webapp-color
+        imagePullPolicy: IfNotPresent
+        name: webapp-color
+        ports:
+        - containerPort: 8080
+        env: 
+        - name: APP_COLOR
+          value: "blue"

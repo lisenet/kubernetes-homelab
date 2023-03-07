@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: httpd-persistent
+  name: httpd-persistent
+  namespace: ckad
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: httpd-persistent
+  template:
+    metadata:
+      labels:
+        app: httpd-persistent
+    spec:
+      containers:
+      - image: httpd:2.4
+        imagePullPolicy: IfNotPresent
+        name: httpd
+        volumeMounts:
+          - mountPath: "/usr/local/apache2/htdocs"
+            name: pvc-httpd-persistent
+      volumes:
+      - name: pvc-httpd-persistent
+        persistentVolumeClaim:
+          claimName: pvc-httpd-webroot

@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pod-sa
+  namespace: ckad
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pod-clusterrole
+rules:
+- apiGroups:
+  - metrics.k8s.io
+  resources:
+  - pods
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pod-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: pod-sa
+  namespace: ckad
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: pod-use-sa
+  name: pod-use-sa
+  namespace: ckad
+spec:
+  serviceAccount: pod-sa
+  serviceAccountName: pod-sa
+  containers:
+  - image: nginx:1.21
+    imagePullPolicy: IfNotPresent
+    name: pod-use-sa

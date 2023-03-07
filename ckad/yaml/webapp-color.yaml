@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+data:
+  color: blue
+kind: ConfigMap
+metadata:
+  name: webapp-color
+  namespace: ckad
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: webapp-color
+  name: webapp-color
+  namespace: ckad
+spec:
+  containers:
+  - image: kodekloud/webapp-color
+    imagePullPolicy: IfNotPresent
+    name: webapp-color
+    env:
+      # Define the environment variable
+      - name: APP_COLOR
+        valueFrom:
+          configMapKeyRef:
+            # The ConfigMap containing the value you want to assign to APP_COLOR
+            name: webapp-color
+            # Specify the key associated with the value
+            key: color

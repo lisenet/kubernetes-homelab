@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: front-end
+    release: blue
+  name: httpd-blue
+  namespace: ckad
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: front-end
+      release: blue
+  template:
+    metadata:
+      labels:
+        app: front-end
+        release: blue
+    spec:
+      containers:
+      - image: lisenet/httpd-pii-demo:0.2
+        imagePullPolicy: IfNotPresent
+        name: httpd-pii-demo
+        ports:
+        - containerPort: 80

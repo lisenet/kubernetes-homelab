@@ -1,0 +1,103 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: httpd-pii-demo-blue
+  name: httpd-pii-demo-blue
+  namespace: ckad
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpd-pii-demo-blue
+  template:
+    metadata:
+      labels:
+        app: httpd-pii-demo-blue
+    spec:
+      containers:
+      - image: lisenet/httpd-pii-demo:0.2
+        imagePullPolicy: IfNotPresent
+        name: httpd-pii-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: httpd-pii-demo-blue
+  name: httpd-pii-demo-blue
+  namespace: ckad
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: httpd-pii-demo-blue
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: httpd-pii-demo-green
+  name: httpd-pii-demo-green
+  namespace: ckad
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpd-pii-demo-green
+  template:
+    metadata:
+      labels:
+        app: httpd-pii-demo-green
+    spec:
+      containers:
+      - image: lisenet/httpd-pii-demo:0.3
+        imagePullPolicy: IfNotPresent
+        name: httpd-pii-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: httpd-pii-demo-green
+  name: httpd-pii-demo-green
+  namespace: ckad
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: httpd-pii-demo-green
+  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-blue-green
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  namespace: ckad
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /blue
+        pathType: Prefix
+        backend:
+          service:
+            name: httpd-pii-demo-blue
+            port:
+              number: 80
+      - path: /green
+        pathType: Prefix
+        backend:
+          service:
+            name: httpd-pii-demo-green
+            port:
+              number: 80
