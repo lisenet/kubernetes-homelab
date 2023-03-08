@@ -13,31 +13,76 @@ Preparation and study material for Certified Kubernetes Application Developer ex
 - [Prep: Install Podman and Helm](#prep-install-podman-and-helm)
 - [Application Design and Build](#application-design-and-build)
     - [Define, build and modify container images](#define-build-and-modify-container-images)
+        - [Task 1](#task-1)
+        - [Solution 1](#solution-1)
+        - [Task 2](#task-2)
+        - [Solution 2](#solution-2)
     - [Understand Jobs and CronJobs](#understand-jobs-and-cronjobs)
+        - [Task 3](#task-3)
+        - [Solution 3](#solution-3)
+        - [Task 4](#task-4)
+        - [Solution 4](#solution-4)
     - [Understand multi-container Pod design patterns (sidecar, init and others)](#understand-multi-container-pod-design-patterns-sidecar-init-and-others)
+        - [Task 5](#task-5)
+        - [Solution 5](#solution-5)
     - [Utilise persistent and ephemeral volumes](#utilise-persistent-and-ephemeral-volumes)
+        - [Task 6](#task-6)
+        - [Solution 6](#solution-6)
 - [Application Deployment](#application-deployment)
     - [Use Kubernetes primitives to implement common deployment strategies (blue/green or canary)](#use-kubernetes-primitives-to-implement-common-deployment-strategies-bluegreen-or-canary)
+        - [Task 7: Blue/Green Deployment](#task-7-bluegreen-deployment)
+        - [Solution 7](#solution-7)
+        - [Task 8: Canary Deployment](#task-8-canary-deployment)
+        - [Solution 8](#solution-8)
     - [Understand Deployments and how to perform rolling updates](#understand-deployments-and-how-to-perform-rolling-updates)
+        - [Task 9](#task-9)
+        - [Solution 9](#solution-9)
     - [Use the Helm package manager to deploy existing packages](#use-the-helm-package-manager-to-deploy-existing-packages)
+        - [Task 10](#task-10)
+        - [Solution 10](#solution-10)
 - [Application Observability and Maintenance](#application-observability-and-maintenance)
     - [Understand API deprecations](#understand-api-deprecations)
+        - [Task 11](#task-11)
+        - [Solution 11](#solution-11)
     - [Implement probes and health checks](#implement-probes-and-health-checks)
+        - [Task 12](#task-12)
+        - [Solution 12](#solution-12)
     - [Use provided tools to monitor Kubernetes applications](#use-provided-tools-to-monitor-kubernetes-applications)
     - [Utilise container logs](#utilise-container-logs)
     - [Debugging in Kubernetes](#debugging-in-kubernetes)
 - [Application Environment, Configuration and Security](#application-environment-configuration-and-security)
     - [Discover and use resources that extend Kubernetes (CRD)](#discover-and-use-resources-that-extend-kubernetes-crd)
+        - [Task 13](#task-13)
+        - [Solution 13](#solution-13)
     - [Understand authentication, authorisation and admission control](#understand-authentication-authorisation-and-admission-control)
     - [Understanding and defining resource requirements, limits and quotas](#understanding-and-defining-resource-requirements-limits-and-quotas)
+        - [Task 14](#task-14)
+        - [Solution 14](#solution-14)
+        - [Task 15](#task-15)
+        - [Solution 15](#solution-15)
     - [Understand ConfigMaps](#understand-configmaps)
+        - [Task 16](#task-16)
+        - [Solution 16](#solution-16)
+        - [Task 17](#task-17)
+        - [Solution 17](#solution-17)
     - [Create and consume Secrets](#create-and-consume-secrets)
+        - [Task 18](#task-18)
+        - [Solution 18](#solution-18)
     - [Understand ServiceAccounts](#understand-serviceaccounts)
+        - [Task 19](#task-19)
+        - [Solution 19](#solution-19)
     - [Understand SecurityContexts](#understand-securitycontexts)
+        - [Task 20](#task-20)
+        - [Solution 20](#solution-20)
 - [Services and Networking](#services-and-networking)
     - [Demonstrate basic understanding of NetworkPolicies](#demonstrate-basic-understanding-of-networkpolicies)
+        - [Task 21](#task-21)
+        - [Solution 21](#solution-21)
     - [Provide and troubleshoot access to applications via services](#provide-and-troubleshoot-access-to-applications-via-services)
+        - [Task 22](#task-22)
     - [Use Ingress rules to expose applications](#use-ingress-rules-to-expose-applications)
+        - [Task 23](#task-23)
+        - [Solution 23](#solution-23)
 
 ## Reasoning
 
@@ -309,7 +354,7 @@ https://developers.redhat.com/content-gateway/file/jboss-eap-7.4.0.zip
 
 Also create a Docker Hub account if you don't have one.
 
-**Exercise 1**: perform the following tasks.
+#### Task 1
 
 As a certified application developer, you should be able to define and build container images. Write a `Dockerfile` to containerise a JBoss EAP 7.4 application to meet all of the following requirements (listed in no particular order):
 
@@ -325,6 +370,8 @@ As a certified application developer, you should be able to define and build con
 10. Unpack the `jboss-eap-7.4.0.zip` file to the `/opt/jboss` directory.
 11. Set the environment variable `JBOSS_HOME` to `/opt/jboss/jboss-eap-7.4`.
 12. Start container with the following executable: `/opt/jboss/jboss-eap-7.4/bin/standalone.sh -b 0.0.0.0 -c standalone-full-ha.xml`.
+
+#### Solution 1
 
 This is how the Dockerfile should look like. Comments are provided for references.
 
@@ -365,14 +412,16 @@ EXPOSE 8080
 ENTRYPOINT ["/opt/jboss/jboss-eap-7.4/bin/standalone.sh", "-b", "0.0.0.0", "-c", "standalone-full-ha.xml"]
 ```
 
-**Exercise 2**: perform the following tasks.
+#### Task 2
 
-Build the container image using Podman from the `Dockerfile` you have created in the previous task.
+Build the container image using Podman from the `Dockerfile` you have created in [task 1](#task-1).
 
 1. Name the image as `ckadstudy-jboss-eap`, add a tag of `7.4.0-podman`, and push the image to your Docker Hub's registry account.
 2. Also tag the images as `latest` and push to Docker Hub.
 3. Use Podman to run a container named `jboss-from-dockerfile`, which keeps running in the background, using image `ckadstudy-jboss-eap:7.4.0-podman`. Run the container as a regular user and not as root. Expose container port `8080`.
 4. Write logs of the container `jboss-from-dockerfile` to file `/tmp/jboss-from-dockerfile.log`.
+
+#### Solution 2
 
 Imperative commands.
 
@@ -444,15 +493,18 @@ podman logs jboss-from-dockerfile | tee /tmp/jboss-from-dockerfile.log
 
 ### Understand Jobs and CronJobs
 
-Docs: https://kubernetes.io/docs/concepts/workloads/controllers/job/
-Docs: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+Docs:
+* https://kubernetes.io/docs/concepts/workloads/controllers/job/
+* https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 
-**Exercise 1**: perform the following tasks.
+#### Task 3
 
 1. Create a `job` called `pi` in `ckad` namespace.
 2. This job should run image `perl:5.34.0` and execute command `["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]`.
 3. It should run a total of 8 times and should execute 2 runs in parallel.
 4. Set `restartPolicy` to `Never`.
+
+#### Solution 3
 
 Imperative commands. Create a job template:
 
@@ -496,12 +548,14 @@ NAME  COMPLETIONS   DURATION   AGE   CONTAINERS   IMAGES         SELECTOR
 pi    2/8           17s        17s   pi           perl:5.34.0    controller-uid=adbaa84e
 ```
 
-**Exercise 2**: perform the following tasks.
+#### Task 4
 
 1. Create a `cronjob` called `crondate` in `ckad` namespace.
 2. This job should run image `busybox:1.35` and execute command `date` every 2 minutes.
 3. Set `successfulJobsHistoryLimit` to 5 and `failedJobsHistoryLimit` to 3.
 4. Set `concurrencyPolicy` to `Replace`.
+
+#### Solution 4
 
 Imperative commands. Create a job template:
 
@@ -554,15 +608,18 @@ crondate   */2 * * * *   False     0        19s             83s   crondate     b
 
 ### Understand multi-container Pod design patterns (sidecar, init and others)
 
-Docs: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+Docs:
+* https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 
-**Exercise 1**: perform the following tasks.
+#### Task 5
 
 1. Create a pod called `web-multi-container` that has three containers (see below).
 2. A container named `main` running `nginx:alpine` image. This container should expose port `80`.
 3. A sidecar container named `sidecar-updater` running `busybox:1.35` image. The sidecar container run the following command: `["sh","-c","while true; do date | tee /usr/share/nginx/html/index.html; sleep 1; done"]`.
 4. An `initContainer` named `init-health` running `busybox:1.35.0` image. The init container runs the following command: `["sh","-c","echo live > /usr/share/nginx/html/health"]`.
 5. All containers inside the pod should mount an `emptyDir` volume named `webroot`, the mount path is `/usr/share/nginx/html`.
+
+#### Solution 5
 
 Imperative commands:
 
@@ -635,7 +692,7 @@ Tue Feb 28 20:20:52 UTC 2023
 
 ### Utilise persistent and ephemeral volumes
 
-**Exercise 1**: perform the following tasks.
+#### Task 6
 
 1. Create a persistent volume named `pv-httpd-webroot` with the following specifications:
     * Storage class name is set to `manual`.
@@ -651,6 +708,8 @@ Tue Feb 28 20:20:52 UTC 2023
 6. Delete the deployment object `httpd-persistent`.
 7. Create the deployment object `httpd-persistent` again.
 8. Exec a command in either of the httpd containers to verify that the file `/usr/local/apache2/htdocs/blank.html` exists.
+
+#### Solution 6
 
 Imperative commands:
 
@@ -846,12 +905,14 @@ Unless stated otherwise, all Kubernetes resources should be created in the `ckad
 
 Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 
-**Exercise 1**: perform the following tasks to implement a blue/green deployment.
+#### Task 7: Blue/Green Deployment
 
 1. Create a deployment `httpd-blue` that uses image `lisenet/httpd-pii-demo:0.2` and has these labels: `app=front-end` and `release=blue`. The deployment should run 2 replicas and expose port `80`.
 2. Create a service `httpd-blue-green` that exposes the deployment `httpd-blue` on port `80`.
 3. Create a deployment `httpd-green` that uses image `lisenet/httpd-pii-demo:0.3` and has these labels: `app=front-end` and `release=green`. The deployment should run 2 replicas and expose port `80`.
 4. Update service `httpd-blue-green` configuration to route traffic to deployment `httpd-green`.
+
+#### Solution 7
 
 Imperative commands.
 
@@ -941,12 +1002,14 @@ Update selector by chaging `release: blue` to `release: green`:
     release: green
 ```
 
-**Exercise 2**: perform the following tasks to implement a canary deployment.
+#### Task 8: Canary Deployment
 
 1. Create a deployment `webapp-canary-blue` that uses image `kodekloud/webapp-color` and has a label of `app=webapp`. The deployment should run 3 replicas and expose port `8080`. Configure the deployment so that the underlying container has the environent variable `APP_COLOR` set to the value of blue.
 2. Create a deployment `webapp-canary-green` that uses image `kodekloud/webapp-color` and has a label of `app=webapp`. The deployment should expose port `8080`. Configure the deployment so that the underlying container has the environent variable `APP_COLOR` set to the value of green.
 3. Create a service `httpd-canary` that load balances request from both deployments on port `8080`.
 4. Configure the deployment `webapp-canary-green` so that the service `httpd-canary` sends 75% of requests to deployment `httpd-canary-blue` and 25% to deployment `httpd-canary-green`.
+
+#### Solution 8
 
 Imperative commands.
 
@@ -1085,12 +1148,14 @@ for i in $(seq 1 100); do curl -s http://10.100.237.144:8080 | grep webapp;done 
 
 Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scaling-a-deployment
 
-**Exercise 1**: perform the following tasks.
+#### Task 9
 
 1. Create a deployment object `nginx-deployment` consisting of 2 pods containing a single `nginx:1.21` container.
 2. Increase the deployment size by adding 1 additional pod.
 3. Update deployment container image to `nginx:1.21.0.0`.
 4. Roll back a broken deployment to the previous version.
+
+#### Solution 9
 
 Imperative commands:
 
@@ -1156,9 +1221,9 @@ spec:
 
 ### Use the Helm package manager to deploy existing packages
 
-Docs: https://helm.sh/docs/intro/quickstart/
+Docs: https://helm.sh/docs/
 
-**Exercise 1**: perform the following tasks.
+#### Task 10
 
 1. Add Helm repository with a name of `prometheus-community` and URL **https://prometheus-community.github.io/helm-charts**.
 2. Use Helm to deploy a Prometheus server. Install a new release `prometheus` of chart `prometheus-community/prometheus` and chart version `19.0.0`.
@@ -1166,6 +1231,8 @@ Docs: https://helm.sh/docs/intro/quickstart/
 4. Resources should be deployed into `monitoring` namespace.
 5. Upgrade Helm deployment in order to update Prometheus server version to `2.41.0` (application version). You can use any Helm chart version that provides application version `2.41.0`.
 6. Delete Helm `prometheus` release.
+
+#### Solution 10
 
 Imperative commands.
 
@@ -1272,9 +1339,9 @@ Unless stated otherwise, all Kubernetes resources should be created in the `ckad
 
 Docs: https://kubernetes.io/docs/reference/using-api/deprecation-guide/
 
-**Exercise 1**: perform the following tasks.
+#### Task 11
 
-1. Use provided YAML file below to create a role.
+1. Use provided YAML file below to create a role. Fix any issues.
 
 ```yaml
 ---
@@ -1294,7 +1361,7 @@ rules:
       - services/proxy
 ```
 
-2. Fix any issues.
+#### Solution 11
 
 Imperative commands:
 
@@ -1344,12 +1411,14 @@ role.rbac.authorization.k8s.io/broken-role created
 
 Docs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 
-**Exercise 1**: perform the following tasks.
+#### Task 12
 
 1. Create a pod `httpd-liveness-readiness` that uses `lisenet/httpd-healthcheck:1.0.0` image.
 2. Configure a `readinessProbe` for an `httpGet` check using a path of `/index.html` and port `10001`.
 3. Configure a `livenessProbe` for a TCP check on port `10001`.
 4. Set `initialDelaySeconds` to 5. The probes should be performed every 10 seconds.
+
+#### Solution 12
 
 Imperative commands:
 
@@ -1455,7 +1524,7 @@ Unless stated otherwise, all Kubernetes resources should be created in the `ckad
 
 Docs: https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/
 
-**Exercise 1**: perform the following tasks.
+#### Task 13
 
 1. A `CustomResourceDefinition` YAML file is provided below. Use it to create the resource.
 
@@ -1504,6 +1573,8 @@ spec:
     - ct
 ```
 
+#### Solution 13
+
 Imperative commands:
 
 ```bash
@@ -1524,11 +1595,13 @@ crontabs.stable.example.com   2023-03-02T19:12:35Z
 
 Docs: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#example-1
 
-**Exercise 1**: perform the following tasks.
+#### Task 14
 
 1. Create a pod `httpd-resource-limits` that uses `lisenet/httpd-healthcheck:1.0.0` image.
 2. Set the pod memory request to `40Mi` and memory limit to `128Mi`.
 3. Set the pod CPU request to `10m` and CPU limit to `50m`.
+
+#### Solution 14
 
 Imperative commands:
 
@@ -1581,11 +1654,13 @@ kubectl describe po/httpd-resource-limits -n ckad | egrep -A2 "Limits|Requests"
 
 Docs: https://kubernetes.io/docs/concepts/policy/limit-range/
 
-**Exercise 2**: perform the following tasks.
+#### Task 15
 
 1. Create a namespace `ckad-memlimit` with a container memory limit of 30Mi.
 2. Create a pod `httpd-memlimit` that uses `lisenet/httpd-healthcheck:1.0.0` image in the `ckad-memlimit` namespace, and set the pod memory request to 100Mi.
 3. Observe the error.
+
+#### Solution 15
 
 Imperative commands:
 
@@ -1647,7 +1722,9 @@ The Pod "httpd-memlimit" is invalid: spec.containers[0].resources.requests: Inva
 
 Docs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
 
-**Exercise**: perform the following tasks to configure application to use a configmap.
+#### Task 16
+
+Configure application to use a `ConfigMap`.
 
 1. Create a configmap `webapp-color` that has the following key=value pair:
     * `key` = color
@@ -1655,6 +1732,8 @@ Docs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-con
 2. Create a pod `webapp-color` that uses `kodekloud/webapp-color` image.
 3. Configure the pod so that the underlying container has the environent variable `APP_COLOR` set to the value of the configmap.
 4. Check pod logs to ensure that the variable has been set correctly.
+
+#### Solution 16
 
 Imperative commands:
 
@@ -1731,7 +1810,7 @@ spec:
             key: color
 ```
 
-**Exercise 2**: perform the following tasks to configure application to use a configmap.
+#### Task 17
 
 1. Create a configmap `grafana-ini` that containes a file named `grafana.ini` with the following content:
 ```ini
@@ -1741,6 +1820,8 @@ spec:
 ```
 2. Create a pod `grafana` that uses `grafana/grafana:9.3.1` image.
 3. Mount the configmap to the pod using `/etc/grafana/grafana.ini` as a `mountPath` and `grafana.ini` as a `subPath`.
+
+#### Solution 17
 
 Imperative commands:
 
@@ -1834,11 +1915,13 @@ spec:
         name: grafana-ini
 ```
 
-Docs: https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables
-
 ### Create and consume Secrets
 
-**Exercise 1**: perform the following tasks to configure application to use a secret.
+Docs: https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables
+
+#### Task 18
+
+Configure application to use a `Secret`.
 
 1. Create a secret `mysql-credentials` that has the following key=value pairs:
     * `mysql_root_password` = Mysql5.7RootPassword
@@ -1850,6 +1933,8 @@ Docs: https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as
     * `MYSQL_USER` from secret key `mysql_username`
     * `MYSQL_PASSWORD` from secret key `mysql_password`
 4. Exec a command in the container to show that it has the configured environment variable.
+
+#### Solution 18
 
 Imperative commands:
 
@@ -1961,12 +2046,14 @@ spec:
 
 Docs: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 
-**Exercise 1**: perform the following tasks.
+#### Task 19
 
 1. Create a new service account `pod-sa`.
 2. Create a cluster role `pod-clusterrole` that grants permissions `get,list,watch` to resources `pods,nodes` to API group `metrics.k8s.io`.
 3. Grant the service account access to the cluster by creating a cluster role binding `pod-role-binding`.
 4. Create a pod called `pod-use-sa` that uses the service account `pod-sa` and image `nginx:1.21`.
+
+#### Solution 19
 
 Imperative commands. Create a service account:
 
@@ -2086,12 +2173,14 @@ spec:
 
 Docs: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 
-**Exercise 1**: perform the following tasks.
+#### Task 20
 
 1. Create a new pod called `unprivileged` that uses image `busybox:1.35` and runs command `sleep 1800`.
 2. Set `allowPrivilegeEscalation: false` and `privileged: false` for the security context on container level.
 3. The pod should run as UID `1111`. The container should run as UID `2222`.
 4. Add `SYS_TIME` capabilities to the container.
+
+#### Solution 20
 
 Imperative commands.
 
@@ -2142,7 +2231,9 @@ Unless stated otherwise, all Kubernetes resources should be created in the `ckad
 
 ### Demonstrate basic understanding of NetworkPolicies
 
-**Exercise**: perform the following tasks.
+Docs: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+#### Task 21
 
 1. Create a pod `httpd-netpol-blue` that uses image `lisenet/httpd-pii-demo:0.2` and has a label of `app=blue`.
 2. Create a pod `httpd-netpol-green` that uses image `lisenet/httpd-pii-demo:0.3` and has a label of `app=green`.
@@ -2153,6 +2244,8 @@ Unless stated otherwise, all Kubernetes resources should be created in the `ckad
 6. Use the `app` label of pods in your policy.
 
 After implementation, connections from `busybox` pod to `httpd-netpol-green` pod on port `80` should no longer work.
+
+#### Solution 21
 
 Imperative commands. Create pods:
 
@@ -2301,7 +2394,7 @@ spec:
 
 ### Provide and troubleshoot access to applications via services
 
-**Exercise 1**: perform the following tasks.
+#### Task 22
 
 1. A deployment YAML file for a `troublesome-app` application is provided below. Use it to deploy a service that exposes a pod on `NodePort: 30080`.
 2. Do not change the pod definition. Assume that the pod definition is correct.
@@ -2378,12 +2471,14 @@ Docs:
 
 Note: you must have an Ingress controller to satisfy an Ingress. Only creating an Ingress resource has no effect.
 
-**Exercise 1**: perform the following tasks.
+#### Task 23
 
 1. Create a deployment object `httpd-pii-demo-blue` containing a single `lisenet/httpd-pii-demo:0.2` container and expose its port `80` through a type `LoadBalancer` service.
 2. Create a deployment object `httpd-pii-demo-green` containing a single `lisenet/httpd-pii-demo:0.3` container and expose its port `80` through a type `LoadBalancer` service.
 3. Deploy `ingress-nginx` controller.
 4. Create the ingress resource `ingress-blue-green` to make the applications available at `/blue` and `/green` on the `Ingress` service.
+
+#### Solution 23
 
 Imperative commands. Create and expose deployments:
 
@@ -2468,3 +2563,4 @@ Events:
   ----    ------  ----  ----                      -------
   Normal  Sync    13s   nginx-ingress-controller  Scheduled for sync
 ```
+
