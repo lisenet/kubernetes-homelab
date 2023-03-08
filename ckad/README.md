@@ -423,8 +423,6 @@ Build the container image using Podman from the `Dockerfile` you have created in
 
 #### Solution 2
 
-Imperative commands.
-
 Make sure that the file `jboss-eap-7.4.0.zip` has been downloaded and is in the working directory:
 
 ```bash
@@ -493,7 +491,7 @@ podman logs jboss-from-dockerfile | tee /tmp/jboss-from-dockerfile.log
 
 ### Understand Jobs and CronJobs
 
-Docs:
+Docs: 
 * https://kubernetes.io/docs/concepts/workloads/controllers/job/
 * https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 
@@ -506,7 +504,7 @@ Docs:
 
 #### Solution 3
 
-Imperative commands. Create a job template:
+Create a job template:
 
 ```bash
 kubeclt create job pi --image=perl:5.34.0 \
@@ -557,7 +555,7 @@ pi    2/8           17s        17s   pi           perl:5.34.0    controller-uid=
 
 #### Solution 4
 
-Imperative commands. Create a job template:
+Create a job template:
 
 ```bash
 kubectl create cronjob crondate --image=busybox:1.35 --schedule="*/2 * * * *" \
@@ -621,7 +619,7 @@ Docs:
 
 #### Solution 5
 
-Imperative commands:
+Create a container template:
 
 ```bash
 kubectl run web-multi-container --image=nginx:alpine --port=80 \
@@ -711,7 +709,7 @@ Tue Feb 28 20:20:52 UTC 2023
 
 #### Solution 6
 
-Imperative commands:
+Create a persistent volume definition:
 
 ```bash
 cat > pv-httpd-webroot.yaml <<EOF
@@ -914,7 +912,7 @@ Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 
 #### Solution 7
 
-Imperative commands.
+Create a deployment template:
 
 ```bash
 kubectl create deploy httpd-blue --image="lisenet/httpd-pii-demo:0.2" \
@@ -1011,7 +1009,7 @@ Update selector by chaging `release: blue` to `release: green`:
 
 #### Solution 8
 
-Imperative commands.
+Create a deployment template:
 
 ```bash
 kubectl create deploy webapp-canary-blue --image="kodekloud/webapp-color" \
@@ -1157,8 +1155,6 @@ Docs: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scal
 
 #### Solution 9
 
-Imperative commands:
-
 ```bash
 kubectl create deploy nginx-deployment --image=nginx:1.21 --replicas=2 -n ckad
 kubectl scale deploy nginx-deployment --replicas=3 -n ckad
@@ -1233,8 +1229,6 @@ Docs: https://helm.sh/docs/
 6. Delete Helm `prometheus` release.
 
 #### Solution 10
-
-Imperative commands.
 
 Add Helm repository:
 
@@ -1363,7 +1357,7 @@ rules:
 
 #### Solution 11
 
-Imperative commands:
+Create a role template:
 
 ```bash
 cat > broken-role.yaml <<EOF
@@ -1420,7 +1414,7 @@ Docs: https://kubernetes.io/docs/tasks/configure-pod-container/configure-livenes
 
 #### Solution 12
 
-Imperative commands:
+Create a pod template:
 
 ```bash
 kubectl run httpd-liveness-readiness --image=lisenet/httpd-healthcheck:1.0.0 \
@@ -1575,7 +1569,7 @@ spec:
 
 #### Solution 13
 
-Imperative commands:
+Install CRD:
 
 ```bash
 kubectl apply -f customresourcedefinition.yaml
@@ -1603,7 +1597,7 @@ Docs: https://kubernetes.io/docs/concepts/configuration/manage-resources-contain
 
 #### Solution 14
 
-Imperative commands:
+Create a pod template:
 
 ```bash
 kubectl run httpd-resource-limits --image=lisenet/httpd-healthcheck:1.0.0 \
@@ -1662,7 +1656,7 @@ Docs: https://kubernetes.io/docs/concepts/policy/limit-range/
 
 #### Solution 15
 
-Imperative commands:
+Create a namespace:
 
 ```bash
 kubectl create ns ckad-memlimit
@@ -1735,7 +1729,7 @@ Configure application to use a `ConfigMap`.
 
 #### Solution 16
 
-Imperative commands:
+Create a config map and a pod template:
 
 ```bash
 kubectl create cm webapp-color --from-literal=color=blue -n ckad
@@ -1823,7 +1817,7 @@ spec:
 
 #### Solution 17
 
-Imperative commands:
+Create a configuration file for Grafana:
 
 ```bash
 cat > grafana.ini <<EOF
@@ -1936,7 +1930,7 @@ Configure application to use a `Secret`.
 
 #### Solution 18
 
-Imperative commands:
+Create a secret:
 
 ```bash
 kubectl create secret generic mysql-credentials \
@@ -2055,7 +2049,7 @@ Docs: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 
 #### Solution 19
 
-Imperative commands. Create a service account:
+Create a service account:
 
 ```bash
 kubectl create sa pod-sa -n ckad
@@ -2182,7 +2176,7 @@ Docs: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 
 #### Solution 20
 
-Imperative commands.
+Create a pod template:
 
 ```bash
 kubectl run unprivileged --image=busybox:1.35 \
@@ -2247,7 +2241,7 @@ After implementation, connections from `busybox` pod to `httpd-netpol-green` pod
 
 #### Solution 21
 
-Imperative commands. Create pods:
+Create pods:
 
 ```bash
 kubectl run httpd-netpol-blue --image="lisenet/httpd-pii-demo:0.2" --labels=app=blue -n ckad
@@ -2480,7 +2474,7 @@ Note: you must have an Ingress controller to satisfy an Ingress. Only creating a
 
 #### Solution 23
 
-Imperative commands. Create and expose deployments:
+Create and expose deployments:
 
 ```bash
 kubectl create deploy httpd-pii-demo-blue --image="lisenet/httpd-pii-demo:0.2" -n ckad
