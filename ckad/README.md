@@ -194,9 +194,12 @@ virt-install \
 
 ### Use Kubeadm to install a basic cluster
 
-We will use `kubeadm` to install a Kubernetes v1.26 cluster.
+Docs:
+* https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+* https://kubernetes.io/docs/setup/production-environment/container-runtimes/
+* https://kubernetes.io/fr/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network
 
-Docs: https://kubernetes.io/docs/setup/production-environment/container-runtimes/
+We will use `kubeadm` to install a Kubernetes v1.26 cluster.
 
 Install container runtime on all nodes:
 
@@ -253,8 +256,6 @@ Make sure to restart containerd:
 sudo systemctl restart containerd
 ```
 
-Docs: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
-
 Install `kubeadm`, `kubelet` and `kubectl` (v1.26):
 
 ```bash
@@ -267,8 +268,6 @@ sudo apt-get install -y kubelet=1.26.1-00 kubeadm=1.26.1-00 kubectl=1.26.1-00
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable kubelet
 ```
-
-Docs: https://kubernetes.io/fr/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network
 
 Initialise the **control plane** node. Set pod network CIDR based on the CNI that you plan to install later:
 
@@ -491,7 +490,7 @@ podman logs jboss-from-dockerfile | tee /tmp/jboss-from-dockerfile.log
 
 ### Understand Jobs and CronJobs
 
-Docs: 
+Docs:
 * https://kubernetes.io/docs/concepts/workloads/controllers/job/
 * https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 
@@ -606,8 +605,7 @@ crondate   */2 * * * *   False     0        19s             83s   crondate     b
 
 ### Understand multi-container Pod design patterns (sidecar, init and others)
 
-Docs:
-* https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+Docs: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 
 #### Task 5
 
@@ -689,6 +687,10 @@ Tue Feb 28 20:20:52 UTC 2023
 ```
 
 ### Utilise persistent and ephemeral volumes
+
+Docs:
+* https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+* https://kubernetes.io/docs/concepts/storage/storage-classes/
 
 #### Task 6
 
@@ -1587,7 +1589,9 @@ crontabs.stable.example.com   2023-03-02T19:12:35Z
 
 ### Understanding and defining resource requirements, limits and quotas
 
-Docs: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#example-1
+Docs:
+* https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#example-1
+* https://kubernetes.io/docs/concepts/policy/limit-range/
 
 #### Task 14
 
@@ -1645,8 +1649,6 @@ kubectl describe po/httpd-resource-limits -n ckad | egrep -A2 "Limits|Requests"
       cpu:        10m
       memory:     40Mi
 ```
-
-Docs: https://kubernetes.io/docs/concepts/policy/limit-range/
 
 #### Task 15
 
@@ -2038,7 +2040,10 @@ spec:
 
 ### Understand ServiceAccounts
 
-Docs: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+Docs:
+* https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+* https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/
+* https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 
 #### Task 19
 
@@ -2186,7 +2191,6 @@ kubectl run unprivileged --image=busybox:1.35 \
 Edit the file `unprivileged.yaml` and add `securityContext` section.
 
 Note that Linux capabilities can be added only at container level security-context, not at the pod level.
-
 
 ```yaml
 ---
@@ -2388,6 +2392,8 @@ spec:
 
 ### Provide and troubleshoot access to applications via services
 
+Docs: https://kubernetes.io/docs/concepts/services-networking/service/
+
 #### Task 22
 
 1. A deployment YAML file for a `troublesome-app` application is provided below. Use it to deploy a service that exposes a pod on `NodePort: 30080`.
@@ -2459,7 +2465,6 @@ spec:
 ### Use Ingress rules to expose applications
 
 Docs:
-
 * https://kubernetes.io/docs/concepts/services-networking/ingress/
 * https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
 
