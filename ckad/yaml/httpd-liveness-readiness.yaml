@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: httpd-liveness-readiness
+  name: httpd-liveness-readiness
+  namespace: ckad
+spec:
+  containers:
+  - image: lisenet/httpd-healthcheck:1.0.0
+    imagePullPolicy: IfNotPresent
+    name: httpd-liveness-readiness
+    readinessProbe:
+      httpGet:
+        path: /index.html
+        port: 10001
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 10001
+      initialDelaySeconds: 5
+      periodSeconds: 10

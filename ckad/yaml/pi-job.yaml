@@ -1,0 +1,17 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+  namespace: ckad
+spec:
+  completions: 8
+  parallelism: 2
+  template:
+    spec:
+      containers:
+      - image: perl:5.34.0
+        imagePullPolicy: IfNotPresent
+        name: pi
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never

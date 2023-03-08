@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: httpd-resource-limits
+  name: httpd-resource-limits
+  namespace: ckad
+spec:
+  containers:
+  - image: lisenet/httpd-healthcheck:1.0.0
+    imagePullPolicy: IfNotPresent
+    name: httpd-resource-limits
+    resources:
+      requests:
+        cpu: 10m
+        memory: 40Mi
+      limits:
+        cpu: 50m
+        memory: 128Mi

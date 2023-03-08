@@ -1,0 +1,15 @@
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: broken-role
+  namespace: ckad
+rules:
+  - verbs:
+      - "get"
+      - "create"
+      - "delete"
+    apiGroups:
+      - ''
+    resources:
+      - services/proxy

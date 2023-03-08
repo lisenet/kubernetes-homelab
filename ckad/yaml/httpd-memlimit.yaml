@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: httpd-memlimit
+  name: httpd-memlimit
+  namespace: ckad-memlimit
+spec:
+  containers:
+  - image: lisenet/httpd-healthcheck:1.0.0
+    imagePullPolicy: IfNotPresent
+    name: httpd-memlimit
+    resources:
+      requests:
+        memory: 100Mi

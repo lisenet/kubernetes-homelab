@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: web-multi-container
+  name: web-multi-container
+  namespace: ckad
+spec:
+  volumes:
+    - name: webroot
+      emptyDir: {}
+  containers:
+  - image: nginx:alpine
+    imagePullPolicy: IfNotPresent
+    name: main
+    ports:
+    - containerPort: 80
+    volumeMounts:
+      - mountPath: /usr/share/nginx/html
+        name: webroot
+  - image: busybox:1.35
+    imagePullPolicy: IfNotPresent
+    name: sidecar-updater
+    command: ["sh","-c","while true; do date | tee /usr/share/nginx/html/index.html; sleep 1; done"]
+    volumeMounts:
+      - mountPath: /usr/share/nginx/html
+        name: webroot
+  initContainers:
+  - image: busybox:1.35
+    imagePullPolicy: IfNotPresent
+    name: init-health
+    command: ["sh","-c","echo live > /usr/share/nginx/html/health"]
+    volumeMounts:
+      - mountPath: /usr/share/nginx/html
+        name: webroot
