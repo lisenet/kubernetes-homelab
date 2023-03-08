@@ -1587,6 +1587,10 @@ crontabs.stable.example.com   2023-03-02T19:12:35Z
 
 ### Understand authentication, authorisation and admission control
 
+Docs: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+
+See [task 19](#task-19).
+
 ### Understanding and defining resource requirements, limits and quotas
 
 Docs:
