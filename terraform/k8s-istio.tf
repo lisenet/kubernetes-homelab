@@ -1,5 +1,5 @@
 data "kubectl_file_documents" "istio" {
-  content          = file("../istio/istio-kubernetes.yml")
+  content          = file("../kubernetes/istio/istio-kubernetes.yml")
 }
 
 resource "kubernetes_namespace" "istio-system" {

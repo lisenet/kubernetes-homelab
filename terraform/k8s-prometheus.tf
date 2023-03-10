@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "prometheus" {
-  pattern          = "../prometheus/*.y*ml"
+  pattern          = "../kubernetes/prometheus/*.y*ml"
   disable_template = true
 }
 

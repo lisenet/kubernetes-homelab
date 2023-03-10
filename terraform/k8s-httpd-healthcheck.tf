@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "httpd_healthcheck" {
-  pattern          = "../httpd-healthcheck/*.y*ml"
+  pattern          = "../kubernetes/httpd-healthcheck/*.y*ml"
   disable_template = true
 }
 

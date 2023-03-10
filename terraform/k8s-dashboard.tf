@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "dashboard" {
-  pattern          = "../dashboard/*.y*ml"
+  pattern          = "../kubernetes/dashboard/*.y*ml"
   disable_template = true
 }
 

@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "calico" {
-  pattern          = "../calico/*.y*ml"
+  pattern          = "../kubernetes/calico/*.y*ml"
   disable_template = true
 }
 

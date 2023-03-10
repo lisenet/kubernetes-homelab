@@ -1,9 +1,9 @@
 data "kubectl_path_documents" "istio_addons_kiali" {
-  pattern          = "../istio-addons/kiali/*.y*ml"
+  pattern          = "../kubernetes/istio-addons/kiali/*.y*ml"
   disable_template = true
 }
 data "kubectl_path_documents" "istio_addons_prometheus" {
-  pattern          = "../istio-addons/prometheus/*.y*ml"
+  pattern          = "../kubernetes/istio-addons/prometheus/*.y*ml"
   disable_template = true
 }
 

@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "kube_state_metrics" {
-  pattern          = "../kube_state_metrics/*.y*ml"
+  pattern          = "../kubernetes/kube_state_metrics/*.y*ml"
   disable_template = true
 }
 
