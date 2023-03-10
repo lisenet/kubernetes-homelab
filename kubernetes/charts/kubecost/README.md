@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # Kubecost
 
 See https://www.kubecost.com
@@ -9,12 +11,14 @@ Kubecost helps you monitor and manage cost and capacity in Kubernetes environmen
 ### Pre-requisites
 
 Add Helm repository:
-```
+
+```bash
 helm repo add kubecost https://kubecost.github.io/cost-analyzer/
 ```
 
 Create `kubecost` namespace:
-```
+
+```bash
 kubectl create namespace kubecost
 ```
 
@@ -32,7 +36,7 @@ We have to do several things:
 
 Note that we do not have to supply any value as a token, it does not seem to be validated, deployment works regardless.
 
-```
+```bash
 helm upgrade --install kubecost \
   kubecost/cost-analyzer \
   --namespace kubecost \
@@ -54,7 +58,7 @@ helm upgrade --install kubecost \
 
 Alternativelly, use a pre-configured `values.yaml` file:
 
-```
+```bash
 helm upgrade --install kubecost \
   kubecost/cost-analyzer \
   --namespace kubecost \
@@ -63,13 +67,15 @@ helm upgrade --install kubecost \
 ```
 
 Create a `LoadBalancer` type service (this uses MetalLB) that will expose Kubecost to the network:
-```
+
+```bash
 kubectl apply -f ./kubecost-service.yaml
 ```
 
 Kubecost should be deployed:
-```
-$ kubectl get svc -n kubecost
+
+```bash
+kubectl get svc -n kubecost
 NAME                          TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
 kubecost-cost-analyzer        ClusterIP      10.102.128.194   <none>        9001/TCP,9003/TCP,9090/TCP   42m
 kubecost-grafana              ClusterIP      10.111.116.220   <none>        80/TCP                       42m
@@ -81,8 +87,8 @@ kubecost-service              LoadBalancer   10.102.54.33     10.11.1.52    80:3
 
 Monthly costs using AWS labels (if the homelab was hosted on AWS):
 
-![Kubecost Monthly Cost](../docs/kubecost/kubecost-monthly-cost.png)
+![Kubecost Monthly Cost](../images/kubecost/kubecost-monthly-cost.png)
 
 Assets and their total cost:
 
-![Kubecost Assets](../docs/kubecost/kubecost-assets.png)
+![Kubecost Assets](../images/kubecost/kubecost-assets.png)

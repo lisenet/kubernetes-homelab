@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # Grafana
 
 See https://grafana.com/oss/grafana/
@@ -6,11 +8,10 @@ Grafana allows you to query, visualise and alert on metrics that are stored in P
 
 ## Deploy Grafana
 
-```
+```bash
 kubectl apply -f ./grafana
 ```
 
 ## Grafana Dashboards
 
-![Grafana Dashboard Kubernetes](../docs/grafana/grafana-dashboard-kubernetes.png)
-
+![Grafana Dashboard Kubernetes](../images/grafana/grafana-dashboard-kubernetes.png)

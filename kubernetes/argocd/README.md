@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # Argo CD
 
 See https://argoproj.github.io/cd/
@@ -6,7 +8,7 @@ Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes.
 
 ## Deploy Argo CD
 
-```
+```bash
 kubectl create namespace argocd
 kubectl config set-context --current --namespace=argocd
 kubectl apply -n argocd -f ./argocd-install.yaml
@@ -14,25 +16,25 @@ kubectl apply -n argocd -f ./argocd-install.yaml
 
 Optional: set up TLS.
 
-```
+```bash
 kubectl -n argocd create secret tls argocd-server-tls \
-  --cert=../hl-ca/wildcard.hl.test.crt \
-  --key=../hl-ca/wildcard.hl.test.key
+  --cert=../../hl-ca/wildcard.hl.test.crt \
+  --key=../../hl-ca/wildcard.hl.test.key
 
 kubectl -n argocd create secret tls argocd-repo-server-tls \
-  --cert=../hl-ca/wildcard.hl.test.crt \
-  --key=../hl-ca/wildcard.hl.test.key
+  --cert=../../hl-ca/wildcard.hl.test.crt \
+  --key=../../hl-ca/wildcard.hl.test.key
 ```
 
 Retrieve ArgoCD password:
 
-```
+```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
 
 Log in:
 
-```
+```bash
 argocd login argocd.hl.test
 ```
 
@@ -40,7 +42,7 @@ argocd login argocd.hl.test
 
 Use Argo CD to deploy the PII Demo application.
 
-```
+```bash
 argocd proj create pii-demo \
   --allow-cluster-resource "Namespace" \
   --dest "https://kubernetes.default.svc,pii-demo" \

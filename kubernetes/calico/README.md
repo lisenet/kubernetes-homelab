@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # Calico
 
 See https://docs.projectcalico.org/getting-started/kubernetes/
@@ -6,6 +8,6 @@ Calico is an open source networking solution for containers and native host-base
 
 ## Install Calico
 
-```
+```bash
 kubectl apply -f ./calico.yaml
 ```

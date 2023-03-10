@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # MetalLB
 
 See https://metallb.org/
@@ -12,6 +14,6 @@ MetalLB aims to redress this imbalance by offering a network LB implementation t
 
 Update the config map [`metallb-config-map.yml`](./metallb-config-map.yml) and specify the IP address range. Deploy MetalLB network load-balancer:
 
-```
-$ kubectl apply -f ./metallb
+```bash
+kubectl apply -f ./metallb
 ```

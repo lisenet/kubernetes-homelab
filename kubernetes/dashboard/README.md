@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # Kubernetes Dashboard
 
 See https://github.com/kubernetes/dashboard

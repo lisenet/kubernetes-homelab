@@ -34,40 +34,39 @@ A repository to keep resources and configuration files used with my Kubernetes h
 
 # Content of the Repository
 
-* [`alertmanager`](./alertmanager/) - configuration files to deploy Alertmanager.
 * [`ansible`](./ansible/README.md) - Ansible playbooks to deploy Kubernetes homelab.
-* [`argocd`](./argocd/) - configuration files to deploy Argo CD.
-* [`calico`](./calico/) - configuration files to deploy Calico CNI.
 * [`cka`](./cka/) - CKA study notes.
 * [`ckad`](./ckad/) - CKAD study notes.
-* [`dashboard`](./dashboard/) - configuration files to deploy Kubernetes dashboard.
-* [`docs`](./docs/) - images and documentation files.
-* [`grafana`](./grafana/) - configuration files to deploy Grafana.
+* [`kubernetes/alertmanager`](./kubernetes/alertmanager/) - configuration files to deploy Alertmanager.
+* [`kubernetes/argocd`](./kubernetes/argocd/) - configuration files to deploy Argo CD.
+* [`kubernetes/calico`](./kubernetes/calico/) - configuration files to deploy Calico CNI.
+* [`kubernetes/dashboard`](./kubernetes/dashboard/) - configuration files to deploy Kubernetes dashboard.
+* [`kubernetes/grafana`](./kubernetes/grafana/) - configuration files to deploy Grafana.
 * [`httpd-healthcheck`](./httpd-healthcheck/) - configuration files deploy a simple httpd healthcheck for Istio ingressgateway.
-* [`istio`](./istio/) - configuration files to deploy Istio.
-* [`istio-addons`](./istio-addons/) - configuration files to deploy Istio add-ons (e.g. Kiali).
-* [`kube-state-metrics`](./kube-state-metrics/) - configuration files to deploy kube-state-metrics.
-* [`kubecost`](./kubecost/) - configuration files to deploy Kubecost.
-* [`logging`](./logging/) - configuration files to deploy Elastic Stack (Elasticsearch, Kibana etc).
-* [`metallb`](./metallb/) - configuration files to deploy MetalLB.
-* [`mikrotik-exporter`](./mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
-* [`openvpn`](./openvpn/) - configuration files to deploy OpenVPN server.
+* [`kubernetes/istio`](./kubernetes/istio/) - configuration files to deploy Istio.
+* [`kubernetes/istio-addons`](./kubernetes/istio-addons/) - configuration files to deploy Istio add-ons (e.g. Kiali).
+* [`kubernetes/kube-state-metrics`](./kubernetes/kube-state-metrics/) - configuration files to deploy kube-state-metrics.
+* [`kubernetes/charts/kubecost`](./kubernetes/charts/kubecost/) - configuration files to deploy Kubecost.
+* [`kubernetes/logging`](./kubernetes/logging/) - configuration files to deploy Elastic Stack (Elasticsearch, Kibana etc).
+* [`kubernetes/metallb`](.kubernetes/metallb/) - configuration files to deploy MetalLB.
+* [`kubernetes/mikrotik-exporter`](./kubernetes/mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
+* [`kubernetes/openvpn`](./kubernetes/openvpn/) - configuration files to deploy OpenVPN server.
 * [`packer`](./packer/) - configuration files build Qemu/KVM images with Packer.
-* [`pihole-exporter`](./pihole-exporter/) - configuration files to deploy a Prometheus exporter for Pi-hole Raspberry Pi ad blocker.
-* [`pii-demo`](./pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
-* [`pii-demo-blue-green`](./pii-demo-blue-green/) - a demo PII application based that uses blue/green deployment.
-* [`prometheus`](./prometheus/) - configuration files to deploy Prometheus monitoring.
+* [`kubernetes/pihole-exporter`](./kubernetes/pihole-exporter/) - configuration files to deploy a Prometheus exporter for Pi-hole Raspberry Pi ad blocker.
+* [`kubernetes/pii-demo`](./kubernetes/pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
+* [`kubernetes/pii-demo-blue-green`](./kubernetes/pii-demo-blue-green/) - a demo PII application based that uses blue/green deployment.
+* [`kubernetes/prometheus`](./kubernetes/prometheus/) - configuration files to deploy Prometheus monitoring.
 * [`pxe`](./pxe/) - configuration files for PXE boot and Kickstart.
 * `regcred` - docker registry credentials.
-* [`speedtest-influxdb`](./speedtest-influxdb/) - configuration files to deploy a Speedtest service that stores results in InfluxDB.
+* [`kubernetes/speedtest-influxdb`](./kubernetes/speedtest-influxdb/) - configuration files to deploy a Speedtest service that stores results in InfluxDB.
 * [`terraform`](./terraform/) - configuration files to manage Kubernetes with Terraform.
-* [`truenas-nfs`](./truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
-* [`velero`](./velero/) - configuration files to deploy Velero backup software.
-* [`x509-certificate-exporter`](./x509-certificate-exporter/) - configuration files to deploy x509-certificate-exporter.
+* [`kubernetes/truenas-nfs`](./kubernetes/truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
+* [`kubernetes/velero`](./kubernetes/velero/) - configuration files to deploy Velero backup software.
+* [`kubernetes/x509-certificate-exporter`](./kubernetes/x509-certificate-exporter/) - configuration files to deploy x509-certificate-exporter.
 
 # Homelab Network Diagram
 
-![Homelab Network Diagram](./docs/kubernetes-homelab-diagram.png)
+![Homelab Network Diagram](./images/kubernetes-homelab-diagram.png)
 
 # Network Configuration
 
@@ -109,7 +108,7 @@ Hostnames and their IP addresses:
 
 Kubernetes environment runs on three KVM hypervisors. The goal is to maintain service in the event of a loss of a (single) host. This [blog post](https://www.lisenet.com/2021/install-and-configure-a-multi-master-ha-kubernetes-cluster-with-kubeadm-haproxy-and-keepalived-on-centos-7/) explains how to build a multi-master Kubernetes homelab cluster by hand using KVM, PXE boot and kubeadm.
 
-![KVM Hosts](./docs/virt-manager-kvm-hosts-provisioned.png)
+![KVM Hosts](./images/virt-manager-kvm-hosts-provisioned.png)
 
 ## Hardware
 
@@ -131,13 +130,13 @@ Previously, provisioning of KVM guests was done by using a [PXE boot server](htt
 
 I have since migrated to [Packer](./packer/README.md) to make the VM deployment process faster. PXE boot is still used to provision physical hosts (hypervisors).
 
-![Homelab PXE Boot](./docs/homelab-pxe-boot-menu.png)
+![Homelab PXE Boot](./images/homelab-pxe-boot-menu.png)
 
 ## Shared Storage
 
 A [TrueNAS](https://www.lisenet.com/2021/moving-to-truenas-and-democratic-csi-for-kubernetes-persistent-storage/) NFS server is used to create persistent volumes claims using `democratic-csi`.
 
-![TrueNAS Dashboard](./docs/truenas-dashboard.png)
+![TrueNAS Dashboard](./images/truenas-dashboard.png)
 
 ## Other Services
 
@@ -149,7 +148,7 @@ Homelab provides other services to Kubernetes that aren't covered here:
 
 ## Backups
 
-[Velero](./velero/) is used to safely backup and restore Kubernetes cluster resources and persistent volumes.
+[Velero](./kubernetes/charts/velero/) is used to safely backup and restore Kubernetes cluster resources and persistent volumes.
 
 ## Kubernetes Cluster Configuration
 
@@ -174,7 +173,7 @@ openssl req -newkey rsa:2048 -keyout homelab-ca.key -nodes -x509 -days 3650 -out
 
 ### Create a Kubernetes Wildcard Cert Signed by the Root CA
 
-```
+```bash
 DOMAIN=wildcard.apps.hl.test
 openssl genrsa -out "${DOMAIN}".key 2048 && chmod 0600 "${DOMAIN}".key
 openssl req -new -sha256 -key "${DOMAIN}".key -out "${DOMAIN}".csr
@@ -209,7 +208,7 @@ Use this to deploy various Kubernetes resources with Terraform.
 
 Democratic CSI implements the container storage interface spec providing storage for Kubernetes.
 
-```
+```bash
 helm repo add democratic-csi https://democratic-csi.github.io/charts/
 helm repo update
 
@@ -223,9 +222,9 @@ helm upgrade --install zfs-nfs \
 
 ### Install MetalLB
 
-Update the config map [`metallb/metallb-config-map.yml`](./metallb/metallb-config-map.yml) and specify the IP address range. Deploy MetalLB network load-balancer:
+Update the config map [`kubernetes/metallb/metallb-config-map.yml`](./kubernetes/metallb/metallb-config-map.yml) and specify the IP address range. Deploy MetalLB network load-balancer:
 
-```
+```bash
 kubectl apply -f ./metallb
 ```
 
@@ -233,111 +232,111 @@ kubectl apply -f ./metallb
 
 The Istio namespace must be created manually.
 
-```
+```bash
 kubectl create ns istio-system
 ```
 
 The `kubectl apply` command may show transient errors due to resources not being available in the cluster in the correct order. If that happens, simply run the command again.
 
-```
-kubectl apply -f ./istio/istio-kubernetes.yml
+```bash
+kubectl apply -f ./kubernetes/istio/istio-kubernetes.yml
 ```
 
 Install httpd-healthcheck:
 
-```
-kubectl apply -f ./httpd-healthcheck
+```bash
+kubectl apply -f ./kubernetes/httpd-healthcheck
 ```
 
 Install Istio add-on Prometheus:
 
-```
-kubectl apply -f ./istio-addons/prometheus
+```bash
+kubectl apply -f ./kubernetes/istio-addons/prometheus
 ```
 
 Install Istio add-on Kiali:
 
-```
-kubectl apply -f ./istio-addons/kiali
+```bash
+kubectl apply -f ./kubernetes/istio-addons/kiali
 ```
 
 ### Create Monitoring Namespace
 
-```
-kubectl apply -f ./monitoring-ns-istio-injection-enabled.yml
-kubectl apply -f ./monitoring-ns-with-istio
+```bash
+kubectl apply -f ./kubernetes/monitoring-ns-istio-injection-enabled.yml
+kubectl apply -f ./kubernetes/monitoring-ns-with-istio
 ```
 
 ### Install kube-state-metrics
 
 Deploy `kube-state-metrics`:
 
-```
-kubectl apply -f ./kube-state-metrics
+```bash
+kubectl apply -f ./kubernetes/kube-state-metrics
 ```
 
 ### Install Prometheus
 
 Create a secret called **prometheus-cluster-name** that contains the cluster name the Prometheus instance is running in:
 
-```
+```bash
 kubectl -n monitoring create secret generic \
   prometheus-cluster-name --from-literal=CLUSTER_NAME=kubernetes-homelab
 ```
 
 Deploy `prometheus`:
 
-```
-kubectl apply -f ./prometheus
+```bash
+kubectl apply -f ./kubernetes/prometheus
 ```
 
 ### Install Grafana
 
-```
-kubectl apply -f ./grafana
+```bash
+kubectl apply -f ./kubernetes/grafana
 ```
 
 ### Install Alertmanager
 
 Alertmanager uses the Incoming Webhooks feature of Slack, therefore you need to set it up if you want to receive Slack alerts.
 
-Update the config map [`alertmanager/alertmanager-config-map.yml`](./alertmanager/alertmanager-config-map.yml) and specify your incoming webhook URL. Deploy `alertmanager`:
+Update the config map [`kubernetes/alertmanager/alertmanager-config-map.yml`](./kubernetes/alertmanager/alertmanager-config-map.yml) and specify your incoming webhook URL. Deploy `alertmanager`:
 
-```
-kubectl apply -f ./alertmanager
+```bash
+kubectl apply -f ./kubernetes/alertmanager
 ```
 
 ### Install Mikrotik-exporter
 
-Update the secret file [`mikrotik-exporter/mikrotik-exporter-secret.yml`](./mikrotik-exporter/mikrotik-exporter-secret.yml) and specify your password for the Mikrotik API user. Deploy `mikrotik-exporter`:
+Update the secret file [`kubernetes/mikrotik-exporter/mikrotik-exporter-secret.yml`](./kubernetes/mikrotik-exporter/mikrotik-exporter-secret.yml) and specify your password for the Mikrotik API user. Deploy `mikrotik-exporter`:
 
-```
-kubectl apply -f ./mikrotik-exporter
+```bash
+kubectl apply -f ./kubernetes/mikrotik-exporter
 ```
 
 ### Install Pi-hole Exporter
 
-```
-kubectl apply -f ./pihole-exporter
+```bash
+kubectl apply -f ./kubernetes/pihole-exporter
 ```
 
 ### Install X509 Certificate Exporter
 
 Deploy the Helm chart:
 
-```
+```bash
 helm repo add enix https://charts.enix.io
 
 helm install x509-certificate-exporter \
   enix/x509-certificate-exporter \
   --namespace monitoring \
   --version "1.20.0" \
-  --values ./x509-certificate-exporter/values.yml
+  --values ./kubernetes/x509-certificate-exporter/values.yml
 ```
 
 ### Install Kubecost
 
-```
+```bash
 kubectl create namespace kubecost
 
 helm repo add kubecost https://kubecost.github.io/cost-analyzer/
@@ -346,17 +345,17 @@ helm upgrade --install kubecost \
   kubecost/cost-analyzer \
   --namespace kubecost \
   --version "1.91.2" \
-  --values ./kubecost/values.yaml
+  --values ./kubernetes/kubecost/values.yaml
 
-kubectl apply -f ./kubecost/kubecost-service.yaml
+kubectl apply -f ./kubernetes/kubecost/kubecost-service.yaml
 ```
 
 ### Install ElasticSearch and Kibana
 
-```
+```bash
 kubectl create namespace logging
-kubectl apply -f ./logging/elastic-credentials-secret.yml
-kubectl apply -f ./logging/elastic-certificates-secret.yml
+kubectl apply -f ./kubernetes/logging/elastic-credentials-secret.yml
+kubectl apply -f ./kubernetes/logging/elastic-certificates-secret.yml
 
 helm repo add elastic https://helm.elastic.co
 
@@ -364,13 +363,13 @@ helm upgrade --install elasticsearch \
   elastic/elasticsearch \
   --namespace logging \
   --version "7.17.1" \
-  --values ./logging/values-elasticsearch.yml
+  --values ./kubernetes/logging/values-elasticsearch.yml
 
 helm upgrade --install kibana \
   elastic/kibana \
   --namespace logging \
   --version "7.17.1" \
-  --values ./logging/values-kibana.yml
+  --values ./kubernetes/logging/values-kibana.yml
 ```
 
 # Upgrades

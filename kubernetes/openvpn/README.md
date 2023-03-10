@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # OpenVPN on Kubernetes
 
 OpenVPN server in a Docker container running on Kubernetes.
@@ -19,14 +21,13 @@ OpenVPN server in a Docker container running on Kubernetes.
 6. [Test VPN Access from Android Client](#test-vpn-access-from-android-client)
 7. [Configuration Variables](#configuration-variables)
 
-
 ## Docker Image
 
 We use [lisenet/openvpn:2.5.7](https://hub.docker.com/r/lisenet/openvpn) docker image. This image was built using Dockerfile from [kylemanna/docker-openvpn](https://github.com/kylemanna/docker-openvpn/blob/master/Dockerfile) but without a `192.168.254.0/24` route.
 
 ## Create Kubernetes Namespace
 
-```
+```bash
 kubectl create ns openvpn
 ```
 
@@ -34,20 +35,20 @@ kubectl create ns openvpn
 
 Set environment variables to be used to generate OpenVPN config. See [Configuration Variables](#configuration-variables) and their defaults if undefined.
 
-```
+```bash
 export VPN_HOSTNAME="vpn.example.com"
 export DNS_SERVER="10.11.1.2"
 ```
 
 Generate basic OpenVPN config:
 
-```
+```bash
 ./bin/generate-config.sh
 ```
 
 Change ownership:
 
-```
+```bash
 sudo chown -R "${USER}:${USER}" ./ovpn0
 ```
 
@@ -126,14 +127,14 @@ topology subnet
 
 Generate a client config (can be repeated for any new client):
 
-```
+```bash
 export CLIENT_NAME=android
 ./bin/add-client.sh
 ```
 
 Set the Kubernetes secrets. Prepend with `REPLACE=true` to update the existing ones:
 
-```
+```bash
 ./bin/set-secrets.sh
 ```
 
@@ -143,19 +144,19 @@ Note: VPN config, certificates and keys are stored in the `ovpn0` directory on t
 
 Use `kubectl` to install OpenVPN. See [openvpn-deployment.yaml](./openvpn-deployment.yaml). This will create `PriorityClass`, `Service` and `Deployment` resources, as well as use `loadBalancerIP: 10.11.1.53` from the [MetalLB address pool](../metallb/metallb-config-map.yml).
 
-```
+```bash
 kubectl apply -f openvpn-deployment.yaml
 ```
 
 List pods and services to verify.
 
-```
+```bash
 kubectl get po -n openvpn
 NAME                      READY   STATUS    RESTARTS   AGE
 openvpn-8f548449f-cbqxm   1/1     Running   0          43m
 ```
 
-```
+```bash
 kubectl get svc -n openvpn
 NAME      TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)           AGE
 openvpn   LoadBalancer   10.107.175.151   10.11.1.53    31194:31844/TCP   43m 
@@ -167,7 +168,7 @@ We want to allow connections from the Internet to the OpenVPN service IP `10.11.
 
 Create a destination NAT rule:
 
-```
+```bash
 /ip firewall nat add chain=dstnat \
   action=dst-nat \
   in-interface=ether1_isp \
