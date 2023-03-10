@@ -39,6 +39,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`argocd`](./argocd/) - configuration files to deploy Argo CD.
 * [`calico`](./calico/) - configuration files to deploy Calico CNI.
 * [`cka`](./cka/) - CKA study notes.
+* [`ckad`](./ckad/) - CKAD study notes.
 * [`dashboard`](./dashboard/) - configuration files to deploy Kubernetes dashboard.
 * [`docs`](./docs/) - images and documentation files.
 * [`grafana`](./grafana/) - configuration files to deploy Grafana.
