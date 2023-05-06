@@ -25,7 +25,7 @@ Other services (in alphabetical order):
 * MetalLB 0.12.1
 * Metrics Server 0.6.1
 * Mikrotik Exporter 1.0.11
-* OpenVPN 2.5
+* OpenVPN 2.6
 * Pihole Exporter 0.3.0
 * Prometheus 2.34
 * x509-certificate-exporter 2.12.0
