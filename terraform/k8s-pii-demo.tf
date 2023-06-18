@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "pii_demo" {
-  pattern          = "../pii-demo-blue-green/*.y*ml"
+  pattern          = "../kubernetes/pii-demo-blue-green/*.y*ml"
   disable_template = true
 }
 

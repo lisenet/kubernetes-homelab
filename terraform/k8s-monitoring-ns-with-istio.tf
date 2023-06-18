@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "monitoring_ns_with_istio" {
-  pattern          = "../monitoring-ns-with-istio/*.y*ml"
+  pattern          = "../kubernetes/monitoring-ns-with-istio/*.y*ml"
   disable_template = true
 }
 

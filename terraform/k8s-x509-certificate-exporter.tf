@@ -5,7 +5,7 @@ resource "helm_release" "x509-certificate-exporter" {
   namespace  = "monitoring"
 
   values = [
-    "${file("../x509-certificate-exporter/values.yml")}"
+    "${file("../kubernetes/charts/x509-certificate-exporter/values.yml")}"
   ]
 
   depends_on = [

@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "speedtest-influxdb" {
-  pattern          = "../speedtest-influxdb/*.y*ml"
+  pattern          = "../kubernetes/speedtest-influxdb/*.y*ml"
   disable_template = true
 }
 

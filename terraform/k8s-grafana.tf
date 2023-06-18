@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "grafana" {
-  pattern          = "../grafana/*.y*ml"
+  pattern          = "../kubernetes/grafana/*.y*ml"
   disable_template = true
 }
 

@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "alertmanager" {
-  pattern          = "../alertmanager/*.y*ml"
+  pattern          = "../kubernetes/alertmanager/*.y*ml"
   disable_template = true
 }
 

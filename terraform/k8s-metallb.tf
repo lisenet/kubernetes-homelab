@@ -1,5 +1,5 @@
 data "kubectl_path_documents" "metallb" {
-  pattern          = "../metallb/*.y*ml"
+  pattern          = "../kubernetes/metallb/*.y*ml"
   disable_template = true
 }
 

@@ -1,6 +1,6 @@
 # Create ElasticSearch secrets
 data "kubectl_path_documents" "elasticsearch_secrets" {
-  pattern = "../logging/elastic-*-secret.y*ml"
+  pattern = "../kubernetes/logging/elastic-*-secret.y*ml"
 }
 resource "kubectl_manifest" "elasticsearch_secrets" {
   count     = length(data.kubectl_path_documents.elasticsearch_secrets.documents)
@@ -16,7 +16,7 @@ resource "helm_release" "elasticsearch" {
   version    = var.elastic_stack_version
 
   values = [
-    "${file("../logging/values-elasticsearch.yml")}"
+    "${file("../kubernetes/logging/values-elasticsearch.yml")}"
   ]
 
   depends_on = [
@@ -34,7 +34,7 @@ resource "helm_release" "kibana" {
   version    = var.elastic_stack_version
 
   values = [
-    "${file("../logging/values-kibana.yml")}"
+    "${file("../kubernetes/logging/values-kibana.yml")}"
   ]
 
   depends_on = [
@@ -53,7 +53,7 @@ resource "helm_release" "filebeat" {
   version    = var.elastic_stack_version
 
   values = [
-    "${file("../logging/values-filebeat.yml")}"
+    "${file("../kubernetes/logging/values-filebeat.yml")}"
   ]
 
   depends_on = [

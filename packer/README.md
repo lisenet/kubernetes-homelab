@@ -1,3 +1,5 @@
+[[Back to Index Page](../README.md)]
+
 # Packer
 
 See https://www.packer.io/docs
@@ -14,7 +16,7 @@ Are you getting rid of PXE? Not anytime soon. PXE is still used to provision phy
 
 For RHEL-based systems:
 
-```
+```bash
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install packer
@@ -22,7 +24,7 @@ sudo yum -y install packer
 
 For Debian-based systems:
 
-```
+```bash
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt-get update && sudo apt-get install --no-install-recommends packer
@@ -39,7 +41,7 @@ See JSON files for each distribution:
 
 Build Rocky 8 image:
 
-```
+```bash
 PACKER_LOG=1 packer build ./rocky8.json
 ```
 
@@ -47,7 +49,7 @@ PACKER_LOG=1 packer build ./rocky8.json
 
 Packer uses VNC, therefore we can check its window with a VNC client, e.g.:
 
-```
+```bash
 vncviewer -shared 127.0.0.1:5934
 ```
 
@@ -57,7 +59,7 @@ Note that your VNC port will be different.
 
 On a KVM hypervisor that was used to "package" the image, run the following commands to deploy a `rocky8` guest:
 
-```
+```bash
 sudo cp --sparse=always ./artifacts/qemu/rocky8/rocky8.qcow2 /mnt/storage-luks/libvirt/
 
 sudo virt-install \
@@ -77,7 +79,7 @@ sudo virt-install \
 
 ## Provision Homelab KVM Guests
 
-```
+```bash
 for i in 1 2 3; do \
   scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
   virt-install \
