@@ -37,32 +37,12 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`ansible`](./ansible/README.md) - Ansible playbooks to deploy Kubernetes homelab.
 * [`cka`](./cka/) - CKA study notes.
 * [`ckad`](./ckad/) - CKAD study notes.
-* [`kubernetes/alertmanager`](./kubernetes/alertmanager/) - configuration files to deploy Alertmanager.
-* [`kubernetes/argocd`](./kubernetes/argocd/) - configuration files to deploy Argo CD.
-* [`kubernetes/calico`](./kubernetes/calico/) - configuration files to deploy Calico CNI.
-* [`kubernetes/dashboard`](./kubernetes/dashboard/) - configuration files to deploy Kubernetes dashboard.
-* [`kubernetes/grafana`](./kubernetes/grafana/) - configuration files to deploy Grafana.
-* [`httpd-healthcheck`](./httpd-healthcheck/) - configuration files deploy a simple httpd healthcheck for Istio ingressgateway.
-* [`kubernetes/istio`](./kubernetes/istio/) - configuration files to deploy Istio.
-* [`kubernetes/istio-addons`](./kubernetes/istio-addons/) - configuration files to deploy Istio add-ons (e.g. Kiali).
-* [`kubernetes/kube-state-metrics`](./kubernetes/kube-state-metrics/) - configuration files to deploy kube-state-metrics.
-* [`kubernetes/charts/kubecost`](./kubernetes/charts/kubecost/) - configuration files to deploy Kubecost.
-* [`kubernetes/logging`](./kubernetes/logging/) - configuration files to deploy Elastic Stack (Elasticsearch, Kibana etc).
-* [`kubernetes/metallb`](.kubernetes/metallb/) - configuration files to deploy MetalLB.
-* [`kubernetes/mikrotik-exporter`](./kubernetes/mikrotik-exporter) - configuration files to deploy a Prometheus exporter for Mikrotik devices.
-* [`kubernetes/openvpn`](./kubernetes/openvpn/) - configuration files to deploy OpenVPN server.
-* [`packer`](./packer/) - configuration files build Qemu/KVM images with Packer.
-* [`kubernetes/pihole-exporter`](./kubernetes/pihole-exporter/) - configuration files to deploy a Prometheus exporter for Pi-hole Raspberry Pi ad blocker.
-* [`kubernetes/pii-demo`](./kubernetes/pii-demo/) - a demo PII application based on Apache, PHP and MySQL to test Istio's mTLS.
-* [`kubernetes/pii-demo-blue-green`](./kubernetes/pii-demo-blue-green/) - a demo PII application based that uses blue/green deployment.
-* [`kubernetes/prometheus`](./kubernetes/prometheus/) - configuration files to deploy Prometheus monitoring.
+* [`kubernetes`](./kubernetes/README.md) - Kubernetes resources that are defined in YAML and to be deployed using `kubectl`.
+* [`kubernetes/helm`](./kubernetes/helm/) - Kubernetes resources to be deployed using `helm` charts.
+* [`packer`](./packer/README.md) - configuration files build Qemu/KVM images with Packer.
 * [`pxe`](./pxe/) - configuration files for PXE boot and Kickstart.
 * `regcred` - docker registry credentials.
-* [`kubernetes/speedtest-influxdb`](./kubernetes/speedtest-influxdb/) - configuration files to deploy a Speedtest service that stores results in InfluxDB.
-* [`terraform`](./terraform/) - configuration files to manage Kubernetes with Terraform.
-* [`kubernetes/truenas-nfs`](./kubernetes/truenas-nfs/) - configuration files to deploy democratic-csi with TrueNAS NFS.
-* [`kubernetes/velero`](./kubernetes/velero/) - configuration files to deploy Velero backup software.
-* [`kubernetes/x509-certificate-exporter`](./kubernetes/x509-certificate-exporter/) - configuration files to deploy x509-certificate-exporter.
+* [`terraform`](./terraform/README.md) - configuration files to manage Kubernetes with Terraform.
 
 # Homelab Network Diagram
 
@@ -217,7 +197,7 @@ helm upgrade --install zfs-nfs \
   --namespace democratic-csi \
   --create-namespace \
   --version "0.11.1" \
-  --values ./truenas-nfs/freenas-nfs.yaml
+  --values ./kubernetes/helm/truenas-nfs/freenas-nfs.yaml
 ```
 
 ### Install MetalLB
@@ -225,7 +205,7 @@ helm upgrade --install zfs-nfs \
 Update the config map [`kubernetes/metallb/metallb-config-map.yml`](./kubernetes/metallb/metallb-config-map.yml) and specify the IP address range. Deploy MetalLB network load-balancer:
 
 ```bash
-kubectl apply -f ./metallb
+kubectl apply -f ./kubernetes/metallb
 ```
 
 ### Install Istio
@@ -331,7 +311,7 @@ helm install x509-certificate-exporter \
   enix/x509-certificate-exporter \
   --namespace monitoring \
   --version "1.20.0" \
-  --values ./kubernetes/x509-certificate-exporter/values.yml
+  --values ./kubernetes/helm/x509-certificate-exporter/values.yml
 ```
 
 ### Install Kubecost
@@ -345,9 +325,9 @@ helm upgrade --install kubecost \
   kubecost/cost-analyzer \
   --namespace kubecost \
   --version "1.91.2" \
-  --values ./kubernetes/kubecost/values.yaml
+  --values ./kubernetes/helm/kubecost/values.yaml
 
-kubectl apply -f ./kubernetes/kubecost/kubecost-service.yaml
+kubectl apply -f ./kubernetes/helm/kubecost/kubecost-service.yaml
 ```
 
 ### Install ElasticSearch and Kibana
