@@ -6,7 +6,7 @@ resource "helm_release" "kubecost" {
   version    = "1.87.3"
 
   values = [
-    "${file("../kubernetes/charts/kubecost/values.yaml")}"
+    "${file("../kubernetes/helm/kubecost/values.yaml")}"
   ]
 
   depends_on = [

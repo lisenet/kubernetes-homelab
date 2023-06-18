@@ -1,11 +1,11 @@
 resource "helm_release" "x509-certificate-exporter" {
   name       = "x509-certificate-exporter"
-  repository = "https://charts.enix.io"
+  repository = "https://helm.enix.io"
   chart      = "x509-certificate-exporter"
   namespace  = "monitoring"
 
   values = [
-    "${file("../kubernetes/charts/x509-certificate-exporter/values.yml")}"
+    "${file("../kubernetes/helm/x509-certificate-exporter/values.yml")}"
   ]
 
   depends_on = [
