@@ -3,8 +3,8 @@
 A repository to keep resources and configuration files used with my Kubernetes homelab.
 
 [![version](https://img.shields.io/github/manifest-json/v/lisenet/kubernetes-homelab?label=Kubernetes)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
-![OS](https://img.shields.io/badge/Rocky-8-blue)
-![Istio](https://img.shields.io/badge/Istio-1.17-blue)
+[![istio](https://img.shields.io/badge/Istio-1.17-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
+[![operating system](https://img.shields.io/badge/Rocky-8-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
 [![license](https://img.shields.io/github/license/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/blob/master/LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/commits/master)
 [![commit activity](https://img.shields.io/github/commit-activity/y/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/commits/master)
