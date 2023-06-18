@@ -128,7 +128,7 @@ Homelab provides other services to Kubernetes that aren't covered here:
 
 ## Backups
 
-[Velero](./kubernetes/charts/velero/) is used to safely backup and restore Kubernetes cluster resources and persistent volumes.
+[Velero](./kubernetes/helm/velero/) is used to safely backup and restore Kubernetes cluster resources and persistent volumes.
 
 ## Kubernetes Cluster Configuration
 
