@@ -386,6 +386,7 @@ helm upgrade --install kibana \
 * [Building Qemu KVM Images with Packer](https://www.lisenet.com/2022/building-qemu-kvm-images-with-packer/)
 * [Deploy Elasticsearch and Kibana on Kubernetes with Helm](https://www.lisenet.com/2022/deploy-elasticsearch-and-kibana-on-kubernetes-with-helm/)
 * [Backup Kubernetes Cluster Resources to AWS S3 with Velero](https://www.lisenet.com/2022/backup-kubernetes-cluster-resources-to-aws-s3-with-velero/)
+* [Replacing a Failed Control Plane Node in a HA Kubernetes Cluster](https://www.lisenet.com/2023/replacing-a-failed-control-plane-node-in-a-ha-kubernetes-cluster/)
 
 ## Stargazers Over Time
 
