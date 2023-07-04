@@ -55,17 +55,23 @@ vncviewer -shared 127.0.0.1:5934
 
 Note that your VNC port will be different.
 
+If you are using Packer on a remote server (e.g. 10.11.1.100) where you can't access VNC directly, then you can use SSH port forwarding. See example below.
+
+```bash
+ssh -L 5934:127.0.0.1:5934 user@10.11.1.100
+```
+
 ## Install KVM Guests from Packer Images
 
 On a KVM hypervisor that was used to "package" the image, run the following commands to deploy a `rocky8` guest:
 
 ```bash
-sudo cp --sparse=always ./artifacts/qemu/rocky8/rocky8.qcow2 /mnt/storage-luks/libvirt/
+sudo cp --sparse=always ./artifacts/qemu/rocky8/rocky8.qcow2 /var/lib/libvirt/images/
 
 sudo virt-install \
   --name rocky8 \
   --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:37 \
-  --disk path=/mnt/storage-luks/libvirt/rocky8.qcow2,size=32 \
+  --disk path=/var/lib/libvirt/images/rocky8.qcow2,size=32 \
   --ram 2048 \
   --vcpus 2 \
   --os-type linux \
