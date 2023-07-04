@@ -1,0 +1,70 @@
+{
+  "variables": {
+    "cpu": "2",
+    "ram": "2048",
+    "name": "rocky",
+    "disk_size": "32768",
+    "version": "9",
+    "iso_checksum_type": "sha256",
+    "iso_urls": "http://10.11.1.20/pub/isos/Rocky-9.2-x86_64-boot.iso",
+    "iso_checksum": "11e42da96a7b336de04e60d05e54a22999c4d7f3e92c19ebf31f9c71298f5b42",
+    "headless": "true",
+    "config_file": "rocky9-packer-ks.cfg",
+    "ssh_username": "root",
+    "ssh_password": "packer",
+    "destination_server": "truenas.hl.test:/mnt/homelab-hdd/packer"
+  },
+  "builders": [
+    {
+      "name": "{{user `name`}}{{user `version`}}",
+      "type": "qemu",
+      "format": "qcow2",
+      "accelerator": "kvm",
+      "qemu_binary": "/usr/libexec/qemu-kvm",
+      "net_device": "virtio-net",
+      "disk_interface": "virtio",
+      "disk_cache": "none",
+      "qemuargs": [
+        [
+          "-m",
+          "{{user `ram`}}M"
+        ],
+        [
+          "-smp",
+          "{{user `cpu`}}"
+        ],
+	[
+          "-cpu",
+          "host"
+        ]
+      ],
+      "ssh_wait_timeout": "30m",
+      "http_directory": ".",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "iso_urls": "{{user `iso_urls`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "boot_wait": "40s",
+      "boot_command": [
+        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs> net.ifnames=0 biosdevname=0 inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/http/{{user `config_file`}}<enter><wait>"
+      ],
+      "disk_size": "{{user `disk_size`}}",
+      "disk_discard": "unmap",
+      "disk_compression": true,
+      "headless": "{{user `headless`}}",
+      "shutdown_command": "sudo /usr/sbin/shutdown -h now",
+      "output_directory": "artifacts/qemu/{{user `name`}}{{user `version`}}"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "shell-local",
+      "script": "post-processors/upload-image-to-nfs.sh",
+      "environment_vars": [
+        "IMAGE_NAME={{user `name`}}",
+        "IMAGE_VERSION={{user `version`}}",
+        "DESTINATION_SERVER={{user `destination_server`}}"
+      ]
+    }
+  ]
+}
