@@ -36,8 +36,15 @@ The [Qemu Packer builder](https://www.packer.io/plugins/builders/qemu) is able t
 
 See JSON files for each distribution:
 
+* [rocky9.json](./rocky9.json)
 * [rocky8.json](./rocky8.json)
 * [centos7.json](./centos7.json)
+
+Build Rocky 9 image:
+
+```bash
+PACKER_LOG=1 packer build ./rocky9.json
+```
 
 Build Rocky 8 image:
 
@@ -55,21 +62,27 @@ vncviewer -shared 127.0.0.1:5934
 
 Note that your VNC port will be different.
 
-## Install KVM Guests from Packer Images
-
-On a KVM hypervisor that was used to "package" the image, run the following commands to deploy a `rocky8` guest:
+If you are using Packer on a remote server (e.g. 10.11.1.100) where you can't access VNC directly, then you can use SSH port forwarding. See example below.
 
 ```bash
-sudo cp --sparse=always ./artifacts/qemu/rocky8/rocky8.qcow2 /mnt/storage-luks/libvirt/
+ssh -L 5934:127.0.0.1:5934 user@10.11.1.100
+```
+
+## Install KVM Guests from Packer Images
+
+On a KVM hypervisor that was used to "package" the image, run the following commands to deploy a `rocky9` guest:
+
+```bash
+sudo cp --sparse=always ./artifacts/qemu/rocky9/rocky9.qcow2 /var/lib/libvirt/images/
 
 sudo virt-install \
-  --name rocky8 \
+  --name rocky9 \
   --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:37 \
-  --disk path=/mnt/storage-luks/libvirt/rocky8.qcow2,size=32 \
+  --disk path=/var/lib/libvirt/images/rocky9.qcow2,size=32 \
   --ram 2048 \
   --vcpus 2 \
   --os-type linux \
-  --os-variant centos7.0 \
+  --os-variant centos8 \
   --sound none \
   --rng /dev/urandom \
   --virt-type kvm \
@@ -81,7 +94,7 @@ sudo virt-install \
 
 ```bash
 for i in 1 2 3; do \
-  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
+  scp ./artifacts/qemu/rocky9/rocky9.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
   virt-install \
   --connect qemu+ssh://root@kvm${i}.hl.test/system \
   --name srv3${i}-master \
@@ -91,7 +104,7 @@ for i in 1 2 3; do \
   --ram 4096 \
   --vcpus 2 \
   --os-type linux \
-  --os-variant centos7.0 \
+  --os-variant centos8 \
   --sound none \
   --rng /dev/urandom \
   --virt-type kvm \
@@ -99,7 +112,7 @@ for i in 1 2 3; do \
 done
 
 for i in 1 2 3; do \
-  scp ./artifacts/qemu/rocky8/rocky8.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
+  scp ./artifacts/qemu/rocky9/rocky9.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
   virt-install \
   --connect qemu+ssh://root@kvm${i}.hl.test/system \
   --name srv3$(($i + 3))-node \
@@ -109,7 +122,7 @@ for i in 1 2 3; do \
   --ram 8192 \
   --vcpus 2 \
   --os-type linux \
-  --os-variant centos7.0 \
+  --os-variant centos8 \
   --sound none \
   --rng /dev/urandom \
   --virt-type kvm \

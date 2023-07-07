@@ -4,12 +4,12 @@
     "ram": "2048",
     "name": "rocky",
     "disk_size": "32768",
-    "version": "8",
+    "version": "9",
     "iso_checksum_type": "sha256",
-    "iso_urls": "http://10.11.1.20/pub/isos/Rocky-8.8-x86_64-boot.iso",
-    "iso_checksum": "96c9d96c33ebacc8e909dcf8abf067b6bb30588c0c940a9c21bb9b83f3c99868",
+    "iso_urls": "http://10.11.1.20/pub/isos/Rocky-9.2-x86_64-boot.iso",
+    "iso_checksum": "11e42da96a7b336de04e60d05e54a22999c4d7f3e92c19ebf31f9c71298f5b42",
     "headless": "true",
-    "config_file": "rocky8-packer-ks.cfg",
+    "config_file": "rocky9-packer-ks.cfg",
     "ssh_username": "root",
     "ssh_password": "packer",
     "destination_server": "truenas.hl.test:/mnt/homelab-hdd/packer"
@@ -32,6 +32,10 @@
         [
           "-smp",
           "{{user `cpu`}}"
+        ],
+	[
+          "-cpu",
+          "host"
         ]
       ],
       "ssh_wait_timeout": "30m",
@@ -42,7 +46,7 @@
       "iso_checksum": "{{user `iso_checksum`}}",
       "boot_wait": "40s",
       "boot_command": [
-        "<up><wait><tab><wait> net.ifnames=0 biosdevname=0 inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/http/{{user `config_file`}}<enter><wait>"
+        "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs> net.ifnames=0 biosdevname=0 inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/http/{{user `config_file`}}<enter><wait>"
       ],
       "disk_size": "{{user `disk_size`}}",
       "disk_discard": "unmap",
