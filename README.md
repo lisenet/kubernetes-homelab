@@ -5,7 +5,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 [![version](https://img.shields.io/github/manifest-json/v/lisenet/kubernetes-homelab?label=Kubernetes)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
 [![calico](https://img.shields.io/badge/Calico-3.25-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
 [![istio](https://img.shields.io/badge/Istio-1.17-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
-[![operating system](https://img.shields.io/badge/Rocky-8-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
+[![operating system](https://img.shields.io/badge/Rocky-9-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
 [![license](https://img.shields.io/github/license/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/blob/master/LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/commits/master)
 [![commit activity](https://img.shields.io/github/commit-activity/y/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/commits/master)
@@ -79,12 +79,12 @@ Hostnames and their IP addresses:
 | kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         | Rocky 8 |
 | kvm3.hl.test      | 10.11.1.23   | KVM hypervisor                                         | Rocky 8 |
 | kubelb.hl.test    | 10.11.1.30   | Virtual IP address for HAProxy/keepalived              | N/A |
-| srv31.hl.test     | 10.11.1.31   | Kubernetes control plane                               | Rocky 8 |
-| srv32.hl.test     | 10.11.1.32   | Kubernetes control plane                               | Rocky 8 |
-| srv33.hl.test     | 10.11.1.33   | Kubernetes control plane                               | Rocky 8 |
-| srv34.hl.test     | 10.11.1.34   | Kubernetes worker node                                 | Rocky 8 |
-| srv35.hl.test     | 10.11.1.35   | Kubernetes worker node                                 | Rocky 8 |
-| srv36.hl.test     | 10.11.1.36   | Kubernetes worker node                                 | Rocky 8 |
+| srv31.hl.test     | 10.11.1.31   | Kubernetes control plane                               | Rocky 9 |
+| srv32.hl.test     | 10.11.1.32   | Kubernetes control plane                               | Rocky 9 |
+| srv33.hl.test     | 10.11.1.33   | Kubernetes control plane                               | Rocky 9 |
+| srv34.hl.test     | 10.11.1.34   | Kubernetes worker node                                 | Rocky 9 |
+| srv35.hl.test     | 10.11.1.35   | Kubernetes worker node                                 | Rocky 9 |
+| srv36.hl.test     | 10.11.1.36   | Kubernetes worker node                                 | Rocky 9 |
 
 
 # Homelab Infrastructure
