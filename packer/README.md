@@ -112,7 +112,7 @@ for i in 1 2 3; do \
 done
 
 for i in 1 2 3; do \
-  scp ./artifacts/qemu/rocky9/rocky9.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3${i}.qcow2 && \
+  scp ./artifacts/qemu/rocky9/rocky9.qcow2 root@kvm${i}.hl.test:/var/lib/libvirt/images/srv3$(($i + 3)).qcow2 && \
   virt-install \
   --connect qemu+ssh://root@kvm${i}.hl.test/system \
   --name srv3$(($i + 3))-node \
@@ -120,7 +120,7 @@ for i in 1 2 3; do \
   --disk path=/var/lib/libvirt/images/srv3$(($i + 3)).qcow2,size=32 \
   --import \
   --ram 8192 \
-  --vcpus 2 \
+  --vcpus 4 \
   --os-type linux \
   --os-variant centos8 \
   --sound none \
