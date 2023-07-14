@@ -23,7 +23,7 @@ OpenVPN server in a Docker container running on Kubernetes.
 
 ## Docker Image
 
-We use [lisenet/openvpn:2.5.7](https://hub.docker.com/r/lisenet/openvpn) docker image. This image was built using Dockerfile from [kylemanna/docker-openvpn](https://github.com/kylemanna/docker-openvpn/blob/master/Dockerfile) but without a `192.168.254.0/24` route.
+We use [lisenet/openvpn:latest](https://hub.docker.com/r/lisenet/openvpn) docker image. This image was built using Dockerfile from [lisenet/docker-openvpn](https://github.com/lisenet/docker-openvpn/blob/master/Dockerfile).
 
 ## Create Kubernetes Namespace
 
@@ -262,4 +262,4 @@ If default routing is not desired, then `redirect-gateway def1` could be removed
 | DNS_SERVER        | DNS server IP address (CloudFlare) | 1.1.1.1     |
 | NETWORK_CIDR      | VPN server subnet                  | 10.8.0.0/24 |
 | CLIENT_NAME       | VPN client name                    |             |
-| APP_VERSION       | OpenVPN version (docker build tag) | 2.6.3       |
+| APP_VERSION       | OpenVPN version (docker build tag) | latest      |
