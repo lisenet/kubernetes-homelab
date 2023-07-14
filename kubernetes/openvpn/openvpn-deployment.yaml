@@ -57,8 +57,8 @@ spec:
             - NET_ADMIN
           privileged: true
       containers:
-      - image: lisenet/openvpn:2.6.5
-        imagePullPolicy: IfNotPresent
+      - image: lisenet/openvpn:latest
+        imagePullPolicy: Always
         name: openvpn
         ports:
         - containerPort: 1194
