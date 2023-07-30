@@ -1,16 +1,10 @@
 [[Back to Index Page](../README.md)]
 
-# Elastic Stack for Logging
+# Grafana Loki and Promtail for Logging
 
-See https://github.com/elastic/helm-charts
+See https://grafana.com/docs/loki/latest/
 
 ## Pre-requisites
-
-Add Helm repository:
-
-```bash
-helm repo add elastic https://helm.elastic.co
-```
 
 Create `logging` namespace:
 
@@ -18,60 +12,16 @@ Create `logging` namespace:
 kubectl create namespace logging
 ```
 
-## Deploy Elasticsearch using Helm
-
-### Create Secrets
-
-Create a secret to store Elasticsearch credentials:
+## Deploy Loki using Kubectl
 
 ```bash
-kubectl apply -f ./elastic-credentials-secret.yml
+kubectl apply -f ./loki-pvc.yml
+kubectl apply -f ./loki-deployment.yml
 ```
 
-Create a secret to store Elasticsearch SSL certificates. We are using our [homelab Root CA](https://www.lisenet.com/2021/create-your-own-certificate-authority-ca-for-homelab-environment/) to sign the certificate.
+## Deploy Promtail using Kubectl
 
 ```bash
-kubectl apply -f ./elastic-certificates-secret.yml
+kubectl apply -f ./promtail-deployment.yml
 ```
 
-### Deploy Elasticsearch
-
-Deploy a single node Elasticsearch with authentication, certificates for TLS and custom [values](./values-elasticsearch.yml):
-
-```bash
-helm upgrade --install elasticsearch \
-  elastic/elasticsearch \
-  --namespace logging \
-  --version "7.17.1" \
-  --values ./values-elasticsearch.yml
-```
-
-## Deploy Kibana using Helm
-
-Deploy Kibana using authentication and TLS to connect to Elasticsearch (see [values](./values-kibana.yml)):
-
-```bash
-helm upgrade --install kibana \
-  elastic/kibana \
-  --namespace logging \
-  --version "7.17.1" \
-  --values ./values-kibana.yml
-```
-
-## Deploy Filebeat using Helm
-
-Deploy Filebeat using authentication and TLS to connect to Elasticsearch (see [values](./values-filebeat.yml)).
-
-```bash
-helm upgrade --install filebeat \
-  elastic/filebeat \
-  --namespace logging \
-  --version "7.17.1" \
-  --values ./values-filebeat.yml
-```
-
-# Essential Reading
-
-https://www.elastic.co/guide/en/elasticsearch/reference/7.17/configuring-stack-security.html
-
-https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-settings.html
