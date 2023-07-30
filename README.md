@@ -40,6 +40,7 @@ A repository to keep resources and configuration files used with my Kubernetes h
 * [`ansible`](./ansible/README.md) - Ansible playbooks to deploy Kubernetes homelab.
 * [`cka`](./cka/) - CKA study notes.
 * [`ckad`](./ckad/) - CKAD study notes.
+* [`cks`](./cks/) - CKS study notes.
 * [`kubernetes`](./kubernetes/README.md) - Kubernetes resources that are defined in YAML and to be deployed using `kubectl`.
 * [`kubernetes/helm`](./kubernetes/helm/) - Kubernetes resources to be deployed using `helm` charts.
 * [`packer`](./packer/README.md) - configuration files build Qemu/KVM images with Packer.
