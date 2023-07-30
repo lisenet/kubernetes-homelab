@@ -38,7 +38,6 @@ See JSON files for each distribution:
 
 * [rocky9.json](./rocky9.json)
 * [rocky8.json](./rocky8.json)
-* [centos7.json](./centos7.json)
 
 Build Rocky 9 image:
 
