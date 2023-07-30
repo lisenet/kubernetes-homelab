@@ -1,0 +1,276 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: promtail
+  namespace: logging
+  labels:
+    app: promtail
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: promtail
+  namespace: logging
+  labels:
+    app: promtail
+spec:
+  ports:
+    - name: http-syslog
+      protocol: TCP
+      port: 1514
+      targetPort: http-syslog
+  selector:
+    app: promtail
+  type: LoadBalancer
+  loadBalancerIP: 10.11.1.57
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: promtail
+  labels:
+    app: promtail
+rules:
+  - verbs:
+      - get
+      - watch
+      - list
+    apiGroups:
+      - ''
+    resources:
+      - nodes
+      - nodes/proxy
+      - services
+      - endpoints
+      - pods
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: promtail
+  labels:
+    app: promtail
+subjects:
+  - kind: ServiceAccount
+    name: promtail
+    namespace: logging
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: promtail
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promtail
+  namespace: logging
+  labels:
+    app: promtail
+data:
+  promtail.yaml: |
+    server:
+      log_level: info
+      http_listen_port: 3101
+    clients:
+      - url: http://loki-headless.logging.svc:3100/loki/api/v1/push
+    positions:
+      filename: /run/promtail/positions.yaml
+    scrape_configs:
+      - job_name: syslog
+        syslog:
+          listen_address: 0.0.0.0:1514
+          labels:
+            job: "syslog"
+        relabel_configs:
+          - source_labels:
+              - __syslog_connection_ip_address
+            target_label: 'ip_address'
+          - source_labels:
+              - __syslog_message_severity
+            target_label: 'severity'
+          - source_labels:
+              - __syslog_message_facility
+            target_label: 'facility'
+          - source_labels:
+              - __syslog_message_hostname
+            target_label: 'host'
+      - job_name: kubernetes-pods
+        pipeline_stages:
+          - cri: {}
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels:
+              - __meta_kubernetes_pod_controller_name
+            regex: ([0-9a-z-.]+?)(-[0-9a-f]{8,10})?
+            action: replace
+            target_label: __tmp_controller_name
+          - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_name
+              - __meta_kubernetes_pod_label_app
+              - __tmp_controller_name
+              - __meta_kubernetes_pod_name
+            regex: ^;*([^;]+)(;.*)?$
+            action: replace
+            target_label: app
+          - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_instance
+              - __meta_kubernetes_pod_label_release
+            regex: ^;*([^;]+)(;.*)?$
+            action: replace
+            target_label: instance
+          - source_labels:
+              - __meta_kubernetes_pod_label_app_kubernetes_io_component
+              - __meta_kubernetes_pod_label_component
+            regex: ^;*([^;]+)(;.*)?$
+            action: replace
+            target_label: component
+          - action: replace
+            source_labels:
+            - __meta_kubernetes_pod_node_name
+            target_label: node_name
+          - action: replace
+            source_labels:
+            - __meta_kubernetes_namespace
+            target_label: namespace
+          - action: replace
+            replacement: $1
+            separator: /
+            source_labels:
+            - namespace
+            - app
+            target_label: job
+          - action: replace
+            source_labels:
+            - __meta_kubernetes_pod_name
+            target_label: pod
+          - action: replace
+            source_labels:
+            - __meta_kubernetes_pod_container_name
+            target_label: container
+          - action: replace
+            replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+            - __meta_kubernetes_pod_uid
+            - __meta_kubernetes_pod_container_name
+            target_label: __path__
+          - action: replace
+            regex: true/(.*)
+            replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+            - __meta_kubernetes_pod_annotationpresent_kubernetes_io_config_hash
+            - __meta_kubernetes_pod_annotation_kubernetes_io_config_hash
+            - __meta_kubernetes_pod_container_name
+            target_label: __path__
+          - action: replace
+            source_labels:
+            - __meta_kubernetes_pod_label_env
+            target_label: env
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: promtail
+  namespace: logging
+  labels:
+    app: promtail
+spec:
+  selector:
+    matchLabels:
+      app: promtail
+  template:
+    metadata:
+      labels:
+        app: promtail
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: promtail
+            defaultMode: 420
+        - name: run
+          hostPath:
+            path: /run/promtail
+            type: ''
+        - name: containers
+          hostPath:
+            path: /var/lib/docker/containers
+            type: ''
+        - name: pods
+          hostPath:
+            path: /var/log/pods
+            type: ''
+      containers:
+        - name: promtail
+          image: docker.io/grafana/promtail:2.6.1
+          imagePullPolicy: IfNotPresent
+          args:
+            - '-config.file=/etc/promtail/promtail.yaml'
+          ports:
+            - name: http-metrics
+              containerPort: 3101
+              protocol: TCP
+            - name: http-syslog
+              containerPort: 1514
+              protocol: TCP
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/promtail
+            - name: run
+              mountPath: /run/promtail
+            - name: containers
+              readOnly: true
+              mountPath: /var/lib/docker/containers
+            - name: pods
+              readOnly: true
+              mountPath: /var/log/pods
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 5
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: promtail
+      serviceAccount: promtail
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      hostNetwork: false
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+  updateStrategy:
+    type: RollingUpdate
+...

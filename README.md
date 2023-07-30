@@ -333,26 +333,13 @@ helm upgrade --install kubecost \
 kubectl apply -f ./kubernetes/helm/kubecost/kubecost-service.yaml
 ```
 
-### Install ElasticSearch and Kibana
+### Install Loki and Promtail
 
 ```bash
 kubectl create namespace logging
-kubectl apply -f ./kubernetes/logging/elastic-credentials-secret.yml
-kubectl apply -f ./kubernetes/logging/elastic-certificates-secret.yml
-
-helm repo add elastic https://helm.elastic.co
-
-helm upgrade --install elasticsearch \
-  elastic/elasticsearch \
-  --namespace logging \
-  --version "7.17.1" \
-  --values ./kubernetes/logging/values-elasticsearch.yml
-
-helm upgrade --install kibana \
-  elastic/kibana \
-  --namespace logging \
-  --version "7.17.1" \
-  --values ./kubernetes/logging/values-kibana.yml
+kubectl apply -f ./kubernetes/logging/loki-pvc.yml
+kubectl apply -f ./kubernetes/logging/loki-deployment.yml
+kubectl apply -f ./kubernetes/logging/promtail-deployment.yml
 ```
 
 # Upgrades
