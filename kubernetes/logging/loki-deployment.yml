@@ -1,0 +1,276 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+automountServiceAccountToken: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+spec:
+  ports:
+    - name: http-metrics
+      protocol: TCP
+      port: 3100
+      targetPort: http-metrics
+  selector:
+    app: loki
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-headless
+  namespace: logging
+  labels:
+    app: loki
+spec:
+  ports:
+    - name: http-metrics
+      protocol: TCP
+      port: 3100
+      targetPort: http-metrics
+  selector:
+    app: loki
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-memberlist
+  namespace: logging
+  labels:
+    app: loki
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 7946
+      targetPort: memberlist-port
+  selector:
+    app: loki
+  type: ClusterIP
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+rules:
+  - verbs:
+      - use
+    apiGroups:
+      - extensions
+    resources:
+      - podsecuritypolicies
+    resourceNames:
+      - loki
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+subjects:
+  - kind: ServiceAccount
+    name: loki
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: loki
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+data:
+  loki.yaml: |
+    auth_enabled: false
+    chunk_store_config:
+      max_look_back_period: 90d
+    compactor:
+      compaction_interval: 60m
+      retention_delete_delay: 2h
+      retention_delete_worker_count: 150
+      retention_enabled: true
+      shared_store: filesystem
+      working_directory: /data/loki/boltdb-shipper-compactor
+    frontend:
+      compress_responses: true
+      max_outstanding_per_tenant: 4096
+    ingester:
+      chunk_block_size: 262144
+      chunk_idle_period: 3m
+      chunk_retain_period: 1m
+      lifecycler:
+        ring:
+          replication_factor: 1
+      max_transfer_retries: 0
+      wal:
+        dir: /data/loki/wal
+    limits_config:
+      enforce_metric_name: false
+      max_entries_limit_per_query: 5000
+      reject_old_samples: true
+      reject_old_samples_max_age: 168h
+      retention_period: 90d
+      retention_stream:
+      - period: 30d
+        priority: 10
+        selector: '{namespace="kube-system"}'
+      - period: 30d
+        priority: 11
+        selector: '{namespace="logging"}'
+      - period: 30d
+        priority: 12
+        selector: '{namespace="monitoring"}'
+    memberlist:
+      join_members:
+      - 'loki-memberlist'
+    querier:
+      max_concurrent: 2048
+    query_range:
+      parallelise_shardable_queries: false
+      split_queries_by_interval: 0
+    query_scheduler:
+      max_outstanding_requests_per_tenant: 4096
+    schema_config:
+      configs:
+      - from: "2020-10-24"
+        index:
+          period: 24h
+          prefix: index_
+        object_store: filesystem
+        schema: v11
+        store: boltdb-shipper
+    server:
+      grpc_listen_port: 9095
+      http_listen_port: 3100
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /data/loki/boltdb-shipper-active
+        cache_location: /data/loki/boltdb-shipper-cache
+        cache_ttl: 24h
+        shared_store: filesystem
+      filesystem:
+        directory: /data/loki/chunks
+    table_manager:
+      retention_deletes_enabled: false
+      retention_period: 0s
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: loki
+      annotations:
+        prometheus.io/port: http-metrics
+        prometheus.io/scrape: 'true'
+    spec:
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: loki
+            defaultMode: 420
+        - name: storage
+          persistentVolumeClaim:
+            claimName: nfs-pvc-loki
+      containers:
+        - name: loki
+          image: grafana/loki:2.6.1
+          imagePullPolicy: IfNotPresent
+          args:
+            - '-config.file=/etc/loki/loki.yaml'
+          ports:
+            - name: http-metrics
+              containerPort: 3100
+              protocol: TCP
+            - name: grpc
+              containerPort: 9095
+              protocol: TCP
+            - name: memberlist-port
+              containerPort: 7946
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+            requests:
+              cpu: 10m
+              memory: 128Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: config
+              mountPath: /etc/loki
+            - name: storage
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          securityContext:
+            readOnlyRootFilesystem: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 4800
+      dnsPolicy: ClusterFirst
+      serviceAccountName: loki
+      serviceAccount: loki
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        fsGroup: 10001
+      affinity: {}
+      schedulerName: default-scheduler
+  serviceName: loki-headless
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 10
+...
