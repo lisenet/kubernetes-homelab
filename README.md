@@ -98,7 +98,7 @@ Kubernetes environment runs on three KVM hypervisors. The goal is to maintain se
 Commodity hardware is used to keep costs to a minimum.
 
 | Hostname | CPU Cores | RAM (MB) | Storage | OS |
-| --- | --- | --- | --- | --- |x
+| --- | --- | --- | --- | --- |
 | pxe.hl.test  | 4 | 8192  | 120GB SSD | Rocky 8 |
 | kvm1.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
 | kvm2.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
