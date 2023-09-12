@@ -19,7 +19,7 @@ Other services (in alphabetical order):
 * Democratic CSI 0.11.1
 * Grafana 9.5.2
 * Kube State Metrics 1.9.7
-* Kubecost 1.91.2
+* Kubecost 1.105.1
 * Kubernetes Dashboard 2.7.0
 * Loki 2.9.0
 * MetalLB 0.12.1
