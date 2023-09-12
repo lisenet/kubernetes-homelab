@@ -41,4 +41,13 @@ data:
       url: http://influxdb.speedtest.svc:8086
       user: ${INFLUXDB_USERNAME}
       version: 1
-
+    - access: proxy
+      editable: true
+      isDefault: false
+      name: Loki
+      orgId: 1
+      type: loki
+      url: http://loki.logging.svc:3100
+      version: 1
+      jsonData:
+        maxLines: 5000

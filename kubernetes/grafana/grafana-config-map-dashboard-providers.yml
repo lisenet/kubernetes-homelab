@@ -109,3 +109,21 @@ data:
         path: /var/lib/grafana/dashboards/speedtest
       orgId: 1
       type: file
+    - name: syslog-host
+      folder: logs
+      options:
+        path: /var/lib/grafana/dashboards/syslog-host
+      orgId: 1
+      type: file
+    - name: syslog-severity
+      folder: logs
+      options:
+        path: /var/lib/grafana/dashboards/syslog-severity
+      orgId: 1
+      type: file
+    - name: logs-k8s-containers
+      folder: logs
+      options:
+        path: /var/lib/grafana/dashboards/logs-k8s-containers
+      orgId: 1
+      type: file

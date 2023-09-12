@@ -17,7 +17,7 @@ Other services (in alphabetical order):
 * Argo CD 2.3.2
 * CoreDNS 1.10.1
 * Democratic CSI 0.11.1
-* Grafana 8.4.4
+* Grafana 9.5.2
 * Kube State Metrics 1.9.7
 * Kubecost 1.91.2
 * Kubernetes Dashboard 2.7.0
