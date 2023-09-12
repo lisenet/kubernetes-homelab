@@ -6,6 +6,21 @@ These resources should be built with Terraform: https://terraform.io
 
 Manage Kubernetes with Terraform. This effectivelly replaces all `kubectl` and `helm` commands with a single `terraform apply`.
 
+## Install Terraform
+
+```bash
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo yum -y install terraform
+```
+
+```bash
+curl -sSfL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip ./awscliv2.zip
+sudo ./aws/install
+rm -f awscliv2.zip
+```
+
 ## Kubernetes Provider
 
 The Kubernetes provider is used to interact with the resources supported by Kubernetes. The provider needs to be configured with the proper credentials before it can be used.
