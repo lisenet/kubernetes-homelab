@@ -1,6 +1,6 @@
 resource "helm_release" "x509-certificate-exporter" {
   name       = "x509-certificate-exporter"
-  repository = "https://helm.enix.io"
+  repository = "https://charts.enix.io"
   chart      = "x509-certificate-exporter"
   namespace  = "monitoring"
 
