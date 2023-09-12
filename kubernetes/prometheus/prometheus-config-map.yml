@@ -312,6 +312,9 @@ data:
         - source_labels: [__meta_kubernetes_pod_name]
           action: replace
           target_label: kubernetes_pod_name
+        - source_labels: [__meta_kubernetes_pod_name, __address__]
+          action: drop
+          regex: "loki-0;.*:(9095|7946)"
 
       #--------------------------------------------
       # Scrape config for cadvisor.
@@ -452,6 +455,12 @@ data:
           - targets: ['10.11.1.36:9100']
             labels:
               alias: k8s-node3
+
+      - job_name: 'openvas'
+        static_configs:
+          - targets: ['10.11.1.40:9100']
+            labels:
+              alias: openvas
 
       - job_name: 'raspberrypi'
         static_configs:

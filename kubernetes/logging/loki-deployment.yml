@@ -21,6 +21,10 @@ spec:
       protocol: TCP
       port: 3100
       targetPort: http-metrics
+    - name: grpc
+      port: 9095
+      targetPort: grpc
+      protocol: TCP
   selector:
     app: loki
   type: ClusterIP
@@ -60,36 +64,36 @@ spec:
   type: ClusterIP
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  name: loki
+  name: loki-clusterrole
   namespace: logging
   labels:
     app: loki
 rules:
   - verbs:
-      - use
-    apiGroups:
-      - extensions
+      - get
+      - watch
+      - list
+    apiGroups: [""]
     resources:
-      - podsecuritypolicies
-    resourceNames:
-      - loki
+      - configMaps
+      - secrets
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: loki
-  namespace: logging
+  name: loki-clusterrolebinding
   labels:
     app: loki
 subjects:
   - kind: ServiceAccount
     name: loki
+    namespace: logging
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: loki
+  kind: ClusterRole
+  name: loki-clusterrole
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -99,33 +103,29 @@ metadata:
   labels:
     app: loki
 data:
-  loki.yaml: |
+  config.yaml: |
     auth_enabled: false
-    chunk_store_config:
-      max_look_back_period: 90d
+    common:
+      compactor_address: 'loki'
+      path_prefix: /var/loki
+      replication_factor: 1
+      storage:
+        filesystem:
+          chunks_directory: /var/loki/chunks
+          rules_directory: /var/loki/rules
     compactor:
       compaction_interval: 60m
       retention_delete_delay: 2h
       retention_delete_worker_count: 150
       retention_enabled: true
-      shared_store: filesystem
-      working_directory: /data/loki/boltdb-shipper-compactor
     frontend:
       compress_responses: true
       max_outstanding_per_tenant: 4096
-    ingester:
-      chunk_block_size: 262144
-      chunk_idle_period: 3m
-      chunk_retain_period: 1m
-      lifecycler:
-        ring:
-          replication_factor: 1
-      max_transfer_retries: 0
-      wal:
-        dir: /data/loki/wal
+    index_gateway:
+      mode: ring
     limits_config:
       enforce_metric_name: false
-      max_entries_limit_per_query: 5000
+      max_cache_freshness_per_query: 10m
       reject_old_samples: true
       reject_old_samples_max_age: 168h
       retention_period: 90d
@@ -141,14 +141,19 @@ data:
         selector: '{namespace="monitoring"}'
     memberlist:
       join_members:
-      - 'loki-memberlist'
+      - loki-memberlist
     querier:
       max_concurrent: 2048
     query_range:
+      align_queries_with_step: true
       parallelise_shardable_queries: false
-      split_queries_by_interval: 0
     query_scheduler:
       max_outstanding_requests_per_tenant: 4096
+    ruler:
+      storage:
+        type: local
+    runtime_config:
+      file: /etc/loki/runtime-config/runtime-config.yaml
     schema_config:
       configs:
       - from: "2020-10-24"
@@ -158,20 +163,32 @@ data:
         object_store: filesystem
         schema: v11
         store: boltdb-shipper
+      - from: "2023-09-12"
+        index:
+          period: 24h
+          prefix: index_
+        object_store: filesystem
+        schema: v12
+        store: tsdb
     server:
       grpc_listen_port: 9095
       http_listen_port: 3100
     storage_config:
-      boltdb_shipper:
-        active_index_directory: /data/loki/boltdb-shipper-active
-        cache_location: /data/loki/boltdb-shipper-cache
-        cache_ttl: 24h
-        shared_store: filesystem
-      filesystem:
-        directory: /data/loki/chunks
-    table_manager:
-      retention_deletes_enabled: false
-      retention_period: 0s
+      hedging:
+        at: "250ms"
+        max_per_second: 20
+        up_to: 3
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-runtime
+  namespace: logging
+  labels:
+    app: loki
+data:
+  runtime-config.yaml: |
+    {}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -187,7 +204,6 @@ spec:
       app: loki
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: loki
       annotations:
@@ -200,16 +216,19 @@ spec:
         - name: config
           configMap:
             name: loki
-            defaultMode: 420
+        - name: runtime-config
+          configMap:
+            name: loki-runtime
         - name: storage
           persistentVolumeClaim:
             claimName: nfs-pvc-loki
       containers:
         - name: loki
-          image: grafana/loki:2.6.1
+          image: grafana/loki:2.9.0
           imagePullPolicy: IfNotPresent
           args:
-            - '-config.file=/etc/loki/loki.yaml'
+            - -config.file=/etc/loki/config/config.yaml
+            - -target=all
           ports:
             - name: http-metrics
               containerPort: 3100
@@ -231,9 +250,11 @@ spec:
             - name: tmp
               mountPath: /tmp
             - name: config
-              mountPath: /etc/loki
+              mountPath: /etc/loki/config
+            - name: runtime-config
+              mountPath: /etc/loki/runtime-config
             - name: storage
-              mountPath: /data
+              mountPath: /var/loki
           livenessProbe:
             httpGet:
               path: /ready
@@ -255,21 +276,33 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
             readOnlyRootFilesystem: true
       restartPolicy: Always
       terminationGracePeriodSeconds: 4800
       dnsPolicy: ClusterFirst
       serviceAccountName: loki
       serviceAccount: loki
+      automountServiceAccountToken: true
+      enableServiceLinks: true
       securityContext:
         runAsUser: 10001
         runAsGroup: 10001
         runAsNonRoot: true
         fsGroup: 10001
-      affinity: {}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: loki
+              topologyKey: kubernetes.io/hostname
       schedulerName: default-scheduler
   serviceName: loki-headless
-  podManagementPolicy: OrderedReady
+  podManagementPolicy: Parallel
   updateStrategy:
     type: RollingUpdate
   revisionHistoryLimit: 10

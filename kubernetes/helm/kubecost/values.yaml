@@ -3,7 +3,8 @@ global:
     enabled: false
     fqdn: "http://prometheus-service.monitoring.svc:9090"
   grafana:
-    enabled: true
+    enabled: false
+    proxy: false
 
 kubecostFrontend:
   imagePullPolicy: IfNotPresent
@@ -45,6 +46,8 @@ reporting:
 
 networkCosts:
   enabled: false
+  podSecurityPolicy:
+    enabled: false
   imagePullPolicy: IfNotPresent
   resources:
     requests:
@@ -53,3 +56,15 @@ networkCosts:
     limits:
       cpu: "100m"
       memory: "256Mi"
+
+grafana:
+  rbac:
+    pspEnabled: false
+  sidecar:
+    dashboards:
+      enabled: false
+    datasources:
+      enabled: false
+
+podSecurityPolicy:
+  enabled: false

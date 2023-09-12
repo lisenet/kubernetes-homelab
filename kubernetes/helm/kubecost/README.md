@@ -62,7 +62,7 @@ Alternativelly, use a pre-configured `values.yaml` file:
 helm upgrade --install kubecost \
   kubecost/cost-analyzer \
   --namespace kubecost \
-  --version "1.91.2" \
+  --version "1.105.1" \
   --values ./values.yaml
 ```
 

@@ -1,7 +1,6 @@
-# Inspired by https://raw.githubusercontent.com/istio/istio/release-1.13/samples/addons/prometheus.yaml
 # Modified to include workload_rules.yml and --storage.tsdb.retention.time=6h
 ---
-# Source: prometheus/templates/server/serviceaccount.yaml
+# Source: prometheus/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -9,14 +8,14 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-15.0.1
+    chart: prometheus-19.6.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
   annotations:
     {}
 ---
-# Source: prometheus/templates/server/cm.yaml
+# Source: prometheus/templates/cm.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -24,11 +23,12 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-15.0.1
+    chart: prometheus-19.6.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
 data:
+  allow-snippet-annotations: "false"
   alerting_rules.yml: |
     {}
   alerts: |
@@ -99,7 +99,8 @@ data:
       tls_config:
         ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         insecure_skip_verify: true
-    - job_name: kubernetes-service-endpoints
+    - honor_labels: true
+      job_name: kubernetes-service-endpoints
       kubernetes_sd_configs:
       - role: endpoints
       relabel_configs:
@@ -107,6 +108,10 @@ data:
         regex: true
         source_labels:
         - __meta_kubernetes_service_annotation_prometheus_io_scrape
+      - action: drop
+        regex: true
+        source_labels:
+        - __meta_kubernetes_service_annotation_prometheus_io_scrape_slow
       - action: replace
         regex: (https?)
         source_labels:
@@ -118,7 +123,7 @@ data:
         - __meta_kubernetes_service_annotation_prometheus_io_path
         target_label: __metrics_path__
       - action: replace
-        regex: ([^:]+)(?::\d+)?;(\d+)
+        regex: (.+?)(?::\d+)?;(\d+)
         replacement: $1:$2
         source_labels:
         - __address__
@@ -141,7 +146,8 @@ data:
         source_labels:
         - __meta_kubernetes_pod_node_name
         target_label: node
-    - job_name: kubernetes-service-endpoints-slow
+    - honor_labels: true
+      job_name: kubernetes-service-endpoints-slow
       kubernetes_sd_configs:
       - role: endpoints
       relabel_configs:
@@ -160,7 +166,7 @@ data:
         - __meta_kubernetes_service_annotation_prometheus_io_path
         target_label: __metrics_path__
       - action: replace
-        regex: ([^:]+)(?::\d+)?;(\d+)
+        regex: (.+?)(?::\d+)?;(\d+)
         replacement: $1:$2
         source_labels:
         - __address__
@@ -194,7 +200,8 @@ data:
         regex: pushgateway
         source_labels:
         - __meta_kubernetes_service_annotation_prometheus_io_probe
-    - job_name: kubernetes-services
+    - honor_labels: true
+      job_name: kubernetes-services
       kubernetes_sd_configs:
       - role: service
       metrics_path: /probe
@@ -222,7 +229,8 @@ data:
       - source_labels:
         - __meta_kubernetes_service_name
         target_label: service
-    - job_name: kubernetes-pods
+    - honor_labels: true
+      job_name: kubernetes-pods
       kubernetes_sd_configs:
       - role: pod
       relabel_configs:
@@ -230,6 +238,10 @@ data:
         regex: true
         source_labels:
         - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+      - action: drop
+        regex: true
+        source_labels:
+        - __meta_kubernetes_pod_annotation_prometheus_io_scrape_slow
       - action: replace
         regex: (https?)
         source_labels:
@@ -241,11 +253,18 @@ data:
         - __meta_kubernetes_pod_annotation_prometheus_io_path
         target_label: __metrics_path__
       - action: replace
-        regex: ([^:]+)(?::\d+)?;(\d+)
-        replacement: $1:$2
+        regex: (\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})
+        replacement: '[$2]:$1'
         source_labels:
-        - __address__
         - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
+        target_label: __address__
+      - action: replace
+        regex: (\d+);((([0-9]+?)(\.|$)){4})
+        replacement: $2:$1
+        source_labels:
+        - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
         target_label: __address__
       - action: labelmap
         regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)
@@ -264,7 +283,8 @@ data:
         regex: Pending|Succeeded|Failed|Completed
         source_labels:
         - __meta_kubernetes_pod_phase
-    - job_name: kubernetes-pods-slow
+    - honor_labels: true
+      job_name: kubernetes-pods-slow
       kubernetes_sd_configs:
       - role: pod
       relabel_configs:
@@ -283,11 +303,18 @@ data:
         - __meta_kubernetes_pod_annotation_prometheus_io_path
         target_label: __metrics_path__
       - action: replace
-        regex: ([^:]+)(?::\d+)?;(\d+)
-        replacement: $1:$2
+        regex: (\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})
+        replacement: '[$2]:$1'
         source_labels:
-        - __address__
         - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
+        target_label: __address__
+      - action: replace
+        regex: (\d+);((([0-9]+?)(\.|$)){4})
+        replacement: $2:$1
+        source_labels:
+        - __meta_kubernetes_pod_annotation_prometheus_io_port
+        - __meta_kubernetes_pod_ip
         target_label: __address__
       - action: labelmap
         regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)
@@ -372,7 +399,7 @@ data:
         expr: |
           sum without(instance, namespace, pod) (istio_tcp_received_bytes_total_bucket)
 ---
-# Source: prometheus/templates/server/clusterrole.yaml
+# Source: prometheus/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -380,7 +407,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-15.0.1
+    chart: prometheus-19.6.1
     heritage: Helm
   name: prometheus
 rules:
@@ -414,7 +441,7 @@ rules:
     verbs:
       - get
 ---
-# Source: prometheus/templates/server/clusterrolebinding.yaml
+# Source: prometheus/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -422,7 +449,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-15.0.1
+    chart: prometheus-19.6.1
     heritage: Helm
   name: prometheus
 subjects:
@@ -434,7 +461,7 @@ roleRef:
   kind: ClusterRole
   name: prometheus
 ---
-# Source: prometheus/templates/server/service.yaml
+# Source: prometheus/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -442,7 +469,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-15.0.1
+    chart: prometheus-19.6.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
@@ -459,7 +486,7 @@ spec:
   sessionAffinity: None
   type: "ClusterIP"
 ---
-# Source: prometheus/templates/server/deploy.yaml
+# Source: prometheus/templates/deploy.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -467,7 +494,7 @@ metadata:
     component: "server"
     app: prometheus
     release: prometheus
-    chart: prometheus-15.0.1
+    chart: prometheus-19.6.1
     heritage: Helm
   name: prometheus
   namespace: istio-system
@@ -478,13 +505,16 @@ spec:
       app: prometheus
       release: prometheus
   replicas: 1
+  strategy:
+    type: Recreate
+    rollingUpdate: null
   template:
     metadata:
       labels:
         component: "server"
         app: prometheus
         release: prometheus
-        chart: prometheus-15.0.1
+        chart: prometheus-19.6.1
         heritage: Helm
         
         sidecar.istio.io/inject: "false"
@@ -493,7 +523,7 @@ spec:
       serviceAccountName: prometheus
       containers:
         - name: prometheus-server-configmap-reload
-          image: "jimmidyson/configmap-reload:v0.5.0"
+          image: "jimmidyson/configmap-reload:v0.8.0"
           imagePullPolicy: "IfNotPresent"
           args:
             - --volume-dir=/etc/config
@@ -506,7 +536,7 @@ spec:
               readOnly: true
 
         - name: prometheus-server
-          image: "prom/prometheus:v2.31.1"
+          image: "prom/prometheus:v2.41.0"
           imagePullPolicy: "IfNotPresent"
           args:
             - --storage.tsdb.retention.time=6h
@@ -544,15 +574,12 @@ spec:
             timeoutSeconds: 10
             failureThreshold: 3
             successThreshold: 1
-          resources:
-            {}
           volumeMounts:
             - name: config-volume
               mountPath: /etc/config
             - name: storage-volume
               mountPath: /data
               subPath: ""
-      hostNetwork: false
       dnsPolicy: ClusterFirst
       securityContext:
         fsGroup: 65534
@@ -567,3 +594,4 @@ spec:
         - name: storage-volume
           emptyDir:
             {}
+
