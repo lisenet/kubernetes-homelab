@@ -10,9 +10,16 @@ spec:
       - enabled: true
         name: istio-ingressgateway
         k8s:
-         hpaSpec:
-           minReplicas: 2 # default 1
-         service:
+          hpaSpec:
+            minReplicas: 2 # default 1
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          service:
             ports:
               # Whatever is listed as the first port in a Service of
               # type LoadBalancer is picked to be the port used for
@@ -32,12 +39,30 @@ spec:
                 targetPort: 15021
     pilot:
       k8s:
+        hpaSpec:
+          minReplicas: 2
         resources:
           requests:
             cpu: 100m
             memory: 150Mi
   values:
+    gateways:
+      istio-egressgateway:
+        enabled: false
+      istio-ingressgateway:
+        enabled: true
+        podAntiAffinityTermLabelSelector:
+          - key: app
+            operator: In
+            values: istio-ingressgateway
+            topologyKey: "failure-domain.beta.kubernetes.io/zone"
     global:
+      configValidation: true
+      defaultPodDisruptionBudget:
+        enabled: true
+      defaultResources:
+        requests:
+          cpu: 10m
       proxy:
         resources:
           limits:
