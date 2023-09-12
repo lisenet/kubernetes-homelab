@@ -23,6 +23,6 @@ helm upgrade --install zfs-nfs \
   democratic-csi/democratic-csi \
   --namespace democratic-csi \
   --create-namespace \
-  --version "0.11.1" \
+  --version "0.13.7" \
   --values ./freenas-nfs.yaml
 ```
