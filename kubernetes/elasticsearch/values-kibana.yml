@@ -1,0 +1,64 @@
+---
+elasticsearchHosts: "https://elasticsearch-master:9200"
+
+replicas: 1
+
+protocol: https
+httpPort: 5601
+imagePullPolicy: "IfNotPresent"
+
+extraEnvs:
+  - name: "NODE_OPTIONS"
+    value: "--max-old-space-size=1800"
+  - name: "ELASTICSEARCH_USERNAME"
+    valueFrom:
+      secretKeyRef:
+        name: "elastic-credentials"
+        key: "username"
+  - name: "ELASTICSEARCH_PASSWORD"
+    valueFrom:
+      secretKeyRef:
+        name: "elastic-credentials"
+        key: "password"
+
+kibanaConfig:
+  kibana.yml: |
+    server.ssl:
+      enabled: "true"
+      key: "/usr/share/kibana/config/certs/tls.key"
+      certificate: "/usr/share/kibana/config/certs/tls.crt"
+      certificateAuthorities: [ "/usr/share/kibana/config/certs/homelab-ca.crt" ]
+      clientAuthentication: "none"
+      supportedProtocols: [ "TLSv1.2", "TLSv1.3" ]
+    elasticsearch.ssl:
+      certificateAuthorities: [ "/usr/share/kibana/config/certs/homelab-ca.crt" ]
+      verificationMode: "certificate"
+    newsfeed.enabled: "false"
+    telemetry.enabled: "false"
+    telemetry.optIn: "false"
+
+secretMounts:
+  - name: "elastic-certificates"
+    secretName: "elastic-certificates"
+    path: "/usr/share/kibana/config/certs"
+    defaultMode: "0755"
+
+resources:
+  requests:
+    cpu: "55m"
+    memory: "512Mi"
+  limits:
+    cpu: "1000m"
+    memory: "2Gi"
+
+service:
+  type: LoadBalancer
+  loadBalancerIP: "10.11.1.58"
+  port: 5601
+  nodePort: ""
+  labels: {}
+  annotations:
+    {}
+  loadBalancerSourceRanges:
+    []
+  httpPortName: http
