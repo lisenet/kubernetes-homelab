@@ -1,0 +1,54 @@
+---
+imagePullPolicy: "IfNotPresent"
+
+extraEnvs:
+  - name: "ELASTICSEARCH_PASSWORD"
+    valueFrom:
+      secretKeyRef:
+        name: "elastic-credentials"
+        key: "password"
+  - name: "ELASTICSEARCH_USERNAME"
+    valueFrom:
+      secretKeyRef:
+        name: "elastic-credentials"
+        key: "username"
+
+secretMounts:
+  - name: "elastic-certificates"
+    secretName: "elastic-certificates"
+    path: "/usr/share/filebeat/config/certs"
+    defaultMode: "0755"
+
+daemonset:
+  enabled: true
+  filebeatConfig:
+    filebeat.yml: |
+      filebeat.inputs:
+      - type: container
+        paths:
+          - /var/log/containers/*.log
+        processors:
+        - add_kubernetes_metadata:
+            host: ${NODE_NAME}
+            matchers:
+            - logs_path:
+                logs_path: "/var/log/containers/"
+
+      output.elasticsearch:
+        username: "${ELASTICSEARCH_USERNAME}"
+        password: "${ELASTICSEARCH_PASSWORD}"
+        protocol: https
+        host: "${NODE_NAME}"
+        hosts: ["https://elasticsearch-master:9200"]
+        ssl.certificate_authorities: ["/usr/share/filebeat/config/certs/homelab-ca.crt"]
+        ssl.verification_mode: "certificate"
+  resources:
+    requests:
+      cpu: "80m"
+      memory: "200Mi"
+    limits:
+      cpu: "1000m"
+      memory: "200Mi"
+
+deployment:
+  enabled: false
