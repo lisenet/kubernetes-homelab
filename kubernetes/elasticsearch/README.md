@@ -1,18 +1,20 @@
 # Elastic Stack for Logging
 
-Note: we have migrated from Elasticsearch to Loki. These configuration files are left here for references but are no longer maintaned.
+Note: we have migrated from Elasticsearch to Loki because Elastic no longer support deployment via Helm. These configuration files are left here for references but are no longer maintained.
 
-See https://github.com/elastic/helm-charts
+See https://github.com/elastic/helm-charts (the repository has been archived in 2023).
 
 ## Pre-requisites
 
 Add Helm repository:
-```
+
+```bash
 helm repo add elastic https://helm.elastic.co
 ```
 
 Create `logging` namespace:
-```
+
+```bash
 kubectl create namespace logging
 ```
 
@@ -21,12 +23,14 @@ kubectl create namespace logging
 ### Create Secrets
 
 Create a secret to store Elasticsearch credentials:
-```
+
+```bash
 kubectl apply -f ./elastic-credentials-secret.yml
 ```
 
 Create a secret to store Elasticsearch SSL certificates. We are using our [homelab Root CA](https://www.lisenet.com/2021/create-your-own-certificate-authority-ca-for-homelab-environment/) to sign the certificate.
-```
+
+```bash
 kubectl apply -f ./elastic-certificates-secret.yml
 ```
 
@@ -34,7 +38,7 @@ kubectl apply -f ./elastic-certificates-secret.yml
 
 Deploy a single node Elasticsearch with authentication, certificates for TLS and custom [values](./values-elasticsearch.yml):
 
-```
+```bash
 helm upgrade --install elasticsearch \
   elastic/elasticsearch \
   --namespace logging \
@@ -46,7 +50,7 @@ helm upgrade --install elasticsearch \
 
 Deploy Kibana using authentication and TLS to connect to Elasticsearch (see [values](./values-kibana.yml)):
 
-```
+```bash
 helm upgrade --install kibana \
   elastic/kibana \
   --namespace logging \
@@ -58,7 +62,7 @@ helm upgrade --install kibana \
 
 Deploy Filebeat using authentication and TLS to connect to Elasticsearch (see [values](./values-filebeat.yml)).
 
-```
+```bash
 helm upgrade --install filebeat \
   elastic/filebeat \
   --namespace logging \
