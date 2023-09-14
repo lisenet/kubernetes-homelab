@@ -1,0 +1,8 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: nginx-with-startup-lock
+  labels:
+    name: nginx-with-startup-lock
+...
