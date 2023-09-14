@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: startup-lock
+  namespace: nginx-with-startup-lock
+  annotations:
+    runterrascan.io/skip: "[
+        {\"rule\": \"AC_K8S_0051\", \"comment\": \"Secrets as environment variables accepted\"},
+        {\"rule\": \"AC_K8S_0069\", \"comment\": \"Image without digest accepted\"},
+        {\"rule\": \"AC_K8S_0073\", \"comment\": \"AppArmor profile not set accepted\"},
+        {\"rule\": \"AC_K8S_0080\", \"comment\": \"Default seccomp profile enabled\"},
+        {\"rule\": \"AC_K8S_0084\", \"comment\": \"Share the host network namespace accepted\"}
+      ]"
+spec:
+  selector:
+    matchLabels:
+      app: startup-lock
+  template:
+    metadata:
+      labels:
+        app: startup-lock
+      annotations:
+        "container.apparmor.security.beta.kubernetes.io/startup-lock-container": "unconfined"
+    spec:
+      priorityClassName: system-node-critical
+      securityContext:
+        seccompProfile:
+          type: "RuntimeDefault"
+      containers:
+        - name: startup-lock-container
+          image: lisenet/startup-lock:1.0.3
+          imagePullPolicy: IfNotPresent
+          args: ["--port", "8888", "--locks", "1"]
+          ports:
+            - name: http
+              containerPort: 8888
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          readinessProbe:
+            tcpSocket:
+              port: 8888
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8888
+            initialDelaySeconds: 300
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 10m
+              memory: 4Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: "RuntimeDefault"
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+...
