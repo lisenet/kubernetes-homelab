@@ -1,4 +1,4 @@
-[[Back to Index Page](../README.md)]
+[[Back to Index Page](../../README.md)]
 
 # Kubecost
 
@@ -87,8 +87,8 @@ kubecost-service              LoadBalancer   10.102.54.33     10.11.1.52    80:3
 
 Monthly costs using AWS labels (if the homelab was hosted on AWS):
 
-![Kubecost Monthly Cost](../images/kubecost/kubecost-monthly-cost.png)
+![Kubecost Monthly Cost](../../../images/kubecost/kubecost-monthly-cost.png)
 
 Assets and their total cost:
 
-![Kubecost Assets](../images/kubecost/kubecost-assets.png)
+![Kubecost Assets](../../../images/kubecost/kubecost-assets.png)

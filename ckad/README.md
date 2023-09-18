@@ -173,7 +173,7 @@ virt-install \
 
 When asked for an OS, select Ubuntu 20.04 LTS Server option.
 
-![PXE boot menu](../docs/homelab-pxe-boot-menu.png)
+![PXE boot menu](../images/homelab-pxe-boot-menu.png)
 
 Provision a KVM guest for the **worker node** using PXE boot:
 
