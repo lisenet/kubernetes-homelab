@@ -14,4 +14,4 @@ kubectl apply -f ./mikrotik-exporter
 
 ## Grafana Dashboard
 
-![Grafana Dashboard Mikrotik Exporter](../images/grafana/grafana-dashboard-mikrotik-exporter.png)
+![Grafana Dashboard Mikrotik Exporter](../../images/grafana/grafana-dashboard-mikrotik-exporter.png)

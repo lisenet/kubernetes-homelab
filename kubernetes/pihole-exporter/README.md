@@ -14,4 +14,4 @@ kubectl apply -f ./pihole-exporter
 
 ## Grafana Dashboard
 
-![Grafana Dashboard Pi-hole Exporter](../images/grafana/grafana-dashboard-pihole-exporter.png)
+![Grafana Dashboard Pi-hole Exporter](../../images/grafana/grafana-dashboard-pihole-exporter.png)

@@ -1,4 +1,4 @@
-[[Back to Index Page](../README.md)]
+[[Back to Index Page](../../README.md)]
 
 # Kiali
 

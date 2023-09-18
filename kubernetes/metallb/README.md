@@ -12,6 +12,14 @@ MetalLB aims to redress this imbalance by offering a network LB implementation t
 
 ## Install MetalLB
 
+Enable strict ARP mode.
+
+```bash
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl apply -f - -n kube-system
+```
+
 Update the config map [`metallb-config-map.yml`](./metallb-config-map.yml) and specify the IP address range. Deploy MetalLB network load-balancer:
 
 ```bash

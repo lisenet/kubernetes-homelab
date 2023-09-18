@@ -6,7 +6,7 @@ Run speedtest-cli Docker images using a cronjob and store speedtest results in I
 
 See https://github.com/sivel/speedtest-cli and https://github.com/influxdata/influxdb
 
-![Grafana Dashboard Speedtest](../images/grafana/grafana-dashboard-speedtest.png)
+![Grafana Dashboard Speedtest](../../images/grafana/grafana-dashboard-speedtest.png)
 
 ## Kubernetes Deployment
 
