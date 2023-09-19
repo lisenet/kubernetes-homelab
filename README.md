@@ -3,8 +3,8 @@
 A repository to keep resources and configuration files used with my Kubernetes homelab.
 
 [![version](https://img.shields.io/github/manifest-json/v/lisenet/kubernetes-homelab?label=Kubernetes)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
-[![calico](https://img.shields.io/badge/Calico-3.25-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
-[![istio](https://img.shields.io/badge/Istio-1.17-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
+[![calico](https://img.shields.io/badge/Calico-3.26-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
+[![istio](https://img.shields.io/badge/Istio-1.19-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
 [![operating system](https://img.shields.io/badge/Rocky-9-blue)](https://github.com/lisenet/kubernetes-homelab/blob/master/VERSIONS.md)
 [![license](https://img.shields.io/github/license/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/blob/master/LICENSE)
 [![last commit](https://img.shields.io/github/last-commit/lisenet/kubernetes-homelab)](https://github.com/lisenet/kubernetes-homelab/commits/master)
@@ -101,9 +101,9 @@ Commodity hardware is used to keep costs to a minimum.
 | Hostname | CPU Cores | RAM (MB) | Storage | OS |
 | --- | --- | --- | --- | --- |
 | pxe.hl.test  | 4 | 8192  | 120GB SSD | Rocky 8 |
-| kvm1.hl.test | 8 | 22528 | 240GB SSD | Rocky 8 |
-| kvm2.hl.test | 8 | 18432 | 240GB SSD | Rocky 8 |
-| kvm3.hl.test | 8 | 18432 | 240GB SSD | Rocky 8 |
+| kvm1.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
+| kvm2.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
+| kvm3.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
 | truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool | TrueNAS Core 12 |
 | mikrotik.hl.test | 1 | 128 | 128MB | RouterOS |
 | pi.hl.test | 1 | 512 | 8GB | Raspbian |

@@ -36,7 +36,7 @@ spec:
         runAsUser: 472
       containers:
       - name: grafana
-        image: grafana/grafana:8.4.4
+        image: grafana/grafana:9.5.2
         imagePullPolicy: IfNotPresent
         ports:
         - name: grafana
@@ -100,6 +100,12 @@ spec:
             mountPath: /var/lib/grafana/dashboards/mysqld-exporter
           - name: dashboards-speedtest
             mountPath: /var/lib/grafana/dashboards/speedtest
+          - name: dashboards-syslog-host
+            mountPath: /var/lib/grafana/dashboards/syslog-host
+          - name: dashboards-syslog-severity
+            mountPath: /var/lib/grafana/dashboards/syslog-severity
+          - name: dashboards-logs-k8s-containers
+            mountPath: /var/lib/grafana/dashboards/logs-k8s-containers
 
       # See https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
       #initContainers:
@@ -187,3 +193,12 @@ spec:
         - name: dashboards-speedtest
           configMap:
             name: grafana-dashboards-speedtest
+        - name: dashboards-syslog-host
+          configMap:
+            name: grafana-dashboards-loki-logs-syslog-host-only
+        - name: dashboards-syslog-severity
+          configMap:
+            name: grafana-dashboards-loki-logs-syslog-host-severity
+        - name: dashboards-logs-k8s-containers
+          configMap:
+            name: grafana-dashboards-loki-logs-k8s-containers

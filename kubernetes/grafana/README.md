@@ -14,4 +14,4 @@ kubectl apply -f ./grafana
 
 ## Grafana Dashboards
 
-![Grafana Dashboard Kubernetes](../images/grafana/grafana-dashboard-kubernetes.png)
+![Grafana Dashboard Kubernetes](../../images/grafana/grafana-dashboard-kubernetes.png)

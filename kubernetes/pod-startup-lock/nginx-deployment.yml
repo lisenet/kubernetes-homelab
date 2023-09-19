@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-with-startup-lock
+  namespace: nginx-with-startup-lock
+  labels:
+    app: nginx-with-startup-lock
+spec:
+  replicas: 9
+  selector:
+    matchLabels:
+      app: nginx-with-startup-lock
+  template:
+    metadata:
+      labels:
+        app: nginx-with-startup-lock
+    spec:
+      containers:
+        - name: nginx-with-startup-lock
+          image: nginx:alpine-slim
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "8Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+      terminationGracePeriodSeconds: 60
+      initContainers:
+        - name: startup-lock-init-container
+          image: lisenet/startup-lock-init:1.0.3
+          imagePullPolicy: IfNotPresent
+          args: ["--host", "$(HOST_IP)", "--port", "8888", "--duration", "30"]
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "4Mi"
+            limits:
+              cpu: "100m"
+              memory: "64Mi"
+...

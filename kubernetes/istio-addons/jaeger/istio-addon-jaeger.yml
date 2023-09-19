@@ -13,14 +13,14 @@ spec:
     metadata:
       labels:
         app: jaeger
-      annotations:
         sidecar.istio.io/inject: "false"
+      annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "14269"
     spec:
       containers:
         - name: jaeger
-          image: "docker.io/jaegertracing/all-in-one:1.29"
+          image: "docker.io/jaegertracing/all-in-one:1.46"
           env:
             - name: BADGER_EPHEMERAL
               value: "false"
@@ -113,5 +113,10 @@ spec:
   - port: 9411
     targetPort: 9411
     name: http-zipkin
+  - port: 4317
+    name: grpc-otel
+  - port: 4318
+    name: http-otel
   selector:
     app: jaeger
+
