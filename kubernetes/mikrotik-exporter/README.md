@@ -2,7 +2,7 @@
 
 # mikrotik-exporter
 
-See https://github.com/nshttpd/mikrotik-exporter
+See https://github.com/lisenet/mikrotik-exporter
 
 A Prometheus Exporter for Mikrotik devices.
 
