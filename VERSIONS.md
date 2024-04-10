@@ -5,17 +5,17 @@
 Kubernetes development continues to grow at a rapid pace, and keeping up to date can be a challenge. Therefore it’s important to know which software versions can work together without breaking things.
 
 * Rocky Linux 9.2
-* Kubernetes 1.28.1
-* Calico CNI 3.26
+* Kubernetes 1.29.2
+* Calico CNI 3.27
 * containerd 1.6.20
-* kubernetes-cni 1.1.1
-* Istio 1.19
+* kubernetes-cni 1.3.0
+* Istio 1.20
 
 Other services (in alphabetical order):
 
 * Alertmanager 0.23.0
 * Argo CD 2.3.2
-* CoreDNS 1.10.1
+* CoreDNS 1.11.1
 * Democratic CSI 0.13.7
 * Grafana 9.5.2
 * Homeassistant 2023.7
@@ -34,9 +34,9 @@ Other services (in alphabetical order):
 * Velero 1.8.1
 * x509-certificate-exporter 3.6.0
 
-[Calico 3.26](https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements#kubernetes-requirements) has been tested against the following Kubernetes versions: 1.24, 1.25, 1.26, 1.27.
+[Calico 3.27](https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements#kubernetes-requirements) has been tested against the following Kubernetes versions: 1.27, 1.28, 1.29.
 
-[Istio 1.19](https://istio.io/latest/docs/releases/supported-releases/#support-status-of-istio-releases) has been tested with these Kubernetes releases: 1.25, 1.26, 1.27, 1.28.
+[Istio 1.20](https://istio.io/latest/docs/releases/supported-releases/#support-status-of-istio-releases) has been tested with these Kubernetes releases: 1.25, 1.26, 1.27, 1.28, 1.29.
 
 Kubernetes 1.21 updated the latest validated version of Docker to 20.10. As of [Kubernetes 1.24](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.24.md#dockershim-removed-from-kubelet), Docker runtime support using dockshim in the kubelet has been completely removed.
 
