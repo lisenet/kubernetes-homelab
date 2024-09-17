@@ -67,7 +67,7 @@ Hostnames and their IP addresses:
 
 | Hostname          | IP Address   | Information                                            | OS |
 |:------------------|:-------------|:-------------------------------------------------------|:---|
-| mikrotik.hl.test  | 10.11.1.1    | Mikrotik [L009UiGS-2HaxD](https://mikrotik.com/product/L009UiGS-2HaxD) router | RouterOS 7|
+| mikrotik.hl.test  | 10.11.1.1    | Mikrotik [L009UiGS-2HaxD](https://mikrotik.com/product/l009uigs_2haxd_in) router | RouterOS 7|
 | admin1.hl.test    | 10.11.1.2    | DNS/DHCP master, NTP, SMTP, HAProxy master, Keepalived | Rocky 8 |
 | admin2.hl.test    | 10.11.1.3    | DNS/DHCP slave, NTP, SMTP, HAProxy backup, Keepalived  | Rocky 8 |
 | switch.hl.test    | 10.11.1.4    | Netgear [GS308E](https://www.netgear.com/uk/business/wired/switches/plus/gs308e/) managed switch | V1.00.11EN |
