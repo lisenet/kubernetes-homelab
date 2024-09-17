@@ -67,13 +67,13 @@ Hostnames and their IP addresses:
 
 | Hostname          | IP Address   | Information                                            | OS |
 |:------------------|:-------------|:-------------------------------------------------------|:---|
-| mikrotik.hl.test  | 10.11.1.1    | Mikrotik router                                        | RouterOS |
+| mikrotik.hl.test  | 10.11.1.1    | Mikrotik L009UiGS-2HaxD router                         | RouterOS 7|
 | admin1.hl.test    | 10.11.1.2    | DNS/DHCP master, NTP, SMTP, HAProxy master, Keepalived | Rocky 8 |
 | admin2.hl.test    | 10.11.1.3    | DNS/DHCP slave, NTP, SMTP, HAProxy backup, Keepalived  | Rocky 8 |
-| switch.hl.test    | 10.11.1.4    | Managed switch                                         | N/A |
-| truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      | TrueNAS Core 12 |
-| pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     | Raspbian |
-| mikrotik-lte.hl.test | 10.11.1.11 | Mikrotik wireless access point with LTE antennas      | RouterOS |
+| switch.hl.test    | 10.11.1.4    | Netgear GS308E managed switch                          | V1.00.11EN |
+| truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      | TrueNAS Core 13 |
+| pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     | Raspbian 12 |
+| mikrotik-lte.hl.test | 10.11.1.11 | Mikrotik RBwAPR-2nD with LTE antennas                 | RouterOS 6 |
 | pxe.hl.test       | 10.11.1.20   | PXE boot server                                        | Rocky 8 |
 | kvm1.hl.test      | 10.11.1.21   | KVM hypervisor                                         | Rocky 8 |
 | kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         | Rocky 8 |
@@ -98,14 +98,15 @@ Kubernetes environment runs on three KVM hypervisors. The goal is to maintain se
 Commodity hardware is used to keep costs to a minimum.
 
 | Hostname | CPU Cores | RAM (MB) | Storage | OS |
-| --- | --- | --- | --- | --- |
+| -------- | --------- | -------- | ------- | -- |
+| mikrotik.hl.test | 1 | 128 | 128MB | RouterOS 7 |
+| mikrotik-lte.hl.test | 1 | 64 | 16MB | RouterOS 6 |
 | pxe.hl.test  | 4 | 8192  | 120GB SSD | Rocky 8 |
 | kvm1.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
 | kvm2.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
 | kvm3.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
-| truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool | TrueNAS Core 12 |
-| mikrotik.hl.test | 1 | 128 | 128MB | RouterOS |
-| pi.hl.test | 1 | 512 | 8GB | Raspbian |
+| truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool | TrueNAS Core 13 |
+| pi.hl.test | 1 | 512 | 8GB SD card | Raspbian 12 |
 
 ## Guest Provisioning
 
