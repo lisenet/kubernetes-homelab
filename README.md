@@ -67,13 +67,13 @@ Hostnames and their IP addresses:
 
 | Hostname          | IP Address   | Information                                            | OS |
 |:------------------|:-------------|:-------------------------------------------------------|:---|
-| mikrotik.hl.test  | 10.11.1.1    | Mikrotik L009UiGS-2HaxD router                         | RouterOS 7|
+| mikrotik.hl.test  | 10.11.1.1    | Mikrotik [L009UiGS-2HaxD](https://mikrotik.com/product/L009UiGS-2HaxD) router | RouterOS 7|
 | admin1.hl.test    | 10.11.1.2    | DNS/DHCP master, NTP, SMTP, HAProxy master, Keepalived | Rocky 8 |
 | admin2.hl.test    | 10.11.1.3    | DNS/DHCP slave, NTP, SMTP, HAProxy backup, Keepalived  | Rocky 8 |
-| switch.hl.test    | 10.11.1.4    | Netgear GS308E managed switch                          | V1.00.11EN |
+| switch.hl.test    | 10.11.1.4    | Netgear [GS308E](https://www.netgear.com/uk/business/wired/switches/plus/gs308e/) managed switch | V1.00.11EN |
 | truenas.hl.test   | 10.11.1.5    | TrueNAS Core shared storage server for Kubernetes      | TrueNAS Core 13 |
-| pi.hl.test        | 10.11.1.7    | RaspberryPi Pi-hole DNS ad blocker                     | Raspbian 12 |
-| mikrotik-lte.hl.test | 10.11.1.11 | Mikrotik RBwAPR-2nD with LTE antennas                 | RouterOS 6 |
+| pi.hl.test        | 10.11.1.7    | Raspberry Pi 1 Model B Pi-hole DNS ad blocker          | Raspbian 12 |
+| mikrotik-lte.hl.test | 10.11.1.11 | Mikrotik [RBwAPR-2nD](https://mikrotik.com/product/RBwAPR-2nD) with LTE antennas | RouterOS 6 |
 | pxe.hl.test       | 10.11.1.20   | PXE boot server                                        | Rocky 8 |
 | kvm1.hl.test      | 10.11.1.21   | KVM hypervisor                                         | Rocky 8 |
 | kvm2.hl.test      | 10.11.1.22   | KVM hypervisor                                         | Rocky 8 |
@@ -86,7 +86,6 @@ Hostnames and their IP addresses:
 | srv35.hl.test     | 10.11.1.35   | Kubernetes worker node                                 | Rocky 9 |
 | srv36.hl.test     | 10.11.1.36   | Kubernetes worker node                                 | Rocky 9 |
 
-
 # Homelab Infrastructure
 
 Kubernetes environment runs on three KVM hypervisors. The goal is to maintain service in the event of a loss of a (single) host. This [blog post](https://www.lisenet.com/2021/install-and-configure-a-multi-master-ha-kubernetes-cluster-with-kubeadm-haproxy-and-keepalived-on-centos-7/) explains how to build a multi-master Kubernetes homelab cluster by hand using KVM, PXE boot and kubeadm.
@@ -97,16 +96,16 @@ Kubernetes environment runs on three KVM hypervisors. The goal is to maintain se
 
 Commodity hardware is used to keep costs to a minimum.
 
-| Hostname | CPU Cores | RAM (MB) | Storage | OS |
-| -------- | --------- | -------- | ------- | -- |
-| mikrotik.hl.test | 1 | 128 | 128MB | RouterOS 7 |
-| mikrotik-lte.hl.test | 1 | 64 | 16MB | RouterOS 6 |
-| pxe.hl.test  | 4 | 8192  | 120GB SSD | Rocky 8 |
-| kvm1.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
-| kvm2.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
-| kvm3.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 |
-| truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool | TrueNAS Core 13 |
-| pi.hl.test | 1 | 512 | 8GB SD card | Raspbian 12 |
+| Hostname | CPU Cores | RAM (MB) | Storage | OS | Vendor |
+| -------- | --------- | -------- | ------- | -- | ------ |
+| mikrotik.hl.test | 1 | 128 | 128MB | RouterOS 7 | Mikrotik |
+| mikrotik-lte.hl.test | 1 | 64 | 16MB | RouterOS 6 | Mikrotik |
+| pxe.hl.test  | 4 | 8192  | 120GB SSD | Rocky 8 | Dell |
+| kvm1.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 | Dell |
+| kvm2.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 | Dell |
+| kvm3.hl.test | 8 | 24576 | 240GB SSD | Rocky 8 | Dell |
+| truenas.hl.test | 4 | 8192 | 240GB SSD, 2x 320GB HDDs in RAID 1 for storage pool | TrueNAS Core 13 | Dell |
+| pi.hl.test | 1 | 512 | 8GB SD card | Raspbian 12 | Raspberry Pi 1 Model B |
 
 ## Guest Provisioning
 
