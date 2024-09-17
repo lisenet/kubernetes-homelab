@@ -1,11 +1,17 @@
 ---
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: ckad-memlimit
+---
+apiVersion: v1
 kind: LimitRange
 metadata:
   name: ckad-memlimit
   namespace: ckad-memlimit
 spec:
   limits:
-  - max:
-      memory: 30Mi
-    type: Container
+    - max:
+        memory: 30Mi
+      type: Container
+...
