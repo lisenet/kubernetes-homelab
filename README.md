@@ -109,7 +109,7 @@ Commodity hardware is used to keep costs to a minimum.
 
 ## Guest Provisioning
 
-Previously, provisioning of KVM guests was done by using a [PXE boot server on CentOS 7](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/) ([PXE on Rocky 8](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/),[PXE on Rocky 9](https://www.lisenet.com/2023/configure-pxe-boot-server-for-rocky-linux-9-kickstart-installation/)) with Kickstart templates.
+Previously, provisioning of KVM guests was done by using a PXE boot server ([CentOS 7](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/), [Rocky 8](https://www.lisenet.com/2021/install-and-configure-a-pxe-boot-server-for-kickstart-installation-on-centos/), [Rocky 9](https://www.lisenet.com/2023/configure-pxe-boot-server-for-rocky-linux-9-kickstart-installation/)) with Kickstart templates.
 
 I have since migrated to [Packer](./packer/README.md) to make the VM deployment process faster. PXE boot is still used to provision physical hosts (hypervisors).
 
