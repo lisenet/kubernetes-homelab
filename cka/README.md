@@ -2,7 +2,7 @@
 
 # Certified Kubernetes Administrator (CKA)
 
-Preparation and study material for Certified Kubernetes Administrator exam v1.26.
+Preparation and study material for Certified Kubernetes Administrator exam v1.30.
 
 - [Reasoning](#reasoning)
 - [Aliases](#aliases)
@@ -109,17 +109,17 @@ For the sake of this excercise, we will create a new two-node cluster, with one 
 
 Libvirt/KVM nodes:
 
-* srv39-master: 2 vCPUs, 4GB RAM, 16GB disk, 10.11.1.39/24
-* srv40-node: 2 vCPUs, 4GB RAM, 16GB disk, 10.11.1.40/24
+* srv37-master: 2 vCPUs, 4GB RAM, 16GB disk, 10.11.1.37/24
+* srv38-node: 2 vCPUs, 4GB RAM, 16GB disk, 10.11.1.38/24
 
 Provision a KVM guest for the **control plane** using PXE boot:
 
 ```bash
 virt-install \
   --connect qemu+ssh://root@kvm1.hl.test/system \
-  --name srv39-master \
-  --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:39 \
-  --disk path=/var/lib/libvirt/images/srv39.qcow2,size=16 \
+  --name srv37-master \
+  --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:37 \
+  --disk path=/var/lib/libvirt/images/srv37.qcow2,size=16 \
   --pxe \
   --ram 4096 \
   --vcpus 2 \
@@ -140,9 +140,9 @@ Provision a KVM guest for the **worker node** using PXE boot:
 ```bash
 virt-install \
   --connect qemu+ssh://root@kvm1.hl.test/system \
-  --name srv40-node \
-  --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:40 \
-  --disk path=/var/lib/libvirt/images/srv40.qcow2,size=16 \
+  --name srv38-node \
+  --network bridge=br0,model=virtio,mac=C0:FF:EE:D0:5E:38 \
+  --disk path=/var/lib/libvirt/images/srv38.qcow2,size=16 \
   --pxe \
   --ram 4096 \
   --vcpus 2 \
@@ -156,7 +156,7 @@ virt-install \
 
 ### Use Kubeadm to install a basic cluster
 
-We will use `kubeadm` to install a Kubernetes v1.25 cluster. We will upgrade the cluster to v1.26 in the next chapter.
+We will use `kubeadm` to install a Kubernetes v1.29 cluster. We will upgrade the cluster to v1.30 in the next chapter.
 
 Docs: https://kubernetes.io/docs/setup/production-environment/container-runtimes/
 
@@ -209,6 +209,10 @@ To use the `systemd` cgroup driver in `/etc/containerd/config.toml` with `runc`,
     SystemdCgroup = true
 ```
 
+```bash
+sudo sed -i 's/            SystemdCgroup =.*/            SystemdCgroup = true/g' /etc/containerd/config.toml
+```
+
 Make sure to restart containerd:
 
 ```bash
@@ -217,15 +221,16 @@ sudo systemctl restart containerd
 
 Docs: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
 
-Install `kubeadm`, `kubelet` and `kubectl` (v1.25):
+Install `kubeadm`, `kubelet` and `kubectl` (v1.29):
 
 ```bash
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring-1.29.gpg
 
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring-1.29.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes-1.29.list
 
 sudo apt-get update
-sudo apt-get install -y kubelet=1.25.5-00 kubeadm=1.25.5-00 kubectl=1.25.5-00
+sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable kubelet
 ```
@@ -242,7 +247,7 @@ We are going to use Flannel, hence `10.244.0.0/16`.
 
 ```bash
 sudo kubeadm init \
-  --kubernetes-version "1.25.5" \
+  --kubernetes-version "1.29.9" \
   --pod-network-cidr "10.244.0.0/16"
 ```
 
@@ -257,10 +262,10 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 Run the output of the init command on the **worker node**:
 
 ```bash
-kubeadm join 10.11.1.39:6443 --token "ktlb43.llip8nym905afakm" \
+sudo kubeadm join 10.11.1.37:6443 --token "ktlb43.llip8nym905afakm" \
 	--discovery-token-ca-cert-hash sha256:b3f1c31e2777bd54b3f7a797659a96072711809ae84e8c9be3fba449c8e32dd4
 ```
-
+-1.29
 Install a pod network to the cluster. You can choose one of the following: Calico, Flannel, Weave Net.
 
 * To install Calico, run the following:
@@ -286,8 +291,8 @@ Check the cluster to make sure that all nodes are running and ready:
 ```bash
 kubectl get nodes
 NAME    STATUS   ROLES           AGE    VERSION
-srv39   Ready    control-plane   14m    v1.25.5
-srv40   Ready    <none>          102s   v1.25.5
+srv37   Ready    control-plane   14m    v1.29.9
+srv38   Ready    <none>          102s   v1.29.9
 ```
 
 ### How to add new worker nodes to the cluster?
@@ -303,7 +308,7 @@ kubeadm token create --print-join-command
 The output will be something like this:
 
 ```bash
-kubeadm join 10.11.1.39:6443 --token hh{truncated}g4 --discovery-token-ca-cert-hash sha256:77{truncated}28
+kubeadm join 10.11.1.37:6443 --token hh{truncated}g4 --discovery-token-ca-cert-hash sha256:77{truncated}28
 ```
 
 Run the `kubeadm join` command on a new worker node that is to be added to the cluster.
@@ -321,7 +326,7 @@ sudo apt-get -y install etcd-client
 Alternativelly:
 
 ```bash
-ETCD_VER=v3.5.7
+ETCD_VER=v3.5.16
 GITHUB_URL=https://github.com/etcd-io/etcd/releases/download
 DOWNLOAD_URL=${GITHUB_URL}
 
@@ -331,14 +336,14 @@ tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /tmp/etcd-download-test --s
 rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
 
 /tmp/etcd-download-test/etcdctl version
-etcdctl version: 3.5.7
+etcdctl version: 3.5.16
 API version: 3.5
 ```
 
 Find paths of certificates and keys:
 
 ```bash
-egrep "cert-|key-|trusted-" /etc/kubernetes/manifests/etcd.yaml|grep -ve peer
+sudo egrep "cert-|key-|trusted-" /etc/kubernetes/manifests/etcd.yaml|grep -ve peer
     - --cert-file=/etc/kubernetes/pki/etcd/server.crt
     - --client-cert-auth=true
     - --key-file=/etc/kubernetes/pki/etcd/server.key
@@ -348,7 +353,7 @@ egrep "cert-|key-|trusted-" /etc/kubernetes/manifests/etcd.yaml|grep -ve peer
 Take a snapshot by specifying the endpoint and certificates:
 
 ```bash
-ETCDCTL_API=3 etcdctl \
+sudo ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
@@ -361,7 +366,7 @@ Do not use `snapshot status` command because it can alter the snapshot file and 
 Restore an etcd cluster from the snapshot. Identify the default `data-dir`:
 
 ```bash
-grep data-dir /etc/kubernetes/manifests/etcd.yaml
+sudo grep data-dir /etc/kubernetes/manifests/etcd.yaml
     - --data-dir=/var/lib/etcd
 ```
 
@@ -375,19 +380,19 @@ Stop all control plane components:
 
 ```bash
 cd /etc/kubernetes/manifests/
-mv ./*yaml ../
+sudo mv ./*yaml ../
 ```
 
 Make sure all control plane pods are `NotReady`:
 
 ```bash
-crictl pods | egrep "kube|etcd"
+sudo crictl pods | egrep "kube|etcd"
 ```
 
 Restore the snapshot into a specific directory:
 
 ```bash
-ETCDCTL_API=3 etcdctl \
+sudo ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
@@ -399,14 +404,14 @@ ETCDCTL_API=3 etcdctl \
 Tell etcd to use the new directory `/var/lib/etcd_backup`:
 
 ```bash
-sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/manifests/etcd.yaml
+sudo sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/etcd.yaml
 ```
 
 Start all control plane components:
 
 ```bash
 cd /etc/kubernetes/manifests/
-mv ../*yaml ./
+sudo mv ../*yaml ./
 ```
 
 Give it some time (up to several minutes) for etcd to restart.
@@ -415,55 +420,66 @@ Give it some time (up to several minutes) for etcd to restart.
 
 Docs: https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
-We will upgrade previously deployed Kubernetes cluster v1.25 to v1.26.
+We will upgrade previously deployed Kubernetes cluster v1.29 to v1.30.
 
-Find the latest version in the list:
+Set up Kubernetes repository for the new release:
 
 ```bash
-apt-get update
-apt-cache madison kubeadm
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring-1.30.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring-1.30.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes-1.30.list
 ```
 
 Upgrade the **control plane**:
 
 ```bash
-apt-mark unhold kubeadm && \
-apt-get update && apt-get install -y kubeadm=1.26.1-00 && \
-apt-mark hold kubeadm
+sudo apt-mark unhold kubeadm && \
+sudo apt-get update && \
+sudo apt-get install -y kubeadm=1.30.1-1.1 && \
+sudo apt-mark hold kubeadm
 
 kubeadm version
 sudo kubeadm upgrade plan
-sudo kubeadm upgrade apply v1.26.1
+sudo kubeadm upgrade apply v1.30.1
 
-kubectl drain srv39 --ignore-daemonsets
+kubectl drain srv37 --ignore-daemonsets
 
-apt-mark unhold kubelet kubectl && \
-apt-get install -y kubelet=1.26.1-00 kubectl=1.26.1-00 && \
-apt-mark hold kubelet kubectl
+sudo apt-mark unhold kubelet kubectl && \
+sudo apt-get install -y kubelet=1.30.1-1.1 kubectl=1.30.1-1.1 && \
+sudo apt-mark hold kubelet kubectl
 
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
-kubectl uncordon srv39
+kubectl uncordon srv37
 ```
 
 Upgrade the **worker node**:
 
 ```bash
-apt-mark unhold kubeadm && \
-apt-get update && apt-get install -y kubeadm=1.26.1-00 && \
-apt-mark hold kubeadm
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring-1.30.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring-1.30.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes-1.30.list
+```
+
+```bash
+sudo apt-mark unhold kubeadm && \
+sudo apt-get update && \
+sudo apt-get install -y kubeadm=1.30.1-1.1 && \
+sudo apt-mark hold kubeadm
 
 sudo kubeadm upgrade node
 
-kubectl drain srv40 --ignore-daemonsets
+kubectl drain srv38 --ignore-daemonsets
 
-apt-mark unhold kubelet kubectl && \
-apt-get install -y kubelet=1.26.1-00 kubectl=1.26.1-00 && \
-apt-mark hold kubelet kubectl
+sudo apt-mark unhold kubelet kubectl && \
+sudo apt-get install -y kubelet=1.30.1-1.1 kubectl=1.30.1-1.1 && \
+sudo apt-mark hold kubelet kubectl
 
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
-kubectl uncordon srv40
+kubectl uncordon srv38
 ```
 
 Verify the status of the cluster:
@@ -471,8 +487,8 @@ Verify the status of the cluster:
 ```bash
 kubectl get nodes
 NAME    STATUS   ROLES           AGE   VERSION
-srv39   Ready    control-plane   38m   v1.26.1
-srv40   Ready    <none>          33m   v1.26.1
+srv37   Ready    control-plane   38m   v1.30.1
+srv38   Ready    <none>          33m   v1.30.1
 ```
 
 ### Manage role based access control (RBAC)
@@ -2326,7 +2342,7 @@ journalctl -u kubelet
 Check etcd health and status:
 
 ```bash
-ETCDCTL_API=3 etcdctl \
+sudo ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
@@ -2335,7 +2351,7 @@ ETCDCTL_API=3 etcdctl \
 https://127.0.0.1:2379 is healthy: successfully committed proposal: took = 12.882378ms
 
 
-ETCDCTL_API=3 etcdctl \
+sudo ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
@@ -2369,14 +2385,14 @@ kubectl logs deploy/${DEPLOYMENT_NAME} -c ${CONTAINER_NAME}
 We can write container logs to a file. For example, get container ID of coredns:
 
 ```bash
-crictl ps --quiet --name coredns 
+sudo crictl ps --quiet --name coredns 
 5582a4b80318a741ad0d9a05df6d235642e73a2e88ff53933c103ffd854c0069
 ```
 
 Dump container logs to a file (both the standard output and standard error):
 
 ```bash
-crictl logs ${CONTAINER_ID} > ./container.log 2>&1
+sudo crictl logs ${CONTAINER_ID} | tee /tmp/container.log 2>&1
 ```
 
 ### Troubleshoot application failure
@@ -2458,7 +2474,7 @@ Docs: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-
 11. Create a `NetworkPolicy` called `netpol-mysql`. Use the `app` label of pods in your policy. The policy should allow the `mysql-*` pods to:
     * accept ingress traffic on port `3306` from `wordpres-*` pods only.
     * connect to IP block `10.0.0.0/8`.
-12. Navigate your web browser to http://${NODE_IP_ADDRESS}:31234/ and take a moment to enjoy a brand new instance of WordPress on Kubernetes.
+12. Navigate your web browser to http://10.11.1.38:31234/ and take a moment to enjoy a brand new instance of WordPress on Kubernetes.
 13. Take a backup of `etcd` running on the control plane and save it on the control plane to `/tmp/etcd-backup.db`.
 14. Delete `wordpress` deployment configuration from the cluster. Verify that the application is no longer accessible.
 15. Restore `etcd` configuration from the backup file `/tmp/etcd-backup.db`. Confirm that the cluster is working and that all `wordpress` pods are back.
@@ -2744,12 +2760,12 @@ Deploy the network policy:
 kubectl apply -f netpol-mysql.yaml
 ```
 
-Now, navigate your browser to **http://{NODE_IP_ADDRESS}:31234/** and enjoy a brand new instance of WordPress on Kubernetes.
+Now, navigate your browser to **http://10.11.1.38:31234/** and enjoy a brand new instance of WordPress on Kubernetes.
 
 Take an `etcd` snapshot on the control plane by specifying the endpoint and certificates:
 
 ```bash
-ETCDCTL_API=3 etcdctl \
+sudo ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
@@ -2768,7 +2784,7 @@ No wordpress pods should be present at this point.
 Restore `etcd` configuration from the snapshot. On the control plane, identify the default `data-dir`:
 
 ```bash
-grep data-dir /etc/kubernetes/manifests/etcd.yaml
+sudo grep data-dir /etc/kubernetes/manifests/etcd.yaml
     - --data-dir=/var/lib/etcd
 ```
 
@@ -2776,19 +2792,19 @@ Stop all control plane components:
 
 ```bash
 cd /etc/kubernetes/manifests/
-mv ./*yaml ../
+sudo mv ./*yaml ../
 ```
 
 Make sure that all control plane pods are `NotReady`:
 
 ```bash
-crictl pods | egrep "kube|etcd"
+sudo crictl pods | egrep "kube|etcd"
 ```
 
 Restore the snapshot to directory `/var/lib/etcd_backup`:
 
 ```bash
-ETCDCTL_API=3 etcdctl \
+sudo ETCDCTL_API=3 etcdctl \
   --endpoints=https://127.0.0.1:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
   --cert=/etc/kubernetes/pki/etcd/server.crt \
@@ -2800,14 +2816,14 @@ ETCDCTL_API=3 etcdctl \
 Configure etcd to use the new directory `/var/lib/etcd_backup`:
 
 ```bash
-sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/manifests/etcd.yaml
+sudo sed -i 's/\/var\/lib\/etcd/\/var\/lib\/etcd_backup/g' /etc/kubernetes/etcd.yaml
 ```
 
 Start all control plane components:
 
 ```bash
 cd /etc/kubernetes/manifests/
-mv ../*yaml ./
+sudo mv ../*yaml ./
 ```
 
 Give it some time (up to several minutes) for etcd to restart, and verify that wordpress pods are back.
