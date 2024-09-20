@@ -2,7 +2,7 @@
 
 # Certified Kubernetes Application Developer (CKAD)
 
-Preparation and study material for Certified Kubernetes Application Developer exam v1.26.
+Preparation and study material for Certified Kubernetes Application Developer exam v1.30.
 
 - [Reasoning](#reasoning)
 - [Aliases](#aliases)
@@ -201,7 +201,7 @@ Docs:
 * https://kubernetes.io/docs/setup/production-environment/container-runtimes/
 * https://kubernetes.io/fr/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network
 
-We will use `kubeadm` to install a Kubernetes v1.26 cluster.
+We will use `kubeadm` to install a Kubernetes v1.30 cluster.
 
 Install container runtime on all nodes:
 
@@ -252,21 +252,26 @@ To use the `systemd` cgroup driver in `/etc/containerd/config.toml` with `runc`,
     SystemdCgroup = true
 ```
 
+```bash
+sudo sed -i 's/            SystemdCgroup =.*/            SystemdCgroup = true/g' /etc/containerd/config.toml
+```
+
 Make sure to restart containerd:
 
 ```bash
 sudo systemctl restart containerd
 ```
 
-Install `kubeadm`, `kubelet` and `kubectl` (v1.26):
+Install `kubeadm`, `kubelet` and `kubectl` (v1.30):
 
 ```bash
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring-1.30.gpg
 
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring-1.30.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes-1.30.list
 
 sudo apt-get update
-sudo apt-get install -y kubelet=1.26.1-00 kubeadm=1.26.1-00 kubectl=1.26.1-00
+sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable kubelet
 ```
@@ -281,7 +286,7 @@ We are going to use Calico to support network policies, hence `192.168.0.0/16`.
 
 ```bash
 sudo kubeadm init \
-  --kubernetes-version "1.26.1" \
+  --kubernetes-version "1.30.1" \
   --pod-network-cidr "192.168.0.0/16"
 ```
 
@@ -311,8 +316,8 @@ Check the cluster to make sure that all nodes are running and ready:
 ```bash
 kubectl get nodes
 NAME    STATUS   ROLES           AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-srv37   Ready    control-plane   18h   v1.26.1   10.11.1.37    <none>        Ubuntu 20.04.5 LTS   5.4.0-139-generic   containerd://1.6.18
-srv38   Ready    <none>          18h   v1.26.1   10.11.1.38    <none>        Ubuntu 20.04.5 LTS   5.4.0-139-generic   containerd://1.6.18
+srv37   Ready    control-plane   18h   v1.30.1   10.11.1.37    <none>        Ubuntu 20.04.6 LTS   5.4.0-196-generic   containerd://1.7.22
+srv38   Ready    <none>          18h   v1.30.1   10.11.1.38    <none>        Ubuntu 20.04.6 LTS   5.4.0-196-generic   containerd://1.7.22
 ```
 
 Now that we have a cluster running, we can start with the exam objectives.
@@ -327,7 +332,7 @@ Use these commands to install Podman on Ubuntu 20.04:
 VERSION_ID="20.04"
 echo "deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
 curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
-sudo apt-get update -qq
+sudo apt-get update
 sudo apt-get install -y podman
 ```
 
@@ -337,7 +342,7 @@ Use these commands to install Helm on Ubuntu 20.04:
 sudo apt install -y apt-transport-https software-properties-common
 curl -fsSL https://baltocdn.com/helm/signing.asc | sudo apt-key add -
 sudo add-apt-repository -y "deb https://baltocdn.com/helm/stable/debian/ all main"
-sudo apt-get update -qq
+sudo apt-get update
 sudo apt-get install -y helm
 ```
 
