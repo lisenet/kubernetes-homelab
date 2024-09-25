@@ -68,8 +68,6 @@ spec:
           - name: grafana-dashboard-providers
             mountPath: /etc/grafana/provisioning/dashboards/dashboardproviders.yaml
             subPath: dashboardproviders.yaml
-          - name: dashboards-k8s-cluster-summary
-            mountPath: /var/lib/grafana/dashboards/k8s-cluster-summary
           - name: dashboards-k8s-cluster-monitoring
             mountPath: /var/lib/grafana/dashboards/k8s-cluster-monitoring
           - name: dashboards-node-exporter-full
@@ -145,9 +143,6 @@ spec:
         - name: grafana-dashboard-providers
           configMap:
             name: grafana-dashboard-providers
-        - name: dashboards-k8s-cluster-summary
-          configMap:
-            name: grafana-dashboards-k8s-cluster-summary
         - name: dashboards-k8s-cluster-monitoring
           configMap:
             name: grafana-dashboards-k8s-cluster-monitoring
