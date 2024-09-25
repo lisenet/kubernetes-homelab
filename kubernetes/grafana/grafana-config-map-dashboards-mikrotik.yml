@@ -420,7 +420,7 @@ data:
                   "type": "special"
                 }
               ],
-              "max": 128000000,
+              "max": 512000000,
               "min": 0,
               "thresholds": {
                 "mode": "absolute",
@@ -431,11 +431,11 @@ data:
                   },
                   {
                     "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 64000000
+                    "value": 256000000
                   },
                   {
                     "color": "rgba(245, 54, 54, 0.9)",
-                    "value": 96000000
+                    "value": 384000000
                   }
                 ]
               },
@@ -517,7 +517,7 @@ data:
                   "type": "value"
                 }
               ],
-              "max": 128000000,
+              "max": 512000000,
               "min": 0,
               "thresholds": {
                 "mode": "absolute",
@@ -528,11 +528,11 @@ data:
                   },
                   {
                     "color": "dark-orange",
-                    "value": 32000000
+                    "value": 2568000000
                   },
                   {
                     "color": "dark-green",
-                    "value": 64000000
+                    "value": 384000000
                   }
                 ]
               },
@@ -1032,7 +1032,7 @@ data:
                 "filter": "Memory"
               },
               "exemplar": true,
-              "expr": "mikrotik_system_total_hdd_space{address=\"$node\",name=\"mikrotik\"} - mikrotik_system_free_hdd_space{address=\"$node\",name=\"mikrotik\"}",
+              "expr": "mikrotik_system_total_memory{address=\"$node\",name=\"mikrotik\"} - mikrotik_system_free_memory{address=\"$node\",name=\"mikrotik\"}",
               "format": "time_series",
               "functions": [],
               "group": {
@@ -1058,7 +1058,7 @@ data:
                 "filter": "Memory"
               },
               "exemplar": true,
-              "expr": "mikrotik_system_total_hdd_space{address=\"$node\",name=\"mikrotik\"}",
+              "expr": "mikrotik_system_total_memory{address=\"$node\",name=\"mikrotik\"}",
               "format": "time_series",
               "functions": [],
               "group": {
