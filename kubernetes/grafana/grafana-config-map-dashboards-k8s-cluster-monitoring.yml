@@ -424,7 +424,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum (container_fs_usage_bytes{device=~\"^/dev/[sv]d[a-z][1-9]$\",id=\"/\"}) / sum (container_fs_limit_bytes{device=~\"^/dev/[sv]d[a-z][1-9]$\",id=\"/\"}) * 100",
+              "expr": "sum (container_fs_usage_bytes{device=~\"^/dev/mapper/vg_os-lv_root$\",id=\"/\"}) / sum (container_fs_limit_bytes{device=~\"^/dev/mapper/vg_os-lv_root$\",id=\"/\"}) * 100",
               "interval": "10s",
               "intervalFactor": 1,
               "legendFormat": "",
@@ -886,7 +886,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum (container_fs_usage_bytes{device=~\"^/dev/[sv]d[a-z][1-9]$\",id=\"/\"})",
+              "expr": "sum (container_fs_usage_bytes{device=~\"^/dev/mapper/vg_os-lv_root$\",id=\"/\"})",
               "interval": "10s",
               "intervalFactor": 1,
               "refId": "A",
@@ -978,7 +978,7 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum (container_fs_limit_bytes{device=~\"^/dev/[sv]d[a-z][1-9]$\",id=\"/\"})",
+              "expr": "sum (container_fs_limit_bytes{device=~\"^/dev/mapper/vg_os-lv_root$\",id=\"/\"})",
               "interval": "10s",
               "intervalFactor": 1,
               "refId": "A",
