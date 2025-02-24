@@ -1,6 +1,6 @@
 {
   "name": "Kubernetes homelab",
-  "version": "1.30.4",
+  "version": "1.31.6",
   "author": "Lisenet",
   "homepage_url": "https://github.com/lisenet/kubernetes-homelab"
 }
