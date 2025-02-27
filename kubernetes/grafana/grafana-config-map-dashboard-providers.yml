@@ -16,87 +16,98 @@ data:
         path: /var/lib/grafana/dashboards/k8s-cluster-summary
       orgId: 1
       type: file
-      disableDeletion: false
+      disableDeletion: true
     - name: k8s-cluster-monitoring
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/k8s-cluster-monitoring
       orgId: 1
       type: file
-      disableDeletion: false
+      disableDeletion: true
     - name: node-exporter-full
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/node-exporter-full
       orgId: 1
       type: file
-      disableDeletion: false
+      disableDeletion: true
     - name: etcd-summary
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/etcd-summary
       orgId: 1
       type: file
+      disableDeletion: true
     - name: bind-summary
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/bind-summary
       orgId: 1
       type: file
+      disableDeletion: true
     - name: haproxy-summary
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/haproxy-summary
       orgId: 1
       type: file
+      disableDeletion: true
     - name: mikrotik-summary
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/mikrotik-summary
       orgId: 1
       type: file
+      disableDeletion: true
     - name: x509-cert-summary
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/x509-cert-summary
       orgId: 1
       type: file
+      disableDeletion: true
     - name: velero-stats
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/velero-stats
       orgId: 1
       type: file
+      disableDeletion: true
     - name: cloudwatch-aws-billing
       folder: aws
       options:
         path: /var/lib/grafana/dashboards/cloudwatch-aws-billing
       orgId: 1
       type: file
+      disableDeletion: true
     - name: cloudwatch-aws-ec2
       folder: aws
       options:
         path: /var/lib/grafana/dashboards/cloudwatch-aws-ec2
       orgId: 1
       type: file
+      disableDeletion: true
     - name: cloudwatch-amazon-ebs
       folder: aws
       options:
         path: /var/lib/grafana/dashboards/cloudwatch-amazon-ebs
       orgId: 1
       type: file
+      disableDeletion: true
     - name: cloudwatch-amazon-ec2
       folder: aws
       options:
         path: /var/lib/grafana/dashboards/cloudwatch-amazon-ec2
       orgId: 1
       type: file
+      disableDeletion: true
     - name: pihole-exporter
       folder: homelab
       options:
         path: /var/lib/grafana/dashboards/pihole-exporter
       orgId: 1
       type: file
+      disableDeletion: true
     - name: mysqld-exporter
       folder: homelab
       options:
@@ -109,21 +120,25 @@ data:
         path: /var/lib/grafana/dashboards/speedtest
       orgId: 1
       type: file
+      disableDeletion: true
     - name: syslog-host
       folder: logs
       options:
         path: /var/lib/grafana/dashboards/syslog-host
       orgId: 1
       type: file
+      disableDeletion: true
     - name: syslog-severity
       folder: logs
       options:
         path: /var/lib/grafana/dashboards/syslog-severity
       orgId: 1
       type: file
+      disableDeletion: true
     - name: logs-k8s-containers
       folder: logs
       options:
         path: /var/lib/grafana/dashboards/logs-k8s-containers
       orgId: 1
       type: file
+      disableDeletion: true
