@@ -1,6 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ]
+  "branchPrefix": "renovate-",
+  "branchTopicSeparator": "-",
+  "packageRules": [
+    {
+      "matchPaths": [
+        "cka/**",
+        "ckad/**"
+      ],
+      "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ],
+  "reviewers": ["lisenet"],
+  "timezone": "Europe/London"
 }
