@@ -6,11 +6,5 @@
     "**/cka/**",
     "**/ckad/**"
   ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": ["major"],
-      "enabled": false
-    }
-  ],
   "prHourlyLimit": 1
 }
