@@ -4,7 +4,10 @@
   "branchTopicSeparator": "-",
   "packageRules": [
     {
-      "matchPaths": ["/cka/**", "/ckad/**"],
+      "matchPaths": [
+        "cka/**",
+        "ckad/**"
+      ],
       "enabled": false
     },
     {
