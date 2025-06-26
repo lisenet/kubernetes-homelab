@@ -12,6 +12,5 @@
       "enabled": false
     }
   ],
-  "prHourlyLimit": 1,
-  "reviewers": ["lisenet"]
+  "prHourlyLimit": 1
 }
