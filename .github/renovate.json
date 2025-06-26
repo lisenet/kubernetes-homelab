@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "branchPrefix": "renovate-",
+  "branchPrefixOld": "renovate-",
+  "ignorePaths": [
+    "**/cka/**",
+    "**/ckad/**"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ],
+  "prHourlyLimit": 1,
+  "reviewers": ["lisenet"]
+}
