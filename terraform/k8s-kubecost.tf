@@ -3,7 +3,7 @@ resource "helm_release" "kubecost" {
   repository = "https://kubecost.github.io/cost-analyzer/"
   chart      = "cost-analyzer"
   namespace  = "kubecost"
-  version    = "1.108.1"
+  version    = "2.8.0"
 
   values = [
     "${file("../kubernetes/helm/kubecost/values.yaml")}"
