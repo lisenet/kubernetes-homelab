@@ -6,7 +6,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 10.11.1.51-10.11.1.59
+    - 10.11.1.51-10.11.1.59
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -14,5 +14,5 @@ metadata:
   name: homelab-pool
   namespace: metallb-system
   ipAddressPools:
-  - homelab-pool
+    - homelab-pool
 ...
