@@ -1,0 +1,41 @@
+---
+pilot:
+  autoscalerEnabled: true
+  autoscaleMin: 2
+  autoscaleMax: 5
+  replicaCount: 2
+  rollingMaxSurge: 50%
+  rollingMaxUnavailable: 1
+  resources:
+    requests:
+      cpu: 150m
+      memory: 300Mi
+    limits:
+      cpu: 2000m
+      memory: 4096Mi
+global:
+  defaultPodDisruptionBudget:
+    enabled: true
+  defaultResources:
+    requests:
+      cpu: 10m
+  istioNamespace: istio-system
+  proxy:
+    # applies to istio-proxy and istio-init containers
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1024Mi
+      requests:
+        cpu: 20m
+        memory: 64Mi
+    tracer: "zipkin"
+telemetry:
+  enabled: true
+meshConfig:
+  defaultConfig:
+    tracing:
+      sampling: 100
+      zipkin:
+        address: jaeger-collector.istio-system:9411
+...

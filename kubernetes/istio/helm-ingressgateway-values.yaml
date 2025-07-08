@@ -1,0 +1,43 @@
+---
+name: istio-ingressgateway
+autoscaling:
+  minReplicas: 2
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 2000m
+    memory: 1024Mi
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - istio-ingressgateway
+          topologyKey: failure-domain.beta.kubernetes.io/zone
+        weight: 100
+service:
+  type: LoadBalancer
+  ports:
+    # Whatever is listed as the first port in a Service of
+    # type LoadBalancer is picked to be the port used for
+    # health checks. 10001 is the port of httpd-healthcheck.
+    - name: httpd-healthcheck
+      port: 10001
+      targetPort: 10001
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: https
+      port: 443
+      targetPort: 8443
+    # Istio readiness port of gateways
+    - name: status-port
+      port: 15021
+      targetPort: 15021
+...
